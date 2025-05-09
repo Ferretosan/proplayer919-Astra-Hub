@@ -69,6 +69,7 @@
         position: sticky;
         top: 0;
         z-index: 1000;
+        flex-wrap: wrap;
       }
 
       body.light-mode header {
@@ -117,7 +118,48 @@
       .nav-menu {
         display: flex;
         align-items: center;
-        gap: 2rem;
+        gap: 1rem;
+        flex: 1;
+        justify-content: space-between;
+      }
+
+      .category-list {
+        display: flex;
+        gap: 0.5rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 0.5rem 0;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .category-list::-webkit-scrollbar {
+        display: none;
+      }
+
+      .category-item {
+        padding: 0.5rem 1.2rem;
+        background: var(--primary);
+        color: var(--light-text);
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.3s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .category-item:hover {
+        transform: scale(1.05);
+        box-shadow: var(--glow);
+      }
+
+      .category-item.active {
+        background: var(--secondary);
+        color: var(--light-text);
       }
 
       @media (max-width: 768px) {
@@ -133,6 +175,7 @@
           transform: translateX(-100%);
           transition: transform 0.3s ease;
           z-index: 999;
+          padding: 2rem;
         }
 
         .nav-menu.active {
@@ -142,13 +185,24 @@
         .hamburger {
           display: block;
         }
+
+        .category-list {
+          flex-direction: column;
+          overflow-x: visible;
+          align-items: center;
+        }
+
+        .category-item {
+          width: 100%;
+          justify-content: center;
+        }
       }
 
       .search-bar {
         flex: 1;
-        max-width: 500px;
+        max-width: 400px;
         position: relative;
-        margin: 0 2rem;
+        margin-left: 1rem;
       }
 
       .search-bar input {
@@ -226,86 +280,6 @@
 
       .theme-toggle:hover {
         transform: rotate(20deg);
-      }
-
-      .dropdown-menu {
-        position: relative;
-      }
-
-      .dropdown-toggle {
-        padding: 0.6rem 1.5rem;
-        background: var(--primary);
-        color: var(--light-text);
-        border: none;
-        border-radius: 20px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: transform 0.2s;
-      }
-
-      .dropdown-toggle:hover {
-        transform: scale(1.05);
-        box-shadow: var(--glow);
-      }
-
-      .dropdown-content {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background: var(--card-bg);
-        border-radius: 12px;
-        box-shadow: var(--shadow);
-        z-index: 1000;
-        min-width: 200px;
-      }
-
-      body.light-mode .dropdown-content {
-        background: var(--light-card);
-      }
-
-      .dropdown-content.show {
-        display: block;
-        animation: slideDown 0.3s ease;
-      }
-
-      @keyframes slideDown {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .dropdown-content a {
-        display: flex;
-        align-items: center;
-        padding: 0.8rem 1.2rem;
-        color: var(--text);
-        text-decoration: none;
-        font-size: 0.95rem;
-        transition: background 0.2s;
-      }
-
-      body.light-mode .dropdown-content a {
-        color: var(--light-text);
-      }
-
-      .dropdown-content a:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-
-      .dropdown-content a i {
-        margin-right: 0.6rem;
-        color: var(--primary);
       }
 
       main {
@@ -840,14 +814,10 @@
       </div>
       <i class="fas fa-bars hamburger" id="hamburger" aria-label="Toggle menu"></i>
       <nav class="nav-menu" id="nav-menu">
+        <div class="category-list" id="category-list" role="tablist"></div>
         <div class="search-bar">
           <input type="text" id="search-input" placeholder="Search games..." aria-label="Search games">
           <div class="search-suggestions" id="search-suggestions" role="listbox"></div>
-        </div>
-        <div class="dropdown-menu">
-          <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><i class="fas fa-gamepad"></i>
-            Categories</button>
-          <div class="dropdown-content" id="dropdown-content" role="menu"></div>
         </div>
         <div class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
           <i class="fas fa-moon" id="theme-toggle"></i>
@@ -921,7 +891,7 @@
         gameIframe: $('#game-iframe'),
         searchInput: $('#search-input'),
         searchSuggestions: $('#search-suggestions'),
-        dropdownContent: $('#dropdown-content'),
+        categoryList: $('#category-list'),
         toast: $('#toast'),
         backToTop: $('#back-to-top'),
         logoContainer: $('#logoContainer'),
@@ -976,23 +946,43 @@
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           state.gameData = await response.json();
           elements.homePage.innerHTML = '';
-          populateDropdown();
           populateCategories();
+          populateCategoryList();
         } catch (error) {
           elements.homePage.innerHTML = `<div class="error">Error loading games: ${error.message}</div>`;
         }
       }
 
-      // Dropdown Menu
-      function populateDropdown() {
-        elements.dropdownContent.innerHTML = '';
+      // Category List Population
+      function populateCategoryList() {
+        elements.categoryList.innerHTML = '';
         state.gameData.categories.forEach(category => {
-          const link = document.createElement('a');
-          link.href = '#';
-          link.innerHTML = `<i class="fas ${category.icon}" aria-hidden="true"></i> ${category.name}`;
-          link.dataset.category = category.id;
-          link.setAttribute('role', 'menuitem');
-          elements.dropdownContent.appendChild(link);
+          const button = document.createElement('a');
+          button.href = '#';
+          button.className = 'category-item';
+          button.innerHTML = `<i class="fas ${category.icon}" aria-hidden="true"></i> ${category.name}`;
+          button.dataset.category = category.id;
+          button.setAttribute('role', 'tab');
+          button.setAttribute('aria-selected', state.selectedCategory === category.id ? 'true' : 'false');
+          if (state.selectedCategory === category.id) {
+            button.classList.add('active');
+          }
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            state.selectedCategory = category.id;
+            state.selectedTag = '';
+            localStorage.setItem('selectedCategory', state.selectedCategory);
+            localStorage.setItem('selectedTag', state.selectedTag);
+            populateCategories();
+            $$('.category-item').forEach(item => {
+              item.classList.remove('active');
+              item.setAttribute('aria-selected', 'false');
+            });
+            button.classList.add('active');
+            button.setAttribute('aria-selected', 'true');
+            elements.navMenu.classList.remove('active');
+          });
+          elements.categoryList.appendChild(button);
         });
       }
 
@@ -1279,27 +1269,6 @@
             });
           }
         });
-      });
-
-      // Dropdown Interactions
-      $('.dropdown-toggle').addEventListener('click', () => {
-        elements.dropdownContent.classList.toggle('show');
-        $('.dropdown-toggle').setAttribute('aria-expanded', elements.dropdownContent.classList.contains('show'));
-      });
-
-      elements.dropdownContent.addEventListener('click', (e) => {
-        e.preventDefault();
-        const link = e.target.closest('a');
-        if (link) {
-          state.selectedTag = '';
-          state.selectedCategory = link.dataset.category;
-          localStorage.setItem('selectedTag', state.selectedTag);
-          localStorage.setItem('selectedCategory', state.selectedCategory);
-          populateCategories(state.selectedTag, state.selectedCategory);
-          elements.dropdownContent.classList.remove('show');
-          $('.dropdown-toggle').setAttribute('aria-expanded', 'false');
-          elements.navMenu.classList.remove('active');
-        }
       });
 
       // Theme Toggle

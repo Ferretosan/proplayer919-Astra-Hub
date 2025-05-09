@@ -55,6 +55,42 @@
         "featured",
         "clicker"
       ]
+    },
+    {
+      "id": "flappy-bird",
+      "title": "Flappy Bird",
+      "description": "Play the classic Flappy Bird game.",
+      "developer": "proplayer919",
+      "image": "images/flappy-bird.png",
+      "url": "games/flappy-bird/index.html",
+      "tags": [
+        "clicker",
+        "satisfying",
+        "relaxing"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "clicker"
+      ]
+    },
+    {
+      "id": "president-sim",
+      "title": "President Simulator",
+      "description": "Can you lead the nation to prosperity and secure your re-election?",
+      "developer": "proplayer919",
+      "image": "images/president-sim.png",
+      "url": "games/president-sim/index.html",
+      "tags": [
+        "simulator",
+        "simple",
+        "strategy"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "simulator"
+      ]
     }
   ],
   "categories": [
@@ -72,6 +108,11 @@
       "id": "action",
       "name": "Action",
       "icon": "fa-rocket"
+    },
+    {
+      "id": "simulator",
+      "name": "Simulator",
+      "icon": "fa-robot"
     },
     {
       "id": "satisfying",
@@ -96,6 +137,8 @@
     "satisfying": "fa-smile",
     "exploration": "fa-compass",
     "adventure": "fa-map",
-    "multiplayer": "fa-users"
+    "multiplayer": "fa-users",
+    "simulator": "fa-robot",
+    "simple": "fa-thumbs-up"
   }
 }

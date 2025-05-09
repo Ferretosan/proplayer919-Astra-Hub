@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>President Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        /* Default sans-serif font */
+        background-color: #f0f4f8;
+        /* Lighter, more neutral background */
+        color: #1a202c;
+        /* Darker text for better contrast */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Custom font for headings */
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: 'Merriweather', serif;
+      }
+
+      /* Styling for the main title screen button */
+      #title-screen button {
+        background-color: #3b82f6;
+        /* Tailwind blue-500 */
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.375rem;
+        /* Tailwind rounded-md */
+        font-weight: 500;
+        /* Tailwind font-medium */
+        transition: background-color 0.3s ease;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        /* Tailwind shadow-md */
+      }
+
+      #title-screen button:hover {
+        background-color: #2563eb;
+        /* Tailwind blue-600 */
+      }
+
+      /* Styling for the bill presentation */
+      .bill-card {
+        background-color: white;
+        border: 1px solid #e2e8f0;
+        /* Tailwind gray-300 */
+        border-radius: 0.5rem;
+        /* Tailwind rounded-lg */
+        padding: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        /* Tailwind shadow-md */
+        flex: 1;
+        /* Ensure cards take equal space */
+        margin: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+
+      .bill-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        /* Tailwind shadow-lg */
+      }
+
+      .bill-title {
+        font-size: 1.125rem;
+        /* Tailwind text-lg */
+        font-weight: 700;
+        /* Tailwind font-bold */
+        color: #1d4ed8;
+        /* Tailwind blue-700 */
+        margin-bottom: 0.5rem;
+      }
+
+      .bill-description {
+        font-size: 0.875rem;
+        /* Tailwind text-sm */
+        color: #4a5568;
+        /* Tailwind gray-700 */
+        margin-bottom: 0.75rem;
+        flex-grow: 1;
+        /* Allow description to take available space */
+      }
+
+      .bill-effects {
+        font-size: 0.8rem;
+        /* Smaller text for effects */
+        color: #4a5568;
+        /* Tailwind gray-700 */
+        margin-bottom: 1rem;
+      }
+
+      .bill-effects span {
+        margin-right: 0.5rem;
+      }
+
+      .effect-positive {
+        color: #16a34a;
+        /* Tailwind green-600 */
+      }
+
+      .effect-negative {
+        color: #dc2626;
+        /* Tailwind red-600 */
+      }
+
+      .effect-neutral {
+        color: #6b7280;
+        /* Tailwind gray-500 */
+      }
+
+      .bill-button-action {
+        background-color: #2563eb;
+        /* Tailwind blue-600 */
+        color: white;
+        padding: 0.6rem 1rem;
+        border-radius: 0.375rem;
+        /* Tailwind rounded-md */
+        font-weight: 500;
+        /* Tailwind font-medium */
+        transition: background-color 0.3s ease;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        width: 100%;
+      }
+
+      .bill-button-action:hover {
+        background-color: #1d4ed8;
+        /* Tailwind blue-700 */
+      }
+
+
+      /* News Ticker Vertical Animation */
+      #news-reader {
+        background-color: #fff;
+        padding: 0.5rem 0;
+        /* Padding top and bottom */
+        border-radius: 0.5rem;
+        /* Tailwind rounded-lg */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        /* Tailwind shadow-sm */
+        margin-bottom: 1.5rem;
+        /* Tailwind mb-6 */
+        overflow: hidden;
+        height: 100px;
+        /* Fixed height for the news area */
+        position: relative;
+        /* Needed for absolute positioning of news-list */
+      }
+
+      #news-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        width: 100%;
+        animation: scrollNewsVertical 90s linear infinite;
+        /* Much slower animation */
+      }
+
+      #news-list li {
+        padding: 0.5rem 1rem;
+        /* Padding for each news item */
+        color: #1e3a8a;
+        /* Tailwind blue-800 */
+        font-weight: 500;
+        /* Tailwind font-medium */
+        border-bottom: 1px dashed #e5e7eb;
+        /* Tailwind gray-200 */
+        white-space: normal;
+        /* Allow text to wrap */
+        line-height: 1.4;
+      }
+
+      #news-list li:last-child {
+        border-bottom: none;
+      }
+
+
+      @keyframes scrollNewsVertical {
+        0% {
+          transform: translateY(0%);
+        }
+
+        /* Start at the top */
+        100% {
+          transform: translateY(-100%);
+        }
+
+        /* Scroll all the way up */
+      }
+
+
+      /* Toast Notification Styling */
+      #toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        /* Center the toast */
+        background-color: #2d3748;
+        /* Tailwind gray-800 */
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.375rem;
+        /* Tailwind rounded-md */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        /* Tailwind shadow-lg */
+        z-index: 1000;
+        /* Ensure it's on top */
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, bottom 0.5s ease-in-out;
+        pointer-events: none;
+        /* Prevent interaction when hidden */
+      }
+
+      #toast.show {
+        opacity: 1;
+        bottom: 40px;
+        /* Move up slightly when shown */
+        pointer-events: auto;
+      }
+
+      /* Confetti Canvas */
+      #confetti-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        /* Make sure it doesn't block interactions */
+        z-index: 9999;
+        /* Above everything else */
+        display: none;
+        /* Initially hidden */
+      }
+
+      /* Result Screen Button */
+      #result button {
+        background-color: #16a34a;
+        /* Tailwind green-600 */
+      }
+
+      #result button:hover {
+        background-color: #15803d;
+        /* Tailwind green-700 */
+      }
+    </style>
+  </head>
+
+  <body class="bg-gradient-to-br from-blue-100 to-indigo-100">
+
+    <div id="title-screen" class="flex flex-col items-center justify-center min-h-screen w-full p-6 text-center">
+      <img src="https://placehold.co/150x150/3B82F6/FFFFFF?text=PS&font=merriweather" alt="President Simulator Logo"
+        class="mb-8 rounded-full shadow-lg w-32 h-32 md:w-40 md:h-40">
+      <h1 class="text-4xl md:text-5xl font-bold text-blue-700 mb-4">President Simulator</h1>
+      <p class="text-lg text-gray-600 mb-8">Can you lead the nation to prosperity and secure your re-election?</p>
+      <button onclick="startGame()" class="text-lg">Start New Term</button>
+    </div>
+
+    <div id="game" style="display:none;" class="w-full max-w-5xl mx-auto p-4 md:p-6">
+      <header class="bg-blue-600 text-white p-6 rounded-lg shadow-xl mb-6 text-center">
+        <h1 class="text-3xl md:text-4xl font-bold">Presidential Dashboard</h1>
+        <div class="tagline text-blue-200 mt-1 text-sm md:text-base">Term: <span id="termDisplay">1</span> | Month:
+          <span id="monthDisplay">0</span> / 48</div>
+      </header>
+
+      <div id="stats" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="stat bg-white p-4 rounded-lg shadow-md text-center">
+          <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fas fa-users mr-2"></i>Party Support</h3>
+          <div id="partySupport" class="text-3xl font-bold text-gray-800">50</div>
+        </div>
+        <div class="stat bg-white p-4 rounded-lg shadow-md text-center">
+          <h3 class="text-xl font-semibold text-green-700 mb-2"><i class="fas fa-building mr-2"></i>Corporate Approval
+          </h3>
+          <div id="corpSupport" class="text-3xl font-bold text-gray-800">50</div>
+        </div>
+        <div class="stat bg-white p-4 rounded-lg shadow-md text-center">
+          <h3 class="text-xl font-semibold text-red-700 mb-2"><i class="fas fa-vote-yea mr-2"></i>Re-election Chance
+          </h3>
+          <div id="reelectChance" class="text-3xl font-bold text-gray-800">50</div>
+        </div>
+      </div>
+
+      <div id="progress-container" class="mb-6 bg-gray-200 rounded-full h-6 shadow-inner">
+        <div id="progress-bar"
+          class="bg-gradient-to-r from-green-400 to-blue-500 h-full rounded-full transition-all duration-300 ease-linear text-xs font-medium text-white text-center leading-6">
+          0%
+        </div>
+      </div>
+
+      <div id="news-reader-container" class="mb-6">
+        <h4 class="text-xl font-semibold text-gray-700 mb-2 text-center"><i class="fas fa-newspaper mr-2"></i>Latest
+          Headlines</h4>
+        <div id="news-reader">
+          <ul id="news-list">
+          </ul>
+        </div>
+      </div>
+
+
+      <div id="bills-section" class="mb-6">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4 text-center"><i
+            class="fas fa-file-signature mr-2"></i>Pending Legislation</h2>
+        <div id="bills" class="flex flex-col lg:flex-row justify-around gap-4 items-stretch"> </div>
+      </div>
+
+      <div id="result" style="display:none;"
+        class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-8 rounded-lg shadow-2xl text-center max-w-md w-full">
+          <h2 id="outcomeText" class="text-2xl md:text-3xl font-bold mb-6"></h2>
+          <p id="finalStats" class="mb-6 text-gray-600"></p>
+          <button onclick="restartGameFromModal()"
+            class="w-full text-white py-3 rounded-lg font-semibold text-lg transition-colors duration-300">Start a New
+            Term</button>
+        </div>
+      </div>
+
+      <div id="toast"></div>
+
+      <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <script>
+      // Game state variables
+      let month = 0;
+      let partySupport = 50;
+      let corpSupport = 50;
+      let reelectionChance = 50;
+      let term = 1;
+      const monthsPerTerm = 48; // 4 years
+
+      // DOM Elements
+      const titleScreen = document.getElementById('title-screen');
+      const gameScreen = document.getElementById('game');
+      const partySupportEl = document.getElementById('partySupport');
+      const corpSupportEl = document.getElementById('corpSupport');
+      const reelectChanceEl = document.getElementById('reelectChance');
+      const progressBarEl = document.getElementById('progress-bar');
+      // const progressContainerEl = document.getElementById('progress-container'); // Not directly used after initial setup
+      const billsContainer = document.getElementById('bills');
+      const newsListEl = document.getElementById('news-list');
+      const newsReaderEl = document.getElementById('news-reader');
+      const resultModal = document.getElementById('result');
+      const outcomeTextEl = document.getElementById('outcomeText');
+      const finalStatsEl = document.getElementById('finalStats');
+      const toastEl = document.getElementById('toast');
+      const termDisplayEl = document.getElementById('termDisplay');
+      const monthDisplayEl = document.getElementById('monthDisplay');
+      const confettiCanvas = document.getElementById('confetti-canvas');
+      const confettiCtx = confettiCanvas.getContext('2d');
+
+      // Game Data - Bills enhanced with emojis and descriptions
+      const billsPool = [
+        { id: "mil_funding", emoji: "🛡️", text: "Increase Military Funding", description: "Bolster national defense capabilities and project strength on the global stage.", effects: { party: 5, corp: 10, reelect: -2 }, news: "Defense stocks soar as military budget increases." },
+        { id: "corp_tax_cut", emoji: "💼", text: "Cut Corporate Taxes", description: "Stimulate business investment and growth by reducing the tax burden on corporations.", effects: { party: -10, corp: 20, reelect: 5 }, news: "Businesses celebrate major corporate tax cuts." },
+        { id: "env_regs", emoji: "🌳", text: "Pass Environmental Regulations", description: "Implement stricter rules to protect natural resources and combat pollution.", effects: { party: 15, corp: -15, reelect: 3 }, news: "New environmental laws aim to combat climate change." },
+        { id: "healthcare_reform", emoji: "⚕️", text: "Introduce Healthcare Reform", description: "Overhaul the healthcare system to improve access and affordability for citizens.", effects: { party: 20, corp: -5, reelect: 10 }, news: "Sweeping healthcare reforms promise wider coverage." },
+        { id: "edu_funding", emoji: "🎓", text: "Fund Public Education", description: "Invest in schools, teachers, and educational programs to enhance learning opportunities.", effects: { party: 10, corp: -5, reelect: 5 }, news: "Increased education spending to benefit schools nationwide." },
+        { id: "internet_restrict", emoji: "🌐", text: "Impose Internet Restrictions", description: "Regulate online content and access in the name of national security or public order.", effects: { party: -5, corp: 5, reelect: -10 }, news: "Controversial internet bill sparks debate on free speech." },
+        { id: "lobby_ban", emoji: "⚖️", text: "Ban Foreign Lobbying", description: "Prevent foreign governments and entities from influencing domestic policy decisions.", effects: { party: 10, corp: -10, reelect: 5 }, news: "Crackdown on foreign influence in politics begins." },
+        { id: "green_energy_sub", emoji: "💡", text: "Subsidize Green Energy", description: "Provide financial incentives for renewable energy development and adoption.", effects: { party: 15, corp: -8, reelect: 7 }, news: "Government invests heavily in renewable energy projects." },
+        { id: "surveillance_exp", emoji: "👁️", text: "Expand Surveillance Powers", description: "Grant intelligence agencies greater authority to monitor communications and data.", effects: { party: -10, corp: 10, reelect: -8 }, news: "Civil liberties groups protest expansion of state surveillance." },
+        { id: "ubi_create", emoji: "💰", text: "Create Universal Basic Income", description: "Provide a regular, unconditional payment to all citizens to ensure a basic standard of living.", effects: { party: 25, corp: -20, reelect: 12 }, news: "Landmark UBI program launched, promising economic security." },
+        { id: "infra_spend", emoji: "🏗️", text: "Invest in Infrastructure", description: "Fund major projects to repair and upgrade roads, bridges, and public utilities.", effects: { party: 8, corp: 12, reelect: 6 }, news: "Massive infrastructure plan to modernize the country." },
+        { id: "space_program", emoji: "🚀", text: "Fund Space Exploration", description: "Invest in space missions, research, and technology to push the boundaries of discovery.", effects: { party: 5, corp: 7, reelect: 4 }, news: "New frontier: Nation aims for the stars with bold space program." },
+        { id: "deregulation", emoji: "📈", text: "Financial Deregulation", description: "Reduce rules and oversight in the financial sector to encourage market activity.", effects: { party: -12, corp: 18, reelect: 2 }, news: "Markets surge following significant financial deregulation." },
+        { id: "arts_funding", emoji: "🎭", text: "Increase Arts Funding", description: "Support cultural institutions, artists, and creative projects through public grants.", effects: { party: 7, corp: -3, reelect: 3 }, news: "Cultural sector revitalized with boost in arts funding." }
+      ];
+
+      const genericNewsPool = [
+        "Stock market hits record high amidst economic optimism.",
+        "International tensions rise over trade disputes.",
+        "Breakthrough in scientific research announced.",
+        "Public opinion polls show shifting political landscapes.",
+        "Debate rages over new social policies.",
+        "Unemployment rates reach a new low.",
+        "Natural disaster strikes, emergency response underway.",
+        "Technological innovation promises to reshape industries."
+      ];
+
+      let currentNewsItems = []; // Start with an empty array, will be populated
+      let newsScrollPosition = 0; // For vertical scroll management
+      let newsAnimationId; // To control news animation
+
+      // Confetti particles array
+      let particles = [];
+
+      // Function to start the game
+      function startGame() {
+        titleScreen.style.display = 'none';
+        gameScreen.style.display = 'block';
+        resetGame();
+        populateInitialNews(); // Populate news before first month
+        nextMonth();
+        startNewsTicker();
+      }
+
+      // Function to reset game state for a new term or new game
+      function resetGame(isNewTerm = false) {
+        if (!isNewTerm) {
+          term = 1;
+          partySupport = 50;
+          corpSupport = 50;
+          reelectionChance = 50;
+        } else {
+          // Slight bonus/penalty for re-election
+          partySupport = Math.max(30, Math.min(70, partySupport + (Math.random() * 10 - 5)));
+          corpSupport = Math.max(30, Math.min(70, corpSupport + (Math.random() * 10 - 5)));
+          reelectionChance = 50 + (Math.random() * 10 - 5); // Reset re-election slightly
+        }
+        month = 0;
+        resultModal.style.display = 'none';
+        updateUI();
+      }
+
+      // Function to update all UI elements
+      function updateUI() {
+        partySupportEl.innerText = Math.round(partySupport);
+        corpSupportEl.innerText = Math.round(corpSupport);
+        reelectChanceEl.innerText = Math.round(reelectionChance);
+
+        const progressPercent = (month / monthsPerTerm) * 100;
+        progressBarEl.style.width = progressPercent + '%';
+        progressBarEl.innerText = Math.round(progressPercent) + '%';
+
+        termDisplayEl.innerText = term;
+        monthDisplayEl.innerText = month;
+
+        // Clamp stat values between 0 and 100
+        partySupport = Math.max(0, Math.min(100, partySupport));
+        corpSupport = Math.max(0, Math.min(100, corpSupport));
+        reelectionChance = Math.max(0, Math.min(100, reelectionChance));
+      }
+
+      // Function to proceed to the next month
+      function nextMonth() {
+        month++;
+
+        // Random events can slightly alter stats each month
+        partySupport += (Math.random() * 4 - 2); // +/- 0 to 2
+        corpSupport += (Math.random() * 4 - 2);
+        reelectionChance += (Math.random() * 2 - 1); // Re-election is more stable
+
+        if (month >= monthsPerTerm) {
+          handleEndOfTerm();
+          return;
+        }
+
+        updateUI();
+        displayBills();
+        if (month % 4 === 0) { // Add a new piece of generic news less frequently
+          addNewsItem(genericNewsPool[Math.floor(Math.random() * genericNewsPool.length)]);
+        }
+      }
+
+      // Function to format effect numbers with a sign
+      function formatEffect(value) {
+        if (value > 0) return `+${value}`;
+        if (value < 0) return `${value}`;
+        return `±0`;
+      }
+
+      // Function to get effect class
+      function getEffectClass(value) {
+        if (value > 0) return 'effect-positive';
+        if (value < 0) return 'effect-negative';
+        return 'effect-neutral';
+      }
+
+      // Function to display 2-3 random bills as cards
+      function displayBills() {
+        billsContainer.innerHTML = ''; // Clear old bills
+        const shuffledBills = [...billsPool].sort(() => 0.5 - Math.random());
+        const billsToShowCount = Math.random() < 0.6 ? 3 : 2; // Show 2 or 3 bills
+        const billsToShow = shuffledBills.slice(0, billsToShowCount);
+
+        billsToShow.forEach(bill => {
+          const card = document.createElement('div');
+          card.className = 'bill-card';
+
+          // Bill Title with Emoji
+          const title = document.createElement('h4');
+          title.className = 'bill-title';
+          title.innerHTML = `${bill.emoji} ${bill.text}`; // Use innerHTML to render emoji properly
+          card.appendChild(title);
+
+          // Bill Description
+          const description = document.createElement('p');
+          description.className = 'bill-description';
+          description.textContent = bill.description;
+          card.appendChild(description);
+
+          // Bill Effects
+          const effectsDiv = document.createElement('div');
+          effectsDiv.className = 'bill-effects';
+          effectsDiv.innerHTML = `
+                    <span class="${getEffectClass(bill.effects.party)}"><i class="fas fa-users"></i> Party: ${formatEffect(bill.effects.party)}</span><br>
+                    <span class="${getEffectClass(bill.effects.corp)}"><i class="fas fa-building"></i> Corp: ${formatEffect(bill.effects.corp)}</span><br>
+                    <span class="${getEffectClass(bill.effects.reelect)}"><i class="fas fa-vote-yea"></i> Re-elect: ${formatEffect(bill.effects.reelect)}</span>
+                `;
+          card.appendChild(effectsDiv);
+
+          // Action Button
+          const btn = document.createElement('button');
+          btn.className = 'bill-button-action';
+          btn.textContent = 'Sign Bill';
+          btn.onclick = () => {
+            applyBillEffects(bill);
+            addNewsItem(bill.news, true); // Add bill-specific news, prioritize it
+            nextMonth();
+          };
+          card.appendChild(btn);
+          billsContainer.appendChild(card);
+        });
+      }
+
+
+      // Function to apply effects of a chosen bill
+      function applyBillEffects(bill) {
+        partySupport += bill.effects.party;
+        corpSupport += bill.effects.corp;
+        reelectionChance += bill.effects.reelect;
+        showToast(`${bill.emoji} ${bill.text} signed into law.`);
+      }
+
+      // Function to add a news item to the ticker
+      function addNewsItem(newsText, prioritize = false) {
+        if (!newsText) return;
+
+        if (prioritize) {
+          currentNewsItems.unshift(newsText); // Add to the beginning
+        } else {
+          currentNewsItems.push(newsText); // Add to the end
+        }
+
+        if (currentNewsItems.length > 15) { // Keep the list from growing too long
+          if (prioritize) {
+            currentNewsItems.pop(); // Remove from the end if prioritized
+          } else {
+            currentNewsItems.shift(); // Remove from the beginning
+          }
+        }
+        renderNewsItems();
+      }
+
+      // Function to render news items in the list
+      function renderNewsItems() {
+        newsListEl.innerHTML = ''; // Clear current news
+        let totalHeight = 0;
+        currentNewsItems.forEach(news => {
+          const item = document.createElement('li');
+          item.textContent = news;
+          newsListEl.appendChild(item);
+          totalHeight += item.offsetHeight; // Approximate height
+        });
+
+        // If content is shorter than the container, duplicate to help with scrolling illusion
+        if (totalHeight < newsReaderEl.offsetHeight && currentNewsItems.length > 0) {
+          let tempHeight = totalHeight;
+          const originalItems = [...currentNewsItems];
+          while (tempHeight < newsReaderEl.offsetHeight * 1.5 && newsListEl.children.length < 30) { // Add some buffer, limit total items
+            originalItems.forEach(news => {
+              const item = document.createElement('li');
+              item.textContent = news;
+              newsListEl.appendChild(item);
+              tempHeight += item.offsetHeight;
+            });
+          }
+        }
+        // Adjust animation based on content height
+        const listHeight = newsListEl.scrollHeight;
+        const containerHeight = newsReaderEl.clientHeight;
+        if (listHeight > containerHeight) {
+          const duration = (listHeight / containerHeight) * 45; // Adjust speed based on content length, base 45s per container height
+          newsListEl.style.animation = `scrollNewsVertical ${Math.max(60, duration)}s linear infinite`; // Min duration 60s
+        } else {
+          newsListEl.style.animation = 'none'; // No scroll if content fits
+        }
+      }
+
+
+      function populateInitialNews() {
+        currentNewsItems = []; // Clear any previous news
+        addNewsItem("Welcome, Mr./Ms. President! The nation awaits your decisions.");
+        addNewsItem("Economic advisors present first briefing on national finances.");
+        addNewsItem("Public anticipation high for the new administration's agenda.");
+        // Add a few generic news to fill it up initially
+        for (let i = 0; i < 3; i++) {
+          addNewsItem(genericNewsPool[Math.floor(Math.random() * genericNewsPool.length)]);
+        }
+        renderNewsItems();
+      }
+
+      function startNewsTicker() {
+        renderNewsItems(); // This will also adjust/start animation
+      }
+
+
+      // Handle end of term (election)
+      function handleEndOfTerm() {
+        // gameScreen.style.display = 'none'; // Hide game controls - already done by result modal
+        resultModal.style.display = 'flex';
+
+        const finalParty = Math.round(partySupport);
+        const finalCorp = Math.round(corpSupport);
+        const finalReelect = Math.round(reelectionChance);
+
+        finalStatsEl.innerHTML = `Final Stats:<br><i class="fas fa-users"></i> Party Support: ${finalParty}%<br><i class="fas fa-building"></i> Corporate Approval: ${finalCorp}%<br><i class="fas fa-vote-yea"></i> Re-election Score: ${finalReelect}%`;
+
+        if (finalReelect >= 50) {
+          outcomeTextEl.innerHTML = `<i class="fas fa-trophy text-yellow-500 mr-2"></i>Congratulations, Mr./Ms. President! You've been Re-elected for Term ${term + 1}!`;
+          resultModal.querySelector('button').innerText = 'Start Next Term';
+          resultModal.querySelector('button').onclick = startNextTerm;
+          triggerConfetti(); // Yay!
+        } else {
+          outcomeTextEl.innerHTML = `<i class="fas fa-times-circle text-red-500 mr-2"></i>The people have spoken. You were NOT Re-elected. Game Over.`;
+          resultModal.querySelector('button').innerText = 'Try Again (New Game)';
+          resultModal.querySelector('button').onclick = restartGameFromModal;
+        }
+      }
+
+      // Function to start the next term
+      function startNextTerm() {
+        term++;
+        resetGame(true); // Reset for a new term, keeping some continuity
+        // gameScreen.style.display = 'block'; // Not needed, resultModal hides
+        resultModal.style.display = 'none';
+        showToast(`Welcome to Term ${term}! The nation looks to your leadership.`);
+        populateInitialNews();
+        nextMonth();
+        startNewsTicker();
+      }
+
+      // Function to restart the game entirely from the result modal
+      function restartGameFromModal() {
+        // gameScreen.style.display = 'block'; // Not needed
+        resetGame(false); // Full reset
+        populateInitialNews();
+        nextMonth();
+        startNewsTicker();
+      }
+
+
+      // Function to show toast notifications
+      function showToast(message) {
+        toastEl.innerHTML = message; // Use innerHTML if message contains emojis/icons
+        toastEl.classList.add('show');
+        setTimeout(() => {
+          toastEl.classList.remove('show');
+        }, 3500); // Toast visible for 3.5 seconds
+      }
+
+      // --- Confetti Effect ---
+      function setupConfettiCanvas() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+      }
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * confettiCanvas.width;
+          this.y = Math.random() * confettiCanvas.height - confettiCanvas.height; // Start above screen
+          this.size = Math.random() * 10 + 5; // Size between 5 and 15
+          this.speedX = Math.random() * 3 - 1.5; // Horizontal speed
+          this.speedY = Math.random() * 2 + 1;   // Vertical speed (falling)
+          this.color = `hsl(${Math.random() * 360}, 100%, 70%)`; // Random bright color
+          this.opacity = 1;
+          this.rotation = Math.random() * 360;
+          this.spin = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 0.2 + 0.05); // Spin a bit faster
+        }
+
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          this.opacity -= 0.005; // Fade out
+          this.rotation += this.spin;
+          // Reset particle if it's off-screen or faded
+          if (this.y > confettiCanvas.height + this.size || this.opacity <= 0) {
+            // Only reset if animation is active
+            if (particles.length > 0 && confettiCanvas.style.display === 'block') {
+              this.y = -this.size * 2; // Start further up
+              this.x = Math.random() * confettiCanvas.width;
+              this.opacity = 1;
+              this.speedY = Math.random() * 2 + 1; // Reset speed
+            }
+          }
+        }
+
+        draw() {
+          confettiCtx.save();
+          confettiCtx.globalAlpha = this.opacity;
+          confettiCtx.fillStyle = this.color;
+          confettiCtx.translate(this.x + this.size / 2, this.y + this.size / 2);
+          confettiCtx.rotate(this.rotation * Math.PI / 180);
+          // Draw a rectangle, could be other shapes
+          confettiCtx.fillRect(-this.size / 2, -this.size / 4, this.size, this.size / 2);
+          confettiCtx.restore();
+        }
+      }
+
+      function initConfetti() {
+        particles = []; // Clear existing particles
+        const numParticles = window.innerWidth < 768 ? 100 : 150; // Fewer particles on mobile
+        for (let i = 0; i < numParticles; i++) {
+          particles.push(new Particle());
+        }
+      }
+
+      let confettiAnimationId;
+      function animateConfetti() {
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        let activeParticles = 0;
+        particles.forEach(particle => {
+          particle.update();
+          particle.draw();
+          if (particle.opacity > 0 && particle.y < confettiCanvas.height + particle.size) {
+            activeParticles++;
+          }
+        });
+
+        if (activeParticles > 0) { // Continue if there are visible particles
+          confettiAnimationId = requestAnimationFrame(animateConfetti);
+        } else {
+          confettiCanvas.style.display = 'none'; // Hide canvas when all particles are done
+          cancelAnimationFrame(confettiAnimationId); // Explicitly stop animation frame
+        }
+      }
+
+      function triggerConfetti() {
+        setupConfettiCanvas(); // Ensure canvas is sized correctly
+        initConfetti(); // Create new particles
+        confettiCanvas.style.display = 'block'; // Show canvas
+        if (confettiAnimationId) { // Clear any existing animation frame
+          cancelAnimationFrame(confettiAnimationId);
+        }
+        animateConfetti(); // Start the animation loop
+
+        // Set a timeout to stop creating new particles / effectively end the effect
+        setTimeout(() => {
+          particles = [];
+          cancelAnimationFrame(confettiAnimationId);
+          confettiCanvas.style.display = 'none';
+        }, 7000); // Confetti effect visible for about 7 seconds
+      }
+
+
+      // Initial setup
+      window.onload = () => {
+        setupConfettiCanvas(); // Prepare canvas dimensions
+        // Game starts via the button, initial news population happens in startGame()
+      };
+      window.onresize = () => {
+        setupConfettiCanvas();
+        // If news ticker is active, re-render to adjust animation speed
+        if (gameScreen.style.display === 'block') {
+          renderNewsItems();
+        }
+      };
+
+    </script>
+  </body>
+
+</html>

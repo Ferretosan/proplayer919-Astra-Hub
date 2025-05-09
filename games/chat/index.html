@@ -2,8 +2,8 @@
 <html lang="en">
 
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Global P2P Chatroom</title>
     <style>
       body {
@@ -82,10 +82,11 @@
 
       #input-container {
         display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
         padding: 15px;
         border-top: 1px solid #e0e0e0;
         background: #f9f9f9;
-        gap: 10px;
       }
 
       #message-input {
@@ -96,14 +97,14 @@
         font-size: 16px;
         outline: none;
         transition: border-color 0.2s;
+        min-width: 200px;
       }
 
       #message-input:focus {
         border-color: #007bff;
       }
 
-      #send-button,
-      #set-username-button {
+      button {
         padding: 10px 20px;
         border: none;
         background: #007bff;
@@ -114,17 +115,28 @@
         transition: background 0.2s;
       }
 
-      #send-button:hover,
-      #set-username-button:hover {
+      button:hover {
         background: #0056b3;
       }
 
       #status {
-        text-align: center;
         padding: 10px;
         background: #f0f2f5;
         color: #555;
         font-size: 0.9em;
+      }
+
+      #peer-list {
+        padding: 10px;
+        background: #f9f9f9;
+        border-top: 1px solid #e0e0e0;
+        font-size: 0.9em;
+        color: #333;
+      }
+
+      #peer-list:empty::before {
+        content: "No peers connected";
+        color: #888;
       }
 
       @media (max-width: 600px) {
@@ -137,8 +149,7 @@
           font-size: 14px;
         }
 
-        #send-button,
-        #set-username-button {
+        button {
           padding: 8px 15px;
           font-size: 12px;
         }
@@ -148,47 +159,83 @@
 
   <body>
     <div id="chat-container">
-      <div id="header">Global Chatroom</div>
+      <div id="header">Global P2P Chatroom</div>
       <div id="status">Connecting...</div>
       <div id="messages"></div>
+      <div id="peer-list"></div>
       <div id="input-container">
         <input type="text" id="message-input" placeholder="Type a message..." disabled>
         <button id="send-button" disabled>Send</button>
         <button id="set-username-button">Set Username</button>
+        <button id="connect-peer-button">Connect to Peer</button>
+        <button id="find-random-peer-button">Find Random Peer</button>
+        <button id="copy-id-button">Copy My ID</button>
       </div>
     </div>
 
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script>
-      const GLOBAL_CHAT_ID = 'global-chatroom';
       let peer = null;
       let connections = [];
       let username = 'Guest' + Math.floor(Math.random() * 1000);
+      let myPeerId = null;
       const messages = document.getElementById('messages');
       const messageInput = document.getElementById('message-input');
       const sendButton = document.getElementById('send-button');
       const setUsernameButton = document.getElementById('set-username-button');
+      const connectPeerButton = document.getElementById('connect-peer-button');
+      const randomConnectButton = document.getElementById('find-random-peer-button');
+      const copyIdButton = document.getElementById('copy-id-button');
       const status = document.getElementById('status');
+      const peerList = document.getElementById('peer-list');
 
-      function initializePeer() {
-        if (peer) {
-          peer.destroy();
+      function initializePeerWithLowestAvailableId(start = 1) {
+        let tryId = start;
+
+        function tryNextId() {
+          const tempPeer = new Peer(tryId.toString(), {
+            host: '0.peerjs.com',
+            port: 443,
+            path: '/',
+            secure: true
+          });
+
+          tempPeer.on('open', (id) => {
+            tempPeer.destroy();
+            peer = new Peer(id, {
+              host: '0.peerjs.com',
+              port: 443,
+              path: '/',
+              secure: true
+            });
+            setupPeer();
+          });
+
+          tempPeer.on('error', (err) => {
+            if (err.type === 'unavailable-id') {
+              tryId++;
+              tryNextId();
+            } else {
+              status.textContent = `Error: ${err.type}`;
+            }
+          });
         }
-        peer = new Peer(GLOBAL_CHAT_ID);
-        setupPeer();
+
+        tryNextId();
       }
 
       function setupPeer() {
-        peer.on('open', () => {
-          status.textContent = `Connected as ${username} (0 peers)`;
+        peer.on('open', (id) => {
+          myPeerId = id;
+          status.textContent = `Connected as ${username} (ID: ${id}, 0 peers)`;
           enableChat();
-          connectToPeers();
         });
 
         peer.on('connection', (conn) => {
           setupConnection(conn);
           connections.push(conn);
           updateStatus();
+          updatePeerList();
         });
 
         peer.on('error', (err) => {
@@ -202,10 +249,6 @@
         });
       }
 
-      function connectToPeers() {
-        // PeerJS handles connections to the same ID. We rely on the broker to connect peers.
-      }
-
       function setupConnection(conn) {
         conn.on('data', (data) => {
           addMessage(data.username, data.message, 'received', data.timestamp);
@@ -213,21 +256,88 @@
         conn.on('close', () => {
           connections = connections.filter(c => c !== conn);
           updateStatus();
+          updatePeerList();
         });
         conn.on('error', () => {
           connections = connections.filter(c => c !== conn);
           updateStatus();
+          updatePeerList();
         });
       }
 
-      function updateStatus() {
-        status.textContent = `Connected as ${username} (${connections.length} peer${connections.length === 1 ? '' : 's'})`;
-      }
+      connectPeerButton.onclick = () => {
+        const peerId = prompt('Enter peer ID to connect to:');
+        if (peerId && peerId !== myPeerId) {
+          const conn = peer.connect(peerId);
+          conn.on('open', () => {
+            connections.push(conn);
+            setupConnection(conn);
+            updateStatus();
+            updatePeerList();
+          });
+          conn.on('error', (err) => {
+            status.textContent = `Failed to connect to ${peerId}: ${err.type}`;
+          });
+        } else if (peerId === myPeerId) {
+          status.textContent = 'Cannot connect to your own ID';
+        }
+      };
+
+      randomConnectButton.onclick = () => {
+        let tryId = 1;
+
+        function tryNext() {
+          if (tryId.toString() === myPeerId) {
+            tryId++;
+            return tryNext();
+          }
+
+          const conn = peer.connect(tryId.toString());
+
+          let tried = false;
+          const timeout = setTimeout(() => {
+            if (!tried) {
+              conn.close();
+              tryId++;
+              tryNext();
+            }
+          }, 1000);
+
+          conn.on('open', () => {
+            clearTimeout(timeout);
+            tried = true;
+            if (confirm(`Found peer at ID ${tryId}. Connect?`)) {
+              connections.push(conn);
+              setupConnection(conn);
+              updateStatus();
+              updatePeerList();
+            } else {
+              conn.close();
+            }
+          });
+
+          conn.on('error', () => {
+            clearTimeout(timeout);
+            tryId++;
+            tryNext();
+          });
+        }
+
+        tryNext();
+      };
+
+      copyIdButton.onclick = () => {
+        navigator.clipboard.writeText(myPeerId).then(() => {
+          status.textContent = `Copied your ID: ${myPeerId}`;
+        }).catch(() => {
+          status.textContent = 'Failed to copy ID';
+        });
+      };
 
       setUsernameButton.onclick = () => {
         const newUsername = prompt('Enter your username:', username);
         if (newUsername && newUsername.trim()) {
-          username = newUsername.trim().substring(0, 20); // Limit username length
+          username = newUsername.trim().substring(0, 20);
           updateStatus();
         }
       };
@@ -242,7 +352,7 @@
 
       function sendMessage() {
         const text = messageInput.value.trim();
-        if (text && connections.length > 0) {
+        if (text) {
           const timestamp = Date.now();
           const messageData = { username, message: text, timestamp };
           connections.forEach(conn => {
@@ -259,12 +369,20 @@
         const div = document.createElement('div');
         div.className = `message ${type}`;
         div.innerHTML = `
-                <div class="username">${user}</div>
-                <div>${text}</div>
-                <div class="timestamp">${new Date(timestamp).toLocaleTimeString()}</div>
-            `;
+            <div class="username">${user}</div>
+            <div>${text}</div>
+            <div class="timestamp">${new Date(timestamp).toLocaleTimeString()}</div>
+        `;
         messages.appendChild(div);
         messages.scrollTop = messages.scrollHeight;
+      }
+
+      function updateStatus() {
+        status.textContent = `Connected as ${username} (ID: ${myPeerId}, ${connections.length} peer${connections.length === 1 ? '' : 's'})`;
+      }
+
+      function updatePeerList() {
+        peerList.innerHTML = connections.map(conn => `Peer: ${conn.peer}`).join('<br>');
       }
 
       function enableChat() {
@@ -278,8 +396,8 @@
         sendButton.disabled = true;
       }
 
-      // Initialize peer on load
-      initializePeer();
+      // Start
+      initializePeerWithLowestAvailableId();
     </script>
   </body>
 

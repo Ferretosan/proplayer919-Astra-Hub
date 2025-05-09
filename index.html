@@ -994,6 +994,11 @@
         <img id="logo" src="brand/logo-dark.png" alt="Astra Hub Logo">
         <h1>Astra Hub</h1>
       </div>
+      <div class="dropdown-menu">
+        <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><i class="fas fa-gamepad"></i>
+          Categories</button>
+        <div class="dropdown-content" id="dropdown-content" role="menu"></div>
+      </div>
       <div class="search-bar">
         <input type="text" id="search-input" placeholder="Search games..." aria-label="Search games">
         <div class="search-suggestions" id="search-suggestions" role="listbox"></div>
@@ -1002,13 +1007,6 @@
         <img src="settings-icon.png" alt="Settings" aria-label="Open settings" onclick="toggleSettings()">
       </div>
     </header>
-    <nav class="dropdown-toolbar" role="navigation">
-      <div class="dropdown-menu">
-        <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><i class="fas fa-gamepad"></i>
-          Categories</button>
-        <div class="dropdown-content" id="dropdown-content" role="menu"></div>
-      </div>
-    </nav>
     <div class="modal-overlay" id="modal-overlay" aria-hidden="true"></div>
     <div class="settings-modal" id="settings-modal" role="dialog" aria-labelledby="settings-title">
       <h3 id="settings-title">Settings</h3>

@@ -129,6 +129,22 @@
         "featured",
         "classic"
       ]
+    },
+    {
+      "id": "chat",
+      "title": "Chat",
+      "description": "A global peer-to-peer chat room.",
+      "developer": "proplayer919",
+      "image": "images/chat.png",
+      "url": "games/chat/index.html",
+      "tags": [
+        "utility"
+      ],
+      "rating": 5,
+      "categories": [
+        "featured",
+        "tool"
+      ]
     }
   ],
   "categories": [
@@ -141,6 +157,11 @@
       "id": "featured",
       "name": "Featured",
       "icon": "fa-trophy"
+    },
+    {
+      "id": "tool",
+      "name": "Tools",
+      "icon": "fa-wrench"
     },
     {
       "id": "action",
@@ -182,6 +203,7 @@
     "adventure": "fa-map",
     "multiplayer": "fa-users",
     "simulator": "fa-robot",
-    "simple": "fa-thumbs-up"
+    "simple": "fa-thumbs-up",
+    "utility": "fa-wrench"
   }
 }

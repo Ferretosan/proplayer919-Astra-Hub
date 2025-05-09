@@ -106,11 +106,12 @@
       }
 
       .theme-toggle {
-        cursor: pointer;
+        transition: transform 0.3s ease;
       }
 
       .theme-toggle:hover {
-        transform: scale(1.1), rotate(-10deg);
+        cursor: pointer;
+        transform: scale(1.5) rotate(-10deg);
       }
 
       .search-bar {
@@ -985,7 +986,9 @@
         <div class="search-suggestions" id="search-suggestions" role="listbox"></div>
       </div>
       <div class="settings">
-        <i class="fas fa-moon" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"></i>
+        <div class="theme-toggle" onclick="toggleTheme()">
+          <i class="fas fa-moon" id="theme-toggle" aria-label="Toggle theme"></i>
+        </div>
       </div>
     </header>
     <div class="modal-overlay" id="modal-overlay" aria-hidden="true"></div>

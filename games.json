@@ -1,0 +1,101 @@
+{
+  "games": [
+    {
+      "id": "battlegrounds",
+      "title": "Battlegrounds",
+      "description": "Explore the world map and engage in intense battles across the globe.",
+      "developer": "proplayer919",
+      "image": "images/battlegrounds.png",
+      "url": "games/battlegrounds/index.html",
+      "tags": [
+        "shooter",
+        "exploration",
+        "adventure",
+        "multiplayer",
+        "fast-paced"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "action"
+      ]
+    },
+    {
+      "id": "eat-that-food",
+      "title": "Eat that Food",
+      "description": "Eat glowing orbs to grow and become the biggest player in this satisfying, addictive game.",
+      "developer": "Riley",
+      "image": "images/eat-that-food.png",
+      "url": "games/eat-that-food/index.html",
+      "tags": [
+        "satisfying",
+        "relaxing",
+        "multiplayer"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "featured",
+        "satisfying"
+      ]
+    },
+    {
+      "id": "money-clicker",
+      "title": "Money Clicker",
+      "description": "Make the most money by clicking and upgrading your business.",
+      "developer": "proplayer919",
+      "image": "images/money-clicker.png",
+      "url": "games/money-clicker/index.html",
+      "tags": [
+        "clicker",
+        "satisfying",
+        "strategy"
+      ],
+      "rating": 4.2,
+      "categories": [
+        "featured",
+        "clicker"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "favorites",
+      "name": "Favorites",
+      "icon": "fa-star"
+    },
+    {
+      "id": "featured",
+      "name": "Featured",
+      "icon": "fa-trophy"
+    },
+    {
+      "id": "action",
+      "name": "Action",
+      "icon": "fa-rocket"
+    },
+    {
+      "id": "satisfying",
+      "name": "Satisfying",
+      "icon": "fa-smile"
+    },
+    {
+      "id": "clicker",
+      "name": "Clicker",
+      "icon": "fa-hand-pointer"
+    }
+  ],
+  "tags": {
+    "shooter": "fa-gun",
+    "space": "fa-globe",
+    "fast-paced": "fa-bolt",
+    "puzzle": "fa-brain",
+    "relaxing": "fa-spa",
+    "strategy": "fa-chess",
+    "defense": "fa-shield",
+    "logic": "fa-cogs",
+    "satisfying": "fa-smile",
+    "exploration": "fa-compass",
+    "adventure": "fa-map",
+    "multiplayer": "fa-users"
+  }
+}

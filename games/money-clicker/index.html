@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Clicker</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+        user-select: none;
+      }
+
+      #moneyDisplay {
+        font-size: 48px;
+        margin: 20px;
+        color: #4CAF50;
+      }
+
+      #incomeDisplay {
+        font-size: 24px;
+        margin: 10px;
+        color: #4CAF50;
+      }
+
+      #clickArea {
+        width: 200px;
+        height: 200px;
+        background-color: #4CAF50;
+        border-radius: 50%;
+        margin: 20px auto;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        transition: transform 0.1s;
+      }
+
+      #clickArea:active {
+        transform: scale(0.95);
+      }
+
+      .shop {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 10px;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .upgrade {
+        background-color: #333;
+        padding: 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .upgrade:hover {
+        background-color: #444;
+      }
+
+      .upgrade:active {
+        background-color: #555;
+      }
+
+      .upgrade.disabled {
+        background-color: #222;
+        cursor: not-allowed;
+        pointer-events: none;
+        /* Prevents clicks when disabled */
+      }
+
+      .upgrade h3 {
+        margin: 0 0 10px 0;
+        color: #4CAF50;
+      }
+
+      .cost {
+        color: #4CAF50;
+        font-weight: bold;
+      }
+
+      .owned {
+        color: #888;
+        font-size: 0.9em;
+      }
+
+      #resetButton {
+        margin: 20px;
+        padding: 10px 20px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.2s;
+      }
+
+      #resetButton:hover {
+        background-color: #d32f2f;
+      }
+
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        /* Position above the element */
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="moneyDisplay">$0</div>
+    <div id="incomeDisplay">Income per second: $0</div>
+
+    <div id="clickArea">
+      Click to earn money!
+    </div>
+
+    <button id="resetButton" onclick="resetGame()">Reset Game</button>
+
+    <div class="shop">
+      <div class="upgrade tooltip" onclick="buyUpgrade('cursor')">
+        <h3>Cursor</h3>
+        <div class="description">Automatically clicks every second</div>
+        <div class="tooltiptext">Increases click power slightly.</div>
+        <div class="cost">Cost: $<span id="cursorCost">10</span></div>
+        <div class="owned">Owned: <span id="cursorOwned">0</span></div>
+      </div>
+
+      <div class="upgrade tooltip" onclick="buyUpgrade('artist')">
+        <h3>Artist</h3>
+        <div class="description">Draws more money</div>
+        <div class="tooltiptext">Increases money generation.</div>
+        <div class="cost">Cost: $<span id="artistCost">50</span></div>
+        <div class="owned">Owned: <span id="artistOwned">0</span></div>
+      </div>
+
+      <div class="upgrade tooltip" onclick="buyUpgrade('printer')">
+        <h3>Printer</h3>
+        <div class="description">Mass produces money</div>
+        <div class="tooltiptext">Significantly increases money generation.</div>
+        <div class="cost">Cost: $<span id="printerCost">200</span></div>
+        <div class="owned">Owned: <span id="printerOwned">0</span></div>
+      </div>
+
+      <div class="upgrade tooltip" onclick="buyUpgrade('factory')">
+        <h3>Factory</h3>
+        <div class="description">Produces goods for profit</div>
+        <div class="tooltiptext">Greatly increases money generation.</div>
+        <div class="cost">Cost: $<span id="factoryCost">1000</span></div>
+        <div class="owned">Owned: <span id="factoryOwned">0</span></div>
+      </div>
+
+      <div class="upgrade tooltip" onclick="buyUpgrade('bank')">
+        <h3>Bank</h3>
+        <div class="description">Generates interest</div>
+        <div class="tooltiptext">Generates passive income.</div>
+        <div class="cost">Cost: $<span id="bankCost">5000</span></div>
+        <div class="owned">Owned: <span id="bankOwned">0</span></div>
+      </div>
+
+      <div class="upgrade tooltip" onclick="buyUpgrade('spaceAgency')">
+        <h3>Space Agency</h3>
+        <div class="description">Launches profitable space missions</div>
+        <div class="tooltiptext">Massively increases money generation.</div>
+        <div class="cost">Cost: $<span id="spaceAgencyCost">20000</span></div>
+        <div class="owned">Owned: <span id="spaceAgencyOwned">0</span></div>
+      </div>
+
+      <div class="upgrade tooltip" onclick="buyUpgrade('booster')">
+        <h3>Booster</h3>
+        <div class="description">Increases passive income by 10%</div>
+        <div class="tooltiptext">Boosts overall income.</div>
+        <div class="cost">Cost: $<span id="boosterCost">10000</span></div>
+        <div class="owned">Owned: <span id="boosterOwned">0</span></div>
+      </div>
+    </div>
+
+    <script>
+      let money = 0;
+      let clickPower = 1;
+      let incomeMultiplier = 1.0;
+      let upgrades = {
+        cursor: { baseCost: 10, cost: 10, owned: 0, multiplier: 0.1 },
+        artist: { baseCost: 50, cost: 50, owned: 0, multiplier: 1 },
+        printer: { baseCost: 200, cost: 200, owned: 0, multiplier: 5 },
+        factory: { baseCost: 1000, cost: 1000, owned: 0, multiplier: 10 },
+        bank: { baseCost: 5000, cost: 5000, owned: 0, multiplier: 50 },
+        spaceAgency: { baseCost: 20000, cost: 20000, owned: 0, multiplier: 200 },
+        booster: { baseCost: 10000, cost: 10000, owned: 0, effect: 0.1 }
+      };
+
+      function formatMoney(amount) {
+        return `$${amount.toFixed(2)}`;
+      }
+
+      function updateDisplay() {
+        document.getElementById('moneyDisplay').textContent = formatMoney(money);
+
+        let passiveIncome = 0;
+        for (let type in upgrades) {
+          if (upgrades[type].multiplier !== undefined) {
+            passiveIncome += upgrades[type].owned * upgrades[type].multiplier;
+          }
+        }
+        passiveIncome *= incomeMultiplier;
+        document.getElementById('incomeDisplay').textContent = `Income per second: ${formatMoney(passiveIncome)}`;
+
+        // Update all upgrades
+        for (let type in upgrades) {
+          document.getElementById(`${type}Cost`).textContent = upgrades[type].cost.toFixed(2);
+          document.getElementById(`${type}Owned`).textContent = upgrades[type].owned;
+
+          const upgradeElement = document.querySelector(`[onclick="buyUpgrade('${type}')"]`);
+          if (money >= upgrades[type].cost) {
+            upgradeElement.classList.remove('disabled');
+          } else {
+            upgradeElement.classList.add('disabled');
+          }
+        }
+      }
+
+      function addMoney(amount) {
+        money += amount;
+        updateDisplay();
+      }
+
+      function clickMoney() {
+        addMoney(clickPower);
+        const clickArea = document.getElementById('clickArea');
+        clickArea.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          clickArea.style.transform = 'scale(1)';
+        }, 100);
+      }
+
+      function buyUpgrade(type) {
+        const upgrade = upgrades[type];
+        if (money >= upgrade.cost) {
+          money -= upgrade.cost;
+          upgrade.owned++;
+          upgrade.cost = upgrade.baseCost * Math.pow(1.15, upgrade.owned);
+
+          if (type === 'cursor') {
+            clickPower += 0.1;
+          } else if (type === 'booster') {
+            incomeMultiplier += upgrade.effect;
+          } else {
+            addMoney(upgrade.multiplier * upgrade.owned);
+          }
+
+          updateDisplay();
+        }
+      }
+
+      function resetGame() {
+        if (confirm("Are you sure you want to reset your progress?")) {
+          money = 0;
+          clickPower = 1;
+          incomeMultiplier = 1.0;
+          for (let type in upgrades) {
+            upgrades[type].owned = 0;
+            upgrades[type].cost = upgrades[type].baseCost;
+          }
+          updateDisplay();
+          localStorage.removeItem('moneyClickerSave');
+        }
+      }
+
+      // Game loop
+      setInterval(() => {
+        let passiveIncome = 0;
+        for (let type in upgrades) {
+          if (upgrades[type].multiplier !== undefined) {
+            passiveIncome += upgrades[type].owned * upgrades[type].multiplier;
+          }
+        }
+        addMoney(passiveIncome * incomeMultiplier);
+      }, 1000);
+
+      // Initialize display
+      updateDisplay();
+
+      // Add click event listener
+      document.getElementById('clickArea').addEventListener('click', clickMoney);
+
+      // Save/load system
+      function saveGame() {
+        localStorage.setItem('moneyClickerSave', JSON.stringify({
+          money: money,
+          upgrades: upgrades,
+          incomeMultiplier: incomeMultiplier
+        }));
+      }
+
+      function loadGame() {
+        const save = JSON.parse(localStorage.getItem('moneyClickerSave'));
+        if (save) {
+          money = save.money;
+          upgrades = save.upgrades;
+          incomeMultiplier = save.incomeMultiplier || 1.0;
+          updateDisplay();
+        }
+      }
+
+      // Autosave every 30 seconds
+      setInterval(saveGame, 30000);
+      window.onload = loadGame;
+    </script>
+  </body>
+
+</html>

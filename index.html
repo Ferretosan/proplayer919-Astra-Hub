@@ -1008,17 +1008,10 @@
         <div class="search-suggestions" id="search-suggestions" role="listbox"></div>
       </div>
       <div class="settings">
-        <img src="settings-icon.png" alt="Settings" aria-label="Open settings" onclick="toggleSettings()">
+        <i class="fas fa-moon" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"></i>
       </div>
     </header>
     <div class="modal-overlay" id="modal-overlay" aria-hidden="true"></div>
-    <div class="settings-modal" id="settings-modal" role="dialog" aria-labelledby="settings-title">
-      <h3 id="settings-title">Settings</h3>
-      <label>
-        <input type="checkbox" id="theme-toggle" onclick="toggleTheme()"> Light Mode
-      </label>
-      <button onclick="toggleSettings()" class="close-btn" aria-label="Close settings">Close</button>
-    </div>
     <div class="preview-modal" id="preview-modal" role="dialog" aria-labelledby="preview-title">
       <img id="preview-image" src="" alt="">
       <h3 id="preview-title"></h3>
@@ -1619,16 +1612,6 @@
           }
         }
       });
-
-      // Settings Modal
-      function toggleSettings() {
-        const modal = $('#settings-modal');
-        const overlay = $('#modal-overlay');
-        const isOpen = modal.style.display === 'block';
-        modal.style.display = isOpen ? 'none' : 'block';
-        overlay.style.display = isOpen ? 'none' : 'block';
-        if (!isOpen) $('#theme-toggle').focus();
-      }
 
       // Theme Toggle
       function toggleTheme() {

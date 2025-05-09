@@ -71,7 +71,8 @@
       "rating": 4.5,
       "categories": [
         "featured",
-        "clicker"
+        "clicker",
+        "classic"
       ]
     },
     {
@@ -107,7 +108,26 @@
       "rating": 4.5,
       "categories": [
         "featured",
-        "clicker"
+        "clicker",
+        "classic"
+      ]
+    },
+    {
+      "id": "snake",
+      "title": "Snake",
+      "description": "Snake - but glowing",
+      "developer": "proplayer919",
+      "image": "images/snake.png",
+      "url": "games/snake/index.html",
+      "tags": [
+        "simple",
+        "fast-paced",
+        "relaxing"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "classic"
       ]
     }
   ],
@@ -141,6 +161,11 @@
       "id": "clicker",
       "name": "Clicker",
       "icon": "fa-hand-pointer"
+    },
+    {
+      "id": "classic",
+      "name": "Classic",
+      "icon": "fa-gamepad"
     }
   ],
   "tags": {

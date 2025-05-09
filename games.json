@@ -91,6 +91,24 @@
         "featured",
         "simulator"
       ]
+    },
+    {
+      "id": "whack-a-mole",
+      "title": "Whack a Mole",
+      "description": "Whack as many moles as you can in this classic game.",
+      "developer": "proplayer919",
+      "image": "images/whack-a-mole.png",
+      "url": "games/whack-a-mole/index.html",
+      "tags": [
+        "clicker",
+        "simple",
+        "relaxing"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "clicker"
+      ]
     }
   ],
   "categories": [

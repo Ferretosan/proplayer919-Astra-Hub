@@ -281,7 +281,8 @@
       <header class="bg-blue-600 text-white p-6 rounded-lg shadow-xl mb-6 text-center">
         <h1 class="text-3xl md:text-4xl font-bold">Presidential Dashboard</h1>
         <div class="tagline text-blue-200 mt-1 text-sm md:text-base">Term: <span id="termDisplay">1</span> | Month:
-          <span id="monthDisplay">0</span> / 48</div>
+          <span id="monthDisplay">0</span> / 48
+        </div>
       </header>
 
       <div id="stats" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -356,7 +357,6 @@
       const corpSupportEl = document.getElementById('corpSupport');
       const reelectChanceEl = document.getElementById('reelectChance');
       const progressBarEl = document.getElementById('progress-bar');
-      // const progressContainerEl = document.getElementById('progress-container'); // Not directly used after initial setup
       const billsContainer = document.getElementById('bills');
       const newsListEl = document.getElementById('news-list');
       const newsReaderEl = document.getElementById('news-reader');
@@ -435,9 +435,9 @@
 
       // Function to update all UI elements
       function updateUI() {
-        partySupportEl.innerText = Math.round(partySupport);
-        corpSupportEl.innerText = Math.round(corpSupport);
-        reelectChanceEl.innerText = Math.round(reelectionChance);
+        partySupportEl.innerText = Math.max(0, Math.min(100, Math.round(partySupport))) + '%';
+        corpSupportEl.innerText = Math.max(0, Math.min(100, Math.round(corpSupport))) + '%';
+        reelectChanceEl.innerText = Math.max(0, Math.min(100, Math.round(reelectionChance))) + '%';
 
         const progressPercent = (month / monthsPerTerm) * 100;
         progressBarEl.style.width = progressPercent + '%';

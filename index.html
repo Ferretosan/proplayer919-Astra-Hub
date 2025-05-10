@@ -586,7 +586,7 @@
       }
 
       .fullscreen-btn,
-      .share-btn {
+      .refresh-btn {
         padding: 0.9rem 2.5rem;
         border: none;
         border-radius: 30px;
@@ -606,12 +606,12 @@
         box-shadow: var(--glow);
       }
 
-      .share-btn {
+      .refresh-btn {
         background: linear-gradient(45deg, var(--accent), var(--primary));
         color: var(--light-text);
       }
 
-      .share-btn:hover {
+      .refresh-btn:hover {
         transform: translateY(-2px);
         box-shadow: var(--glow);
       }
@@ -931,7 +931,7 @@
           </div>
           <div class="game-controls">
             <button class="fullscreen-btn" onclick="goFullscreen()" aria-label="Enter fullscreen">Fullscreen</button>
-            <button class="share-btn" onclick="shareGame()" aria-label="Share game">Share</button>
+            <button class="refresh-btn" onclick="refreshGame()" aria-label="Refresh game">Refresh</button>
           </div>
           <div class="loading-progress" id="loading-progress" aria-hidden="true">
             <div></div>
@@ -1302,22 +1302,9 @@
         }
       }, { passive: true });
 
-      // Share Game
-      function shareGame() {
-        if (state.currentGame && navigator.share) {
-          navigator.share({
-            title: state.currentGame.title,
-            url: state.currentGame.url
-          }).catch(() => {
-            navigator.clipboard.writeText(state.currentGame.url).then(() => {
-              showToast('Game URL copied!');
-            });
-          });
-        } else if (state.currentGame) {
-          navigator.clipboard.writeText(state.currentGame.url).then(() => {
-            showToast('Game URL copied!');
-          });
-        }
+      // Refresh Game
+      function refreshGame() {
+        elements.gameIframe.contentWindow.location.reload();
       }
 
       // Toast Notification

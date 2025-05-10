@@ -1403,6 +1403,9 @@
         }
         homeButton.addEventListener('click', (e) => {
           e.preventDefault();
+          if (elements.gamePage.classList.contains('active')) {
+            backToHome();
+          }
           state.selectedCategory = '';
           state.selectedTag = '';
           localStorage.setItem('selectedCategory', state.selectedCategory);

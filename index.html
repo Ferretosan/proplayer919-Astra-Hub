@@ -1102,6 +1102,8 @@
           flex-direction: column;
           gap: 1rem;
           padding: 1rem;
+          bottom: 0;
+          z-index: 1000;
         }
 
         .fullscreen-info {
@@ -1224,6 +1226,7 @@
               <span class="back-to-home" onclick="backToHome()" role="button" aria-label="Back to home"><i
                   class="fas fa-arrow-left"></i> Back</span>
               <h2 id="game-title"></h2>
+              <p id="game-developer"></p>
               <div class="game-meta">
                 <div class="game-tags" id="game-tags"></div>
                 <div class="game-rating" id="game-rating"></div>
@@ -1248,6 +1251,7 @@
           <div class="fullscreen-bar" id="fullscreen-bar" role="toolbar" aria-hidden="true">
             <div class="fullscreen-info">
               <h3 id="fullscreen-title"></h3>
+              <p id="fullscreen-developer"></p>
               <div class="fullscreen-tags" id="fullscreen-tags"></div>
               <div class="fullscreen-rating" id="fullscreen-rating"></div>
               <button class="favorite-btn" id="fullscreen-favorite-btn" aria-label="Toggle favorite"></button>
@@ -1526,6 +1530,7 @@
         elements.gameIframe.style.display = 'none';
 
         $('#game-title').textContent = game.title;
+        $('#game-developer').textContent = 'By ' + game.developer;
         elements.gameIframe.src = game.url;
         $('#game-description').textContent = game.description;
 
@@ -1538,6 +1543,7 @@
         favoriteBtn.onclick = () => toggleFavorite(game);
 
         $('#fullscreen-title').textContent = game.title;
+        $('#fullscreen-developer').textContent = 'By ' + game.developer;
         $('#fullscreen-tags').innerHTML = game.tags.map(tag => `<span>${tag}</span>`).join('');
         $('#fullscreen-rating').innerHTML = '⭐'.repeat(stars);
         const fullscreenFavoriteBtn = $('#fullscreen-favorite-btn');

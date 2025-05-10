@@ -1495,6 +1495,8 @@
               <img src="${game.image}" alt="${game.title}" loading="lazy">
               <div class="game-card-info">
                 <h3>${game.title}</h3>
+                <p>${game.description}</p>
+                <p class="game-card-developer">By ${game.developer}</p>
                 <div class="game-card-meta">
                   <span class="rating" aria-label="Rating ${stars} out of 5">${'⭐'.repeat(stars)}</span>
                   <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Favorited' : 'Not favorited'}"></span>

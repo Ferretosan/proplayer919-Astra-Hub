@@ -24,7 +24,7 @@
     {
       "id": "eat-that-food",
       "title": "Eat that Food",
-      "description": "Eat glowing orbs to grow and become the biggest player in this satisfying, addictive game.",
+      "description": "Eat orbs to become the biggest player in this satisfying, addictive game.",
       "developer": "Riley",
       "image": "images/eat-that-food.png",
       "url": "games/eat-that-food/index.html",
@@ -76,7 +76,6 @@
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
         "clicker",
         "classic",
         "arcade"
@@ -139,6 +138,7 @@
       ],
       "rating": 4.5,
       "categories": [
+        "featured",
         "classic",
         "arcade"
       ],

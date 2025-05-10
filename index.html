@@ -41,7 +41,7 @@
         --ribbon-popular-bg: #6f42c1;
         /* Purple */
         --ribbon-original-bg: #28a745;
-        /* Green */
+        /* Renamed from --ribbon-astra-hub-original-bg for consistency */
         --ribbon-text-color: #ffffff;
       }
 
@@ -73,55 +73,51 @@
         opacity: 0.5;
       }
 
-      /* New container for sidebar and main content */
       .container {
         display: flex;
         min-height: 100vh;
       }
 
-      /* Sidebar styles */
       .sidebar {
         width: 250px;
-        /* Fixed width for the sidebar */
         background: var(--card-bg);
-        /* Background color for the sidebar */
         padding: 1.5rem;
         box-shadow: var(--shadow);
         display: flex;
         flex-direction: column;
         position: fixed;
-        /* Make sidebar fixed on the left */
         top: 0;
         left: 0;
         bottom: 0;
         overflow-y: auto;
-        /* Add scrolling if content exceeds height */
         z-index: 500;
-        /* Ensure it's above main content */
         transition: transform 0.4s ease;
-        /* Add transition for responsive toggle */
       }
 
       body.light-mode .sidebar {
         background: var(--light-card);
       }
 
-      /* Style for the logo inside the sidebar */
       .sidebar .logo-container {
         margin-bottom: 2rem;
-        justify-content: center;
-        /* Center logo horizontally */
-        margin-right: 0;
-        /* Remove margin from original header style */
+        /* justify-content: center; */
+        /* Removed as it's flex with items inside */
+        /* margin-right: 0; */
+        /* Not needed */
         cursor: pointer;
         transition: transform 0.3s;
+        display: flex;
+        /* Added for alignment of image and text */
+        align-items: center;
+        /* Vertically align image and text */
+        gap: 0.5rem;
+        /* Space between image and text */
       }
 
       .sidebar .logo-container:hover {
         transform: scale(1.05);
       }
 
-      /* Logo animation */
       @keyframes logo-pulse {
         0% {
           transform: scale(1);
@@ -141,7 +137,6 @@
         height: 48px;
         border-radius: 50%;
         animation: logo-pulse 3s infinite ease-in-out;
-        /* Apply logo animation */
       }
 
       .sidebar .logo-container h1 {
@@ -154,35 +149,23 @@
         color: var(--light-text);
       }
 
-
       .sidebar-nav {
         flex-grow: 1;
-        /* Allow navigation to take remaining vertical space */
       }
 
-      /* Category list within the sidebar */
       .sidebar .category-list {
         display: flex;
         flex-direction: column;
-        /* Stack category items vertically */
         gap: 1rem;
-        /* Space between items */
         padding: 0;
-        /* Remove padding */
         overflow-x: visible;
-        /* Allow content to overflow if needed */
         white-space: normal;
-        /* Allow wrapping */
       }
 
-      /* Category item within the sidebar */
       .sidebar .category-item {
         width: 100%;
-        /* Make items fill sidebar width */
         justify-content: flex-start;
-        /* Align text to the left */
         padding: 0.8rem 1.2rem;
-        /* Adjust padding */
         background: transparent;
         border: 2px solid var(--secondary);
         color: var(--text);
@@ -204,14 +187,15 @@
 
       .sidebar .category-item:hover {
         transform: translateY(-4px) scale(1.02);
-        /* More pronounced hover */
         box-shadow: var(--glow);
       }
 
       .sidebar .category-item.active {
         background: var(--accent);
         color: var(--light-text);
-        border: none;
+        /* Ensuring text is light on accent bg */
+        border-color: var(--accent);
+        /* Match border to bg when active */
       }
 
       .sidebar-footer {
@@ -221,22 +205,16 @@
         color: var(--text-secondary);
       }
 
-      /* Main content area */
       .main-content {
         margin-left: 250px;
-        /* Add margin to the left to make space for the fixed sidebar */
         flex-grow: 1;
-        /* Allow main content to take the remaining width */
         padding-top: 80px;
-        /* Add padding to the top for the fixed header */
       }
 
-      /* Header styles - adjusted for the new layout */
       header {
         position: fixed;
         top: 0;
         left: 250px;
-        /* Position header to the right of the sidebar */
         right: 0;
         background: var(--glass-bg);
         backdrop-filter: blur(12px);
@@ -245,7 +223,6 @@
         align-items: center;
         justify-content: space-between;
         z-index: 1000;
-        /* Ensure header is above main content */
         box-shadow: var(--shadow);
       }
 
@@ -253,22 +230,17 @@
         background: var(--glass-light-bg);
       }
 
-      /* Group search bar and theme toggle */
       .header-right {
         display: flex;
         align-items: center;
         gap: 1.5rem;
       }
 
-      /* Search bar styles */
       .search-bar {
         flex-grow: 1;
-        /* Allow search bar to take available space */
         max-width: 600px;
-        /* Maximum width for the search bar */
         position: relative;
         margin-left: 0;
-        /* Remove margin from original header style */
       }
 
       .search-bar input {
@@ -346,11 +318,19 @@
         font-weight: 500;
       }
 
-      /* Theme toggle styles */
+      /* Basic styling for ribbon in search suggestion, can be enhanced */
+      .search-suggestion-ribbon {
+        font-size: 0.7em;
+        padding: 0.1em 0.4em;
+        border-radius: 3px;
+        margin-left: 0.5em;
+        color: var(--ribbon-text-color);
+        vertical-align: middle;
+      }
+
       .theme-toggle {
         font-size: 1.6rem;
         cursor: pointer;
-        transition: transform 0.3s;
         padding: 0.5rem;
         border-radius: 50%;
         transition: transform 0.3s ease;
@@ -360,7 +340,6 @@
         transform: rotate(10deg) scale(1.2);
       }
 
-      /* Hamburger menu - hidden by default on large screens */
       .hamburger {
         display: none;
         font-size: 1.8rem;
@@ -377,16 +356,12 @@
         color: var(--light-text);
       }
 
-      /* Main content area padding */
       main {
         padding: 3rem 2rem;
         max-width: 1500px;
         margin: 0 auto;
-        /* Center content within the main-content area */
-        /* margin-top is handled by padding-top on main-content wrapper */
       }
 
-      /* New branding section styles */
       .branding-section {
         background: linear-gradient(90deg, var(--primary), var(--secondary));
         color: var(--light-text);
@@ -439,7 +414,6 @@
       .branding-features i {
         font-size: 1.5rem;
       }
-
 
       .loading {
         text-align: center;
@@ -520,11 +494,9 @@
         background: var(--card-bg);
         border-radius: 20px;
         overflow: hidden;
-        /* Important for ribbon positioning */
         cursor: pointer;
         transition: all 0.4s ease;
         position: relative;
-        /* Required for absolute positioning of the ribbon */
         background: linear-gradient(135deg, var(--card-bg), #2a1a7b);
         box-shadow: var(--shadow);
       }
@@ -544,45 +516,51 @@
         outline-offset: 2px;
       }
 
-      /* Ribbon Styles */
-      .game-card .ribbon {
-        position: absolute;
-        top: 15px;
-        /* Adjust as needed */
-        right: -30px;
-        /* Start off-screen to create the slant */
-        background-color: var(--primary);
-        /* Default color, will be overridden */
-        color: var(--ribbon-text-color);
-        padding: 6px 30px;
-        /* Adjust padding for text and slant */
-        font-size: 0.85rem;
+      /* New Ribbon Badge Styles for Game Cards */
+      .ribbon-badge {
+        display: inline-block;
+        /* Allows centering via text-align on parent */
+        padding: 0.4em 0.9em;
+        font-size: 0.8rem;
         font-weight: 600;
+        color: var(--ribbon-text-color);
+        border-radius: 4px;
         text-transform: uppercase;
-        transform: rotate(45deg);
-        transform-origin: top right;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        z-index: 10;
-        /* Ensure ribbon is above the image */
+        margin-bottom: 0.6rem;
+        /* Space below badge, above title */
         line-height: 1.2;
-        text-align: center;
-        min-width: 120px;
-        /* Ensure text fits */
       }
 
-      .game-card .ribbon.ribbon-new {
+      .ribbon-badge.ribbon-new {
         background-color: var(--ribbon-new-bg);
       }
 
-      .game-card .ribbon.ribbon-updated {
+      .ribbon-badge.ribbon-updated {
         background-color: var(--ribbon-updated-bg);
       }
 
-      .game-card .ribbon.ribbon-popular {
+      .ribbon-badge.ribbon-popular {
         background-color: var(--ribbon-popular-bg);
       }
 
-      .game-card .ribbon.ribbon-astra-hub-original {
+      .ribbon-badge.ribbon-astra-hub-original {
+        background-color: var(--ribbon-original-bg);
+      }
+
+      /* Ensure search suggestion ribbons pick up colors too */
+      .search-suggestion-ribbon.ribbon-new {
+        background-color: var(--ribbon-new-bg);
+      }
+
+      .search-suggestion-ribbon.ribbon-updated {
+        background-color: var(--ribbon-updated-bg);
+      }
+
+      .search-suggestion-ribbon.ribbon-popular {
+        background-color: var(--ribbon-popular-bg);
+      }
+
+      .search-suggestion-ribbon.ribbon-astra-hub-original {
         background-color: var(--ribbon-original-bg);
       }
 
@@ -601,6 +579,7 @@
       .game-card-info {
         padding: 1.5rem;
         text-align: center;
+        /* Center ribbon badge, title, and other content */
       }
 
       .game-card h3 {
@@ -611,16 +590,32 @@
       }
 
       .game-card-developer {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        /* Slightly smaller for better hierarchy */
         color: var(--text-secondary);
+        margin-top: 0.3rem;
+        /* Space from description */
       }
+
+      .game-card-description {
+        /* Added a class for description for better control */
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.4;
+        min-height: 40px;
+        /* Give some space for description or it collapses */
+        margin-bottom: 0.5rem;
+      }
+
 
       body.light-mode .game-card h3 {
         color: var(--light-text);
       }
 
-      body.light-mode .game-card-developer {
+      body.light-mode .game-card-developer,
+      body.light-mode .game-card-description {
         color: var(--light-text);
+        opacity: 0.85;
       }
 
       .game-card-meta {
@@ -629,6 +624,8 @@
         gap: 0.8rem;
         font-size: 1rem;
         color: var(--text-secondary);
+        margin-top: 1rem;
+        /* Space above meta */
       }
 
       .game-card-meta .rating {
@@ -639,15 +636,12 @@
         font-size: 1.4rem;
         cursor: pointer;
         transition: color 0.3s, transform 0.2s ease-in-out;
-        /* Add transform transition */
       }
 
       .game-card-meta .favorite:hover {
         transform: scale(1.2);
-        /* Scale on hover */
       }
 
-      /* Favorite animation */
       @keyframes favorite-pop {
         0% {
           transform: scale(1);
@@ -658,7 +652,6 @@
           color: var(--accent);
         }
 
-        /* Pop effect with color change */
         100% {
           transform: scale(1);
         }
@@ -678,19 +671,15 @@
         color: var(--text-secondary);
       }
 
-      /* Apply animation when favorited class is added */
       .game-card-meta .favorite.favorited {
         animation: favorite-pop 0.4s ease-in-out;
       }
-
 
       .game-page {
         display: none;
         padding: 3rem 2rem;
         max-width: 1500px;
         margin: 0 auto;
-        /* Center content within the main-content area */
-        /* margin-top is handled by padding-top on main-content wrapper */
         transform: translateX(100%);
         transition: transform 0.6s ease-in-out;
       }
@@ -713,38 +702,42 @@
         border-radius: 20px;
         box-shadow: var(--shadow);
         position: relative;
-        /* For potential ribbon placement on game page */
       }
 
       body.light-mode .game-main {
         background: var(--glass-light-bg);
       }
 
+      #game-title-container,
+      #fullscreen-title-container {
+        text-align: center;
+        /* Center the inline-block ribbon and title */
+        margin-bottom: 1rem;
+        /* Space below title/ribbon group */
+      }
+
       .game-main h2 {
         font-size: 2.8rem;
         font-weight: 700;
         color: var(--secondary);
-        margin-bottom: 0.5rem;
-        /* Adjusted margin for ribbon */
-        display: inline-block;
-        /* To allow ribbon next to it */
-        margin-right: 1rem;
-        /* Space for ribbon */
+        margin-top: 0.5rem;
+        /* Space below ribbon if any */
+        margin-bottom: 0;
+        /* Let container handle bottom margin */
       }
 
-      /* Ribbon on Game Page Title */
+      /* Ribbon on Game Page Title (now a badge above) */
       .game-title-ribbon {
         display: inline-block;
-        padding: 0.3rem 0.8rem;
-        font-size: 0.9rem;
+        padding: 0.3em 0.8em;
+        font-size: 1rem;
+        /* Slightly larger for page title context */
         font-weight: 600;
         color: var(--ribbon-text-color);
         border-radius: 5px;
         text-transform: uppercase;
-        vertical-align: middle;
-        /* Align with title text */
-        margin-bottom: 0.5rem;
-        /* Align with title's original margin */
+        margin-bottom: 0.75rem;
+        /* Space between ribbon and title */
       }
 
       .game-title-ribbon.ribbon-new {
@@ -774,8 +767,9 @@
         margin-bottom: 2rem;
         align-items: center;
         flex-wrap: wrap;
-        margin-top: 1rem;
-        /* Added margin if ribbon is above */
+        justify-content: center;
+        /* Center meta items */
+        /* margin-top: 1rem; /* Removed, title container handles spacing */
       }
 
       .game-tags span {
@@ -787,7 +781,6 @@
         font-weight: 500;
         margin-right: 0.5rem;
         transition: transform 0.2s ease-in-out;
-        /* Add hover effect */
       }
 
       .game-tags span:hover {
@@ -805,12 +798,10 @@
         cursor: pointer;
         font-size: 2rem;
         transition: color 0.3s, transform 0.2s ease-in-out;
-        /* Add transform transition */
       }
 
       .favorite-btn:hover {
         transform: scale(1.2);
-        /* Scale on hover */
       }
 
       .favorite-btn.favorited::before {
@@ -825,13 +816,17 @@
         font-family: 'Font Awesome 6 Free';
         font-weight: 400;
         color: var(--text);
+        /* Ensure this is visible in light mode too */
       }
 
-      /* Apply animation when favorited class is added */
+      body.light-mode .favorite-btn:not(.favorited)::before {
+        color: var(--light-text);
+      }
+
+
       .favorite-btn.favorited {
         animation: favorite-pop 0.4s ease-in-out;
       }
-
 
       .game-controls {
         margin-bottom: 2rem;
@@ -882,13 +877,11 @@
         font-size: 1.1rem;
         font-weight: 500;
         transition: color 0.3s, transform 0.2s ease-in-out;
-        /* Add transform transition */
       }
 
       .back-to-home:hover {
         color: var(--secondary);
         transform: translateX(-5px);
-        /* Slide left on hover */
       }
 
       .game-main iframe {
@@ -901,14 +894,17 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       }
 
-      .game-main p {
+      .game-main p#game-description {
+        /* More specific selector */
         margin: 2rem 0;
         line-height: 1.7;
         color: var(--text-secondary);
         font-size: 1.1rem;
+        text-align: left;
+        /* Descriptions usually left-aligned */
       }
 
-      body.light-mode .game-main p {
+      body.light-mode .game-main p#game-description {
         color: #37474f;
       }
 
@@ -950,7 +946,6 @@
       .similar-game:hover {
         background: rgba(255, 255, 255, 0.1);
         transform: translateY(-2px) scale(1.02);
-        /* Combine translate and scale */
       }
 
       .similar-game img {
@@ -991,28 +986,50 @@
       .fullscreen-info {
         display: flex;
         align-items: center;
+        /* Align items in the center of the flex line */
+        flex-direction: column;
+        /* Stack items vertically for centering ribbon and title */
+        gap: 0.5rem;
+        /* Adjust gap for vertical stacking */
+        flex-grow: 1;
+        /* Allow info to take space for centering */
+        text-align: center;
+      }
+
+      .fullscreen-info-details {
+        /* New wrapper for developer, tags, rating, favorite */
+        display: flex;
+        align-items: center;
         gap: 1.2rem;
         flex-wrap: wrap;
+        justify-content: center;
+        /* Center these details */
+        margin-top: 0.5rem;
+        /* Space below title container */
       }
+
 
       .fullscreen-info h3 {
         font-size: 1.5rem;
         font-weight: 600;
         color: var(--secondary);
+        margin-top: 0.3rem;
+        /* Space below ribbon */
+        margin-bottom: 0;
       }
 
-      /* Ribbon for fullscreen bar title */
+      /* Ribbon for fullscreen bar title (now a badge above) */
       .fullscreen-title-ribbon {
         display: inline-block;
-        padding: 0.2rem 0.6rem;
-        font-size: 0.8rem;
+        padding: 0.2em 0.6em;
+        font-size: 0.9rem;
+        /* Consistent with game page ribbon */
         font-weight: 600;
         color: var(--ribbon-text-color);
         border-radius: 4px;
         text-transform: uppercase;
-        vertical-align: middle;
-        margin-left: 0.5rem;
-        /* Space from title */
+        margin-bottom: 0.5rem;
+        /* Space between ribbon and title */
       }
 
       .fullscreen-title-ribbon.ribbon-new {
@@ -1108,7 +1125,6 @@
         box-shadow: var(--glow);
       }
 
-      /* Overlay for mobile sidebar */
       .overlay {
         position: fixed;
         top: 0;
@@ -1117,6 +1133,7 @@
         bottom: 0;
         background: rgba(0, 0, 0, 0.5);
         z-index: 900;
+        /* Below sidebar but above content */
         display: none;
       }
 
@@ -1129,39 +1146,31 @@
       @media (max-width: 768px) {
         .container {
           flex-direction: column;
-          /* Stack sidebar and main content vertically */
         }
 
-        /* Sidebar is hidden by default on small screens */
         .sidebar {
           position: fixed;
           top: 0;
           left: 0;
           bottom: 0;
           width: 250px;
-          /* Keep sidebar width */
           transform: translateX(-100%);
-          /* Hide sidebar off-screen */
           transition: transform 0.4s ease;
-          z-index: 1000;
+          z-index: 1100;
           /* Ensure sidebar is on top when active */
           background: var(--card-bg);
-          /* Use card background for consistency */
         }
 
-        /* Show sidebar when active */
         .sidebar.active {
           transform: translateX(0);
         }
 
-        /* Remove left margin from main content on small screens */
         .main-content {
           margin-left: 0;
-          padding-top: 80px;
-          /* Keep padding for header */
+          padding-top: 70px;
+          /* Adjusted for slightly smaller header */
         }
 
-        /* Header spans full width on small screens */
         header {
           left: 0;
           padding: 0.8rem 1.5rem;
@@ -1171,61 +1180,55 @@
           gap: 1rem;
         }
 
-        /* Show hamburger menu on small screens */
         .hamburger {
           display: block;
         }
-
-        /* Hide the category list from the header nav (it's now in the sidebar) */
-        .nav-menu .category-list {
-          display: none;
-        }
-
-        /* Style for the active sidebar navigation */
-        .sidebar.active .sidebar-nav {
-          display: flex;
-          /* Show nav when sidebar is active */
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 1rem;
-        }
-
-        /* Adjust category item width in active sidebar */
-        .sidebar.active .category-item {
-          width: auto;
-          justify-content: flex-start;
-        }
-
 
         main {
           padding: 2rem 1.5rem;
         }
 
         .search-bar {
-          margin: 1rem 0;
-          max-width: 100%;
+          /* margin: 1rem 0; */
+          /* Removed to keep it in header flow */
+          max-width: calc(100% - 60px);
+          /* Adjust based on hamburger and theme toggle size */
         }
 
         .games-grid {
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         }
 
-        .game-card .ribbon {
-          top: 12px;
-          right: -35px;
-          /* Adjust for smaller cards */
-          padding: 5px 25px;
+        /* Ribbon badge on smaller cards */
+        .ribbon-badge {
           font-size: 0.75rem;
+          padding: 0.3em 0.7em;
+          margin-bottom: 0.5rem;
         }
-
 
         .game-content {
           flex-direction: column;
         }
 
         .game-main {
-          padding: 2rem;
+          padding: 1.5rem;
+          /* Reduced padding */
         }
+
+        #game-title-container {
+          margin-bottom: 0.8rem;
+        }
+
+        .game-main h2 {
+          font-size: 2.2rem;
+          /* Slightly smaller title */
+        }
+
+        .game-title-ribbon {
+          font-size: 0.9rem;
+          margin-bottom: 0.6rem;
+        }
+
 
         .game-main iframe {
           height: 450px;
@@ -1237,26 +1240,49 @@
 
         .fullscreen-bar {
           flex-direction: column;
-          gap: 1rem;
-          padding: 1rem;
-          bottom: 0;
-          z-index: 1000;
+          gap: 0.8rem;
+          /* Reduced gap */
+          padding: 0.8rem;
+          /* Reduced padding */
+          /* bottom: 0; */
+          /* Removed, top is fine */
+          /* z-index: 1000; */
+          /* Already high z-index */
         }
 
         .fullscreen-info {
-          flex-direction: column;
-          align-items: flex-start;
+          /* flex-direction: column; */
+          /* Already column */
+          /* align-items: flex-start; */
+          /* Changed to center globally */
+          gap: 0.3rem;
+        }
+
+        #fullscreen-title-container {
+          margin-bottom: 0.5rem;
+        }
+
+        .fullscreen-info h3 {
+          font-size: 1.3rem;
         }
 
         .fullscreen-title-ribbon {
-          margin-left: 0;
-          margin-top: 0.3rem;
-          /* Stack below title on small screens */
+          font-size: 0.8rem;
+          margin-bottom: 0.4rem;
         }
+
+        .fullscreen-info-details {
+          gap: 0.8rem;
+          /* Smaller gap for details */
+          justify-content: center;
+          /* Ensure centering */
+        }
+
 
         .fullscreen-controls {
           width: 100%;
-          justify-content: space-between;
+          justify-content: space-around;
+          /* Better distribution */
         }
 
         .branding-section {
@@ -1284,17 +1310,34 @@
       @media (max-width: 480px) {
         .games-grid {
           grid-template-columns: 1fr;
+          /* Single column */
         }
+
+        .game-card-info {
+          padding: 1rem;
+          /* Smaller padding on very small screens */
+        }
+
+        .ribbon-badge {
+          font-size: 0.7rem;
+        }
+
+        .game-card h3 {
+          font-size: 1.3rem;
+        }
+
+        .game-card-description {
+          font-size: 0.85rem;
+          min-height: 30px;
+        }
+
+        .game-card-developer {
+          font-size: 0.9rem;
+        }
+
 
         .game-card img {
           height: 160px;
-        }
-
-        .game-card .ribbon {
-          top: 10px;
-          right: -38px;
-          padding: 4px 20px;
-          font-size: 0.7rem;
         }
 
         .game-main iframe {
@@ -1310,19 +1353,13 @@
         }
 
         .game-main h2 {
-          font-size: 2.2rem;
-          display: block;
-          /* Stack title and ribbon */
-          margin-right: 0;
+          font-size: 1.8rem;
+          /* Further reduce for small screens */
         }
 
         .game-title-ribbon {
-          margin-top: 0.5rem;
-          /* Space below title */
-          margin-bottom: 1rem;
-          /* Space before meta */
+          font-size: 0.8rem;
         }
-
 
         .branding-section h2 {
           font-size: 1.8rem;
@@ -1362,10 +1399,10 @@
             <div class="search-suggestions" id="search-suggestions" role="listbox"></div>
           </div>
           <div class="header-right">
-            <div class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-              <i class="fas fa-moon" id="theme-toggle"></i>
+            <div class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme" role="button" tabindex="0">
+              <i class="fas fa-moon" id="theme-toggle-icon"></i>
             </div>
-            <i class="fas fa-bars hamburger" id="hamburger" aria-label="Toggle menu"></i>
+            <i class="fas fa-bars hamburger" id="hamburger" aria-label="Toggle menu" role="button" tabindex="0"></i>
           </div>
         </header>
 
@@ -1384,7 +1421,7 @@
         <div class="game-page" id="game-page" role="main">
           <div class="game-content">
             <div class="game-main">
-              <span class="back-to-home" onclick="backToHome()" role="button" aria-label="Back to home"><i
+              <span class="back-to-home" onclick="backToHome()" role="button" tabindex="0" aria-label="Back to home"><i
                   class="fas fa-arrow-left"></i> Back</span>
               <div id="game-title-container">
                 <h2 id="game-title"></h2>
@@ -1403,7 +1440,7 @@
               <div class="loading-progress" id="loading-progress" aria-hidden="true">
                 <div></div>
               </div>
-              <iframe id="game-iframe" title="Game content"></iframe>
+              <iframe id="game-iframe" title="Game content" allowfullscreen></iframe>
               <p id="game-description"></p>
             </div>
             <div class="similar-games">
@@ -1411,28 +1448,31 @@
               <div id="similar-games-list" role="list"></div>
             </div>
           </div>
-          <div class="fullscreen-bar" id="fullscreen-bar" role="toolbar" aria-hidden="true">
-            <div class="fullscreen-info">
-              <div id="fullscreen-title-container">
-                <h3 id="fullscreen-title"></h3>
-              </div>
+        </div>
+
+        <div class="fullscreen-bar" id="fullscreen-bar" role="toolbar" aria-hidden="true">
+          <div class="fullscreen-info">
+            <div id="fullscreen-title-container">
+              <h3 id="fullscreen-title"></h3>
+            </div>
+            <div class="fullscreen-info-details">
               <p id="fullscreen-developer"></p>
               <div class="fullscreen-tags" id="fullscreen-tags"></div>
               <div class="fullscreen-rating" id="fullscreen-rating"></div>
               <button class="favorite-btn" id="fullscreen-favorite-btn" aria-label="Toggle favorite"></button>
             </div>
-            <div class="fullscreen-controls">
-              <button class="exit-fullscreen-btn" onclick="exitFullscreen()" aria-label="Exit fullscreen">Exit</button>
-              <button class="hide-bar-btn" onclick="toggleFullscreenBar()"
-                aria-label="Hide fullscreen bar">Hide</button>
-            </div>
+          </div>
+          <div class="fullscreen-controls">
+            <button class="exit-fullscreen-btn" onclick="exitFullscreen()" aria-label="Exit fullscreen">Exit</button>
+            <button class="hide-bar-btn" onclick="toggleFullscreenBar()" aria-label="Hide fullscreen bar">Hide</button>
           </div>
         </div>
+
       </div>
     </div>
     <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
     <button class="back-to-top" id="back-to-top" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
-
+    <div id="mobile-overlay" class="overlay"></div>
     <script>
       // Utility Functions
       const $ = (selector, context = document) => context.querySelector(selector);
@@ -1447,7 +1487,7 @@
         isFullscreen: false
       };
 
-      // DOM Elements - Updated to reflect new structure
+      // DOM Elements
       const elements = {
         canvas: $('#starfield'),
         homePage: $('#home-page'),
@@ -1455,50 +1495,32 @@
         gameIframe: $('#game-iframe'),
         searchInput: $('#search-input'),
         searchSuggestions: $('#search-suggestions'),
-        categoryList: $('#category-list'), // This is now in the sidebar
+        categoryList: $('#category-list'),
         toast: $('#toast'),
         backToTop: $('#back-to-top'),
-        logoContainer: $('#logoContainer'), // This is now in the sidebar
+        logoContainer: $('#logoContainer'),
         fullscreenBar: $('#fullscreen-bar'),
-        hamburger: $('#hamburger'), // Hamburger to toggle sidebar on small screens
-        sidebar: $('#sidebar'), // Reference to the new sidebar element
-        mainContent: $('.main-content'), // Reference to the main content wrapper
-        overlay: null, // Will be created dynamically for mobile sidebar overlay
-        gameTitleContainer: $('#game-title-container'), // Container for game page title and ribbon
-        fullscreenTitleContainer: $('#fullscreen-title-container') // Container for fullscreen bar title and ribbon
+        hamburger: $('#hamburger'),
+        sidebar: $('#sidebar'),
+        mainContent: $('.main-content'),
+        mobileOverlay: $('#mobile-overlay'), // Use ID for overlay
+        gameTitleContainer: $('#game-title-container'),
+        fullscreenTitleContainer: $('#fullscreen-title-container'),
+        themeToggleIcon: $('#theme-toggle-icon') // For theme icon
       };
 
       // Hamburger Menu: Toggle Sidebar on small screens
       elements.hamburger.addEventListener('click', () => {
         elements.sidebar.classList.toggle('active');
-        if (elements.sidebar.classList.contains('active')) {
-          // Create and show overlay when sidebar is active
-          if (!elements.overlay) { // Create overlay only if it doesn't exist
-            elements.overlay = document.createElement('div');
-            elements.overlay.className = 'overlay active';
-            document.body.appendChild(elements.overlay);
-            // Close sidebar when clicking on the overlay
-            elements.overlay.addEventListener('click', closeSidebar);
-          } else {
-            elements.overlay.classList.add('active'); // Show existing overlay
-          }
-        } else {
-          // Hide and remove overlay when sidebar is not active
-          closeSidebar();
-        }
+        elements.mobileOverlay.classList.toggle('active');
       });
+      elements.mobileOverlay.addEventListener('click', closeSidebar);
 
-      // Function to close the sidebar and remove the overlay
+
       function closeSidebar() {
         elements.sidebar.classList.remove('active');
-        if (elements.overlay) {
-          elements.overlay.classList.remove('active');
-          // Optionally remove the overlay from DOM if you prefer:
-          // elements.overlay.remove();
-          // elements.overlay = null;
-        }
+        elements.mobileOverlay.classList.remove('active');
       }
-
 
       // Starfield Animation
       const ctx = elements.canvas.getContext('2d');
@@ -1509,12 +1531,12 @@
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas, { passive: true });
 
-      const stars = Array.from({ length: 250 }, () => ({
+      const stars = Array.from({ length: 150 }, () => ({ // Reduced star count for performance
         x: Math.random() * elements.canvas.width,
         y: Math.random() * elements.canvas.height,
-        radius: Math.random() * 1.8,
-        speed: Math.random() * 0.4 + 0.1,
-        opacity: Math.random() * 0.5 + 0.5
+        radius: Math.random() * 1.5, // Slightly smaller stars
+        speed: Math.random() * 0.3 + 0.1, // Slightly slower
+        opacity: Math.random() * 0.4 + 0.3 // Adjusted opacity
       }));
 
       function animateStars() {
@@ -1532,13 +1554,14 @@
         });
         requestAnimationFrame(animateStars);
       }
-      animateStars();
+      if (elements.canvas) animateStars(); // Check if canvas exists
 
       // Intersection Observer for Animations
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            observer.unobserve(entry.target); // Unobserve after visible to save resources
           }
         });
       }, { threshold: 0.1 });
@@ -1547,159 +1570,140 @@
       async function loadGameData() {
         try {
           const response = await fetch('games.json', { cache: 'no-cache' });
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          if (!response.ok) throw new Error(`HTTP error ${response.status}`);
           state.gameData = await response.json();
-          // Keep the branding section, clear only the loading/category content
+
           const brandingSection = elements.homePage.querySelector('.branding-section');
-          elements.homePage.innerHTML = ''; // Clear previous content
-          if (brandingSection) { // Ensure branding section exists before appending
-            elements.homePage.appendChild(brandingSection); // Add branding section back
-          }
+          const loadingMessage = elements.homePage.querySelector('.loading');
+          if (loadingMessage) loadingMessage.remove(); // Remove loading message
+
+          elements.homePage.innerHTML = ''; // Clear only if needed, or target specific areas
+          if (brandingSection) elements.homePage.appendChild(brandingSection);
+
           populateCategories();
           populateCategoryList();
         } catch (error) {
-          const brandingSection = elements.homePage.querySelector('.branding-section');
-          elements.homePage.innerHTML = ''; // Clear previous content
-          if (brandingSection) {
-            elements.homePage.appendChild(brandingSection);
-          }
-          elements.homePage.innerHTML += `<div class="error">Error loading games: ${error.message}</div>`; // Append error below branding
+          console.error("Error loading game data:", error);
+          const homePageContent = elements.homePage.querySelector('.branding-section')?.nextElementSibling;
+          if (homePageContent) homePageContent.innerHTML = `<div class="error">Error loading games: ${error.message}</div>`;
+          else elements.homePage.innerHTML += `<div class="error">Error loading games: ${error.message}</div>`;
         }
       }
 
-      // Category List Population - Updated to work with the sidebar
+      // Category List Population
       function populateCategoryList() {
         elements.categoryList.innerHTML = '';
-        // Home button remains the same
         const homeButton = document.createElement('a');
         homeButton.href = '#';
         homeButton.className = 'category-item';
         homeButton.innerHTML = `<i class="fas fa-home" aria-hidden="true"></i> Home`;
         homeButton.dataset.category = '';
         homeButton.setAttribute('role', 'tab');
-        homeButton.setAttribute('aria-selected', state.selectedCategory === '' ? 'true' : 'false');
-        if (state.selectedCategory === '') {
-          homeButton.classList.add('active');
-        }
+        homeButton.setAttribute('aria-selected', !state.selectedCategory);
+        if (!state.selectedCategory) homeButton.classList.add('active');
+
         homeButton.addEventListener('click', (e) => {
           e.preventDefault();
-          if (elements.gamePage.classList.contains('active')) {
-            backToHome();
-          }
+          if (elements.gamePage.classList.contains('active')) backToHome();
           state.selectedCategory = '';
           state.selectedTag = '';
-          localStorage.setItem('selectedCategory', state.selectedCategory);
-          localStorage.setItem('selectedTag', state.selectedTag);
+          localStorage.setItem('selectedCategory', '');
+          localStorage.setItem('selectedTag', '');
           populateCategories();
-          // Select category items within the sidebar's category list
-          $$('.category-item', elements.categoryList).forEach(item => {
-            item.classList.remove('active');
-            item.setAttribute('aria-selected', 'false');
-          });
+          $$('.category-item', elements.categoryList).forEach(item => item.classList.remove('active'));
           homeButton.classList.add('active');
-          homeButton.setAttribute('aria-selected', 'true');
-          closeSidebar(); // Close sidebar after clicking a category
+          closeSidebar();
         });
         elements.categoryList.appendChild(homeButton);
 
         state.gameData.categories.forEach(category => {
           if (category.id === 'favorites') return;
-
           const button = document.createElement('a');
           button.href = '#';
           button.className = 'category-item';
-          button.innerHTML = `<i class="fas ${category.icon}" aria-hidden="true"></i> ${category.name}`;
+          button.innerHTML = `<i class="fas ${category.icon || 'fa-gamepad'}" aria-hidden="true"></i> ${category.name}`;
           button.dataset.category = category.id;
           button.setAttribute('role', 'tab');
-          button.setAttribute('aria-selected', state.selectedCategory === category.id ? 'true' : 'false');
-          if (state.selectedCategory === category.id) {
-            button.classList.add('active');
-          }
+          button.setAttribute('aria-selected', state.selectedCategory === category.id);
+          if (state.selectedCategory === category.id) button.classList.add('active');
+
           button.addEventListener('click', (e) => {
             e.preventDefault();
-
-            if (elements.gamePage.classList.contains('active')) {
-              backToHome();
-            }
-
+            if (elements.gamePage.classList.contains('active')) backToHome();
             state.selectedCategory = category.id;
             state.selectedTag = '';
-            localStorage.setItem('selectedCategory', state.selectedCategory);
-            localStorage.setItem('selectedTag', state.selectedTag);
+            localStorage.setItem('selectedCategory', category.id);
+            localStorage.setItem('selectedTag', '');
             populateCategories();
-            // Select category items within the sidebar's category list
-            $$('.category-item', elements.categoryList).forEach(item => {
-              item.classList.remove('active');
-              item.setAttribute('aria-selected', 'false');
-            });
+            $$('.category-item', elements.categoryList).forEach(item => item.classList.remove('active'));
             button.classList.add('active');
-            button.setAttribute('aria-selected', 'true');
-            closeSidebar(); // Close sidebar after clicking a category
+            closeSidebar();
           });
           elements.categoryList.appendChild(button);
         });
       }
 
-      // Helper function to create and add ribbon to game card
-      function addRibbonToCard(game, gameCardElement) {
+      // Helper function to create and add ribbon badge to game card info
+      function addRibbonBadgeToCard(game, gameCardElement) {
         if (game.ribbon) {
-          const ribbonElement = document.createElement('div');
-          ribbonElement.className = `ribbon ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}`;
-          ribbonElement.textContent = game.ribbon;
-          gameCardElement.appendChild(ribbonElement);
-        }
-      }
-
-      // Helper function to create and add ribbon to game title sections
-      function addRibbonToTitle(game, titleContainerElement, isFullscreen = false) {
-        // Clear any existing ribbon first
-        const existingRibbon = titleContainerElement.querySelector(isFullscreen ? '.fullscreen-title-ribbon' : '.game-title-ribbon');
-        if (existingRibbon) {
-          existingRibbon.remove();
-        }
-
-        if (game.ribbon) {
-          const ribbonElement = document.createElement('span');
-          ribbonElement.className = `${isFullscreen ? 'fullscreen-title-ribbon' : 'game-title-ribbon'} ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}`;
-          ribbonElement.textContent = game.ribbon;
-          // Insert after the h2/h3 title element
-          const titleElement = titleContainerElement.querySelector(isFullscreen ? 'h3' : 'h2');
-          if (titleElement) {
-            titleElement.insertAdjacentElement('afterend', ribbonElement);
+          const infoDiv = gameCardElement.querySelector('.game-card-info');
+          if (infoDiv) {
+            const titleElement = infoDiv.querySelector('h3');
+            if (titleElement) {
+              const ribbonElement = document.createElement('div');
+              ribbonElement.className = `ribbon-badge ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}`;
+              ribbonElement.textContent = game.ribbon;
+              infoDiv.insertBefore(ribbonElement, titleElement);
+            }
           }
         }
       }
 
+      // Helper function to create and add ribbon to game title sections (now above title)
+      function addRibbonToTitle(game, titleContainerElement, isFullscreen = false) {
+        const ribbonClass = isFullscreen ? 'fullscreen-title-ribbon' : 'game-title-ribbon';
+        const existingRibbon = titleContainerElement.querySelector(`.${ribbonClass}`);
+        if (existingRibbon) existingRibbon.remove();
+
+        if (game.ribbon) {
+          const ribbonElement = document.createElement('div'); // Use div for block behavior by default
+          ribbonElement.className = `${ribbonClass} ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}`;
+          ribbonElement.textContent = game.ribbon;
+
+          const titleElement = titleContainerElement.querySelector(isFullscreen ? 'h3' : 'h2');
+          if (titleElement) {
+            titleContainerElement.insertBefore(ribbonElement, titleElement);
+          }
+        }
+      }
 
       // Category Population
       function populateCategories(filterTag = state.selectedTag, filterCategory = state.selectedCategory) {
-        // Keep the branding section, clear only the category content
         const brandingSection = elements.homePage.querySelector('.branding-section');
-        elements.homePage.innerHTML = ''; // Clear previous content
-        if (brandingSection) { // Ensure branding section exists before appending
-          elements.homePage.appendChild(brandingSection); // Add branding section back
-        }
+        // Clear only game sections, not the branding section
+        $$('.category-section, .error', elements.homePage).forEach(el => el.remove());
 
 
+        let gamesDisplayed = false;
         state.gameData.categories.forEach(category => {
           if (filterCategory && category.id !== filterCategory && category.id !== 'favorites') return;
+
           let games = category.id === 'favorites'
             ? getFavorites()
             : state.gameData.games.filter(game =>
-              game.categories.includes(category.id) && (!filterTag || game.tags.includes(filterTag))
+              game.categories.includes(category.id) &&
+              (!filterTag || (game.tags && game.tags.includes(filterTag)))
             );
 
           if (games.length) {
+            gamesDisplayed = true;
             const section = document.createElement('div');
             section.className = 'category-section';
             section.id = `category-${category.id}`;
             section.innerHTML = `
-            <div class="category-header">
-              <h2>${category.name}</h2>
-            </div>
-            <div class="games-grid" id="${category.id}-games"></div>
-          `;
-            elements.homePage.appendChild(section);
+              <div class="category-header"><h2>${category.name}</h2></div>
+              <div class="games-grid" id="${category.id}-games"></div>`;
+            elements.homePage.appendChild(section); // Append after branding
             observer.observe(section);
 
             const gamesGrid = $(`#${category.id}-games`);
@@ -1707,37 +1711,42 @@
               const gameCard = document.createElement('div');
               gameCard.className = 'game-card';
               gameCard.tabIndex = 0;
-              gameCard.style.animationDelay = `${index * 0.1}s`;
-              const stars = Math.round(game.rating);
+              gameCard.style.animationDelay = `${index * 0.05}s`; // Faster animation
+              const stars = Math.round(game.rating || 0);
               const isFavorited = localStorage.getItem(`favorite-${game.id}`) === 'true';
 
-              // Add ribbon to game card
-              addRibbonToCard(game, gameCard);
+              // Truncate description for card
+              const shortDescription = game.description && game.description.length > 80
+                ? game.description.substring(0, 80) + "..."
+                : game.description || "";
 
-              gameCard.innerHTML += `
-              <img src="${game.image}" alt="${game.title}" loading="lazy">
-              <div class="game-card-info">
-                <h3>${game.title}</h3>
-                <p>${game.description}</p> <p class="game-card-developer">By ${game.developer}</p>
-                <div class="game-card-meta">
-                  <span class="rating" aria-label="Rating ${stars} out of 5">${'<i class="fas fa-star"></i>'.repeat(stars)}</span>
-                  <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Favorited' : 'Not favorited'}"></span>
-                </div>
-              </div>
-            `;
+              gameCard.innerHTML = `
+                <img src="${game.image || 'placeholder.png'}" alt="${game.title}" loading="lazy" onerror="this.src='https://placehold.co/320x220/1a1354/00d4ff?text=No+Image'">
+                <div class="game-card-info">
+                  <h3>${game.title}</h3>
+                  <p class="game-card-description">${shortDescription}</p>
+                  <p class="game-card-developer">By ${game.developer || 'Unknown Developer'}</p>
+                  <div class="game-card-meta">
+                    <span class="rating" aria-label="Rating ${stars} out of 5">${'<i class="fas fa-star"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}</span>
+                    <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Add to favorites' : 'Remove from favorites'}" role="button" tabindex="0"></span>
+                  </div>
+                </div>`;
+
+              addRibbonBadgeToCard(game, gameCard); // Add ribbon badge
+
               gameCard.addEventListener('click', () => showGamePage(game));
               gameCard.querySelector('.favorite').addEventListener('click', (e) => {
                 e.stopPropagation();
-                toggleFavorite(game);
+                toggleFavorite(game, gameCard.querySelector('.favorite'));
               });
               gamesGrid.appendChild(gameCard);
             });
           }
         });
-        // If no games are found after filtering, display a message below the branding section
-        if (elements.homePage.querySelectorAll('.category-section').length === 0 && !elements.homePage.querySelector('.loading') && !elements.homePage.querySelector('.error')) {
+
+        if (!gamesDisplayed && !elements.homePage.querySelector('.error')) {
           const noGamesMessage = document.createElement('div');
-          noGamesMessage.className = 'error'; // Reusing error class for styling
+          noGamesMessage.className = 'error';
           noGamesMessage.textContent = 'No games found for the selected filters.';
           elements.homePage.appendChild(noGamesMessage);
         }
@@ -1755,74 +1764,86 @@
         elements.gamePage.classList.add('active');
         $('#loading-progress').style.display = 'block';
         elements.gameIframe.style.display = 'none';
+        elements.gameIframe.src = ''; // Clear previous game
 
         $('#game-title').textContent = game.title;
-        addRibbonToTitle(game, elements.gameTitleContainer); // Add ribbon to game page title
+        addRibbonToTitle(game, elements.gameTitleContainer);
 
-        $('#game-developer').textContent = 'By ' + game.developer;
+        $('#game-developer').textContent = 'By ' + (game.developer || 'Unknown Developer');
+        $('#game-developer').style = 'text-align: center; margin-bottom: 1rem;';
         elements.gameIframe.src = game.url;
-        $('#game-description').textContent = game.description;
+        $('#game-description').textContent = game.description || "No description available.";
 
-        $('#game-tags').innerHTML = game.tags.map(tag => `<span>${tag}</span>`).join('');
-        const stars = Math.round(game.rating);
-        $('#game-rating').innerHTML = 'тнР'.repeat(stars);
+        $('#game-tags').innerHTML = game.tags && game.tags.length > 0 ? game.tags.map(tag => `<span>${tag}</span>`).join('') : '<span>No tags</span>';
+        const stars = Math.round(game.rating || 0);
+        $('#game-rating').innerHTML = `${'<i class="fas fa-star" style="color: var(--secondary);"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}`;
 
         const favoriteBtn = $('#favorite-btn');
         favoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
-        favoriteBtn.onclick = () => toggleFavorite(game);
+        favoriteBtn.onclick = () => toggleFavorite(game, favoriteBtn, $('#fullscreen-favorite-btn'));
 
+        // Fullscreen bar update
         $('#fullscreen-title').textContent = game.title;
-        addRibbonToTitle(game, elements.fullscreenTitleContainer, true); // Add ribbon to fullscreen bar title
-
-        $('#fullscreen-developer').textContent = 'By ' + game.developer;
-        $('#fullscreen-tags').innerHTML = game.tags.map(tag => `<span>${tag}</span>`).join('');
-        $('#fullscreen-rating').innerHTML = 'тнР'.repeat(stars);
+        addRibbonToTitle(game, elements.fullscreenTitleContainer, true);
+        $('#fullscreen-developer').textContent = 'By ' + (game.developer || 'Unknown Developer');
+        $('#fullscreen-tags').innerHTML = game.tags && game.tags.length > 0 ? game.tags.map(tag => `<span>${tag}</span>`).join('') : '';
+        $('#fullscreen-rating').innerHTML = `${'<i class="fas fa-star"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}`;
         const fullscreenFavoriteBtn = $('#fullscreen-favorite-btn');
         fullscreenFavoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
-        fullscreenFavoriteBtn.onclick = () => toggleFavorite(game);
+        fullscreenFavoriteBtn.onclick = () => toggleFavorite(game, fullscreenFavoriteBtn, favoriteBtn);
+
 
         const similarGamesList = $('#similar-games-list');
         similarGamesList.innerHTML = '';
-        state.gameData.games.forEach(g => {
-          if (g.id !== game.id && g.tags.some(tag => game.tags.includes(tag))) {
-            const similarGame = document.createElement('div');
-            similarGame.className = 'similar-game';
-            similarGame.tabIndex = 0;
+        let similarCount = 0;
+        if (state.gameData.games && game.tags) {
+          state.gameData.games.forEach(g => {
+            if (similarCount < 5 && g.id !== game.id && g.tags && g.tags.some(tag => game.tags.includes(tag))) {
+              const similarGame = document.createElement('div');
+              similarGame.className = 'similar-game';
+              similarGame.tabIndex = 0;
+              similarGame.innerHTML = `
+                        <img src="${g.image || 'placeholder.png'}" alt="${g.title}" loading="lazy" onerror="this.src='https://placehold.co/90x90/1a1354/00d4ff?text=No+Image'">
+                        <span>${g.title}</span>`;
+              similarGame.addEventListener('click', () => showGamePage(g));
+              similarGamesList.appendChild(similarGame);
+              similarCount++;
+            }
+          });
+        }
+        if (similarCount === 0) similarGamesList.innerHTML = '<p>No similar games found.</p>';
 
-            // Add ribbon to similar game cards if needed (optional, could be too much)
-            // addRibbonToCard(g, similarGame); // Example if you want ribbons here too
-
-            similarGame.innerHTML += `
-            <img src="${g.image}" alt="${g.title}" loading="lazy">
-            <span>${g.title}</span>
-          `;
-            similarGame.addEventListener('click', () => showGamePage(g));
-            similarGamesList.appendChild(similarGame);
-          }
-        });
 
         elements.gameIframe.onload = hideSpinner;
+        elements.gameIframe.onerror = () => { // Basic error handling for iframe
+          hideSpinner();
+          elements.gameIframe.parentElement.insertAdjacentHTML('afterbegin', '<p class="error">Could not load game.</p>');
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        closeSidebar(); // Ensure sidebar is closed when game page is shown
+        closeSidebar();
       }
 
-      function toggleFavorite(game) {
+      function toggleFavorite(game, ...buttonsToUpdate) {
         const isFavorited = localStorage.getItem(`favorite-${game.id}`) === 'true';
         localStorage.setItem(`favorite-${game.id}`, !isFavorited);
-        $('#favorite-btn').classList.toggle('favorited', !isFavorited);
-        $('#fullscreen-favorite-btn').classList.toggle('favorited', !isFavorited);
-        showToast(isFavorited ? 'Removed from favorites' : 'Added to favorites');
 
-        // Update game card favorite status on home page if visible
-        const gameCardOnHomePage = $(`#home-page .game-card img[alt="${game.title}"]`)?.closest('.game-card');
+        buttonsToUpdate.forEach(btn => {
+          if (btn) {
+            btn.classList.toggle('favorited', !isFavorited);
+            btn.setAttribute('aria-label', !isFavorited ? 'Remove from favorites' : 'Add to favorites');
+          }
+        });
+        // Also update on home page if card exists
+        const gameCardOnHomePage = Array.from($$('#home-page .game-card')).find(card => card.querySelector('h3')?.textContent === game.title);
         if (gameCardOnHomePage) {
           const favIcon = gameCardOnHomePage.querySelector('.favorite');
           if (favIcon) {
             favIcon.classList.toggle('favorited', !isFavorited);
-            favIcon.setAttribute('aria-label', !isFavorited ? 'Favorited' : 'Not favorited');
+            favIcon.setAttribute('aria-label', !isFavorited ? 'Remove from favorites' : 'Add to favorites');
           }
         }
 
+        showToast(isFavorited ? 'Removed from favorites' : 'Added to favorites');
         if (state.selectedCategory === 'favorites') {
           populateCategories(state.selectedTag, state.selectedCategory);
         }
@@ -1831,22 +1852,19 @@
       function hideSpinner() {
         $('#loading-progress').style.display = 'none';
         elements.gameIframe.style.display = 'block';
-        elements.gameIframe.focus();
+        try { elements.gameIframe.focus(); } catch (e) { /* some browsers might deny focus */ }
       }
 
-      // Back to Home - Updated to close sidebar
       function backToHome() {
         elements.gamePage.classList.remove('active');
         setTimeout(() => {
           elements.gamePage.style.display = 'none';
           elements.homePage.style.display = 'block';
-          elements.gameIframe.src = ''; // Clear iframe src to stop game
-          // No need to call populateCategories here if filters haven't changed.
-          // If you want to always refresh, uncomment the line below.
-          // populateCategories(state.selectedTag, state.selectedCategory);
-          window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top of home page
-          closeSidebar(); // Close sidebar
-        }, 600); // Match transition duration
+          elements.gameIframe.src = 'about:blank'; // More robust way to clear iframe
+          // populateCategories(state.selectedTag, state.selectedCategory); // Refresh if needed
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          closeSidebar();
+        }, 600);
       }
 
       // Fullscreen Controls
@@ -1854,64 +1872,71 @@
       function goFullscreen() {
         if (elements.gameIframe.requestFullscreen) {
           elements.gameIframe.requestFullscreen();
-          state.isFullscreen = true;
-          elements.fullscreenBar.style.display = 'flex';
-          elements.fullscreenBar.classList.remove('hidden'); // Ensure it's visible initially
-          clearTimeout(autoHideTimeout);
-          autoHideTimeout = setTimeout(() => {
-            elements.fullscreenBar.classList.add('hidden');
-          }, 3000);
+        } else if (elements.gameIframe.mozRequestFullScreen) { /* Firefox */
+          elements.gameIframe.mozRequestFullScreen();
+        } else if (elements.gameIframe.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+          elements.gameIframe.webkitRequestFullscreen();
+        } else if (elements.gameIframe.msRequestFullscreen) { /* IE/Edge */
+          elements.gameIframe.msRequestFullscreen();
         }
       }
 
       function exitFullscreen() {
-        if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
           document.exitFullscreen();
-          // fullscreenchange event will handle state.isFullscreen and bar visibility
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
         }
       }
+
+      document.addEventListener('fullscreenchange', handleFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+      function handleFullscreenChange() {
+        state.isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+        if (state.isFullscreen) {
+          elements.fullscreenBar.style.display = 'flex';
+          elements.fullscreenBar.classList.remove('hidden');
+          clearTimeout(autoHideTimeout);
+          autoHideTimeout = setTimeout(() => elements.fullscreenBar.classList.add('hidden'), 3000);
+        } else {
+          elements.fullscreenBar.style.display = 'none';
+          elements.fullscreenBar.classList.remove('hidden');
+          clearTimeout(autoHideTimeout);
+        }
+      }
+
 
       function toggleFullscreenBar() {
         elements.fullscreenBar.classList.toggle('hidden');
         clearTimeout(autoHideTimeout);
-        if (!elements.fullscreenBar.classList.contains('hidden')) {
-          autoHideTimeout = setTimeout(() => {
-            elements.fullscreenBar.classList.add('hidden');
-          }, 3000);
+        if (state.isFullscreen && !elements.fullscreenBar.classList.contains('hidden')) {
+          autoHideTimeout = setTimeout(() => elements.fullscreenBar.classList.add('hidden'), 3000);
         }
       }
 
-      document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-          state.isFullscreen = false;
-          elements.fullscreenBar.style.display = 'none';
-          elements.fullscreenBar.classList.remove('hidden');
-          clearTimeout(autoHideTimeout);
-        } else {
-          // When entering fullscreen, ensure bar is visible and auto-hide is set
-          elements.fullscreenBar.style.display = 'flex';
-          elements.fullscreenBar.classList.remove('hidden');
-          clearTimeout(autoHideTimeout);
-          autoHideTimeout = setTimeout(() => {
-            elements.fullscreenBar.classList.add('hidden');
-          }, 3000);
-        }
-      });
-
       document.addEventListener('mousemove', (e) => {
-        if (state.isFullscreen && elements.fullscreenBar.classList.contains('hidden') && e.clientY < 120) {
+        if (state.isFullscreen && elements.fullscreenBar.classList.contains('hidden') && e.clientY < 100) { // smaller activation area
           elements.fullscreenBar.classList.remove('hidden');
           clearTimeout(autoHideTimeout);
-          autoHideTimeout = setTimeout(() => {
-            elements.fullscreenBar.classList.add('hidden');
-          }, 3000);
+          autoHideTimeout = setTimeout(() => elements.fullscreenBar.classList.add('hidden'), 3000);
         }
       }, { passive: true });
 
       // Refresh Game
       function refreshGame() {
         if (elements.gameIframe.contentWindow) {
-          elements.gameIframe.contentWindow.location.reload();
+          try {
+            elements.gameIframe.contentWindow.location.reload();
+          } catch (e) {
+            elements.gameIframe.src = elements.gameIframe.src; // Fallback for cross-origin iframes
+          }
         }
       }
 
@@ -1919,7 +1944,7 @@
       function showToast(message) {
         elements.toast.textContent = message;
         elements.toast.classList.add('show');
-        setTimeout(() => elements.toast.classList.remove('show'), 3000);
+        setTimeout(() => elements.toast.classList.remove('show'), 2500); // Slightly shorter
       }
 
       // Search Functionality
@@ -1927,6 +1952,11 @@
         const query = elements.searchInput.value.toLowerCase().trim();
         elements.searchSuggestions.innerHTML = '';
         elements.searchSuggestions.style.display = query ? 'block' : 'none';
+
+        if (!query) { // If query is empty, repopulate all categories
+          populateCategories(state.selectedTag, state.selectedCategory);
+          return;
+        }
 
         const suggestions = state.gameData.games
           .filter(game => game.title.toLowerCase().includes(query))
@@ -1936,17 +1966,15 @@
           const suggestion = document.createElement('div');
           suggestion.className = 'search-suggestion';
           suggestion.setAttribute('role', 'option');
-          // Add ribbon to search suggestions (optional, simple text version here)
           let ribbonText = '';
-          if (game.ribbon) {
+          if (game.ribbon) { // Add ribbon styling to search suggestions
             ribbonText = `<span class="search-suggestion-ribbon ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}">${game.ribbon}</span>`;
           }
           suggestion.innerHTML = `
-            <img src="${game.image}" alt="${game.title}" loading="lazy">
-            <span>${game.title} ${ribbonText}</span>
-          `;
+            <img src="${game.image || 'placeholder.png'}" alt="${game.title}" loading="lazy" onerror="this.src='https://placehold.co/48x48/1a1354/00d4ff?text=N/A'">
+            <span>${game.title} ${ribbonText}</span>`;
           suggestion.addEventListener('click', () => {
-            elements.searchInput.value = game.title; // Keep this to fill input
+            elements.searchInput.value = ''; // Clear search input after selection
             elements.searchSuggestions.style.display = 'none';
             showGamePage(game);
           });
@@ -1954,134 +1982,134 @@
         });
 
         // Filter and display games on the home page based on search query
-        // Keep the branding section, clear only the category content
         const brandingSection = elements.homePage.querySelector('.branding-section');
-        elements.homePage.innerHTML = ''; // Clear previous content
-        if (brandingSection) { // Ensure branding section exists before appending
-          elements.homePage.appendChild(brandingSection); // Add branding section back
-        }
+        $$('.category-section, .error', elements.homePage).forEach(el => el.remove()); // Clear previous results
 
-
+        let searchGamesDisplayed = false;
         state.gameData.categories.forEach(category => {
           const matchingGames = state.gameData.games
             .filter(game => game.title.toLowerCase().includes(query) &&
-              (!state.selectedTag || game.tags.includes(state.selectedTag)) &&
+              (!state.selectedTag || (game.tags && game.tags.includes(state.selectedTag))) &&
               (category.id === 'favorites' ? localStorage.getItem(`favorite-${game.id}`) === 'true' : game.categories.includes(category.id))
             );
           if (matchingGames.length && (!state.selectedCategory || category.id === state.selectedCategory || category.id === 'favorites')) {
+            searchGamesDisplayed = true;
             const section = document.createElement('div');
             section.className = 'category-section';
-            section.id = `category-${category.id}`;
+            section.id = `category-search-${category.id}`; // Unique ID for search results
             section.innerHTML = `
-            <div class="category-header">
-              <h2>${category.name}</h2>
-            </div>
-            <div class="games-grid" id="${category.id}-games"></div>
-          `;
+              <div class="category-header"><h2>${category.name} (Search Results)</h2></div>
+              <div class="games-grid" id="search-${category.id}-games"></div>`;
             elements.homePage.appendChild(section);
             observer.observe(section);
 
-            const gamesGrid = $(`#${category.id}-games`);
+            const gamesGrid = $(`#search-${category.id}-games`);
             matchingGames.forEach((game, index) => {
               const gameCard = document.createElement('div');
               gameCard.className = 'game-card';
               gameCard.tabIndex = 0;
-              gameCard.style.animationDelay = `${index * 0.1}s`;
-              const stars = Math.round(game.rating);
+              gameCard.style.animationDelay = `${index * 0.05}s`;
+              const stars = Math.round(game.rating || 0);
               const isFavorited = localStorage.getItem(`favorite-${game.id}`) === 'true';
+              const shortDescription = game.description && game.description.length > 80 ? game.description.substring(0, 80) + "..." : game.description || "";
 
-              addRibbonToCard(game, gameCard); // Add ribbon
 
-              gameCard.innerHTML += `
-              <img src="${game.image}" alt="${game.title}" loading="lazy">
-              <div class="game-card-info">
-                <h3>${game.title}</h3>
-                <p>${game.description}</p>
-                <p class="game-card-developer">By ${game.developer}</p>
-                <div class="game-card-meta">
-                  <span class="rating" aria-label="Rating ${stars} out of 5">${'<i class="fas fa-star"></i>'.repeat(stars)}</span>
-                  <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Favorited' : 'Not favorited'}"></span>
-                </div>
-              </div>
-            `;
+              gameCard.innerHTML = `
+                <img src="${game.image || 'placeholder.png'}" alt="${game.title}" loading="lazy" onerror="this.src='https://placehold.co/320x220/1a1354/00d4ff?text=No+Image'">
+                <div class="game-card-info">
+                  <h3>${game.title}</h3>
+                  <p class="game-card-description">${shortDescription}</p>
+                  <p class="game-card-developer">By ${game.developer || 'Unknown Developer'}</p>
+                  <div class="game-card-meta">
+                    <span class="rating" aria-label="Rating ${stars} out of 5">${'<i class="fas fa-star"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}</span>
+                    <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Add to favorites' : 'Remove from favorites'}" role="button" tabindex="0"></span>
+                  </div>
+                </div>`;
+              addRibbonBadgeToCard(game, gameCard); // Add ribbon
+
               gameCard.addEventListener('click', () => showGamePage(game));
               gameCard.querySelector('.favorite').addEventListener('click', (e) => {
                 e.stopPropagation();
-                toggleFavorite(game);
+                toggleFavorite(game, gameCard.querySelector('.favorite'));
               });
               gamesGrid.appendChild(gameCard);
             });
           }
         });
-        // If no games are found after filtering, display a message below the branding section
-        if (elements.homePage.querySelectorAll('.category-section').length === 0 && !elements.homePage.querySelector('.loading') && !elements.homePage.querySelector('.error')) {
+        if (!searchGamesDisplayed) {
           const noGamesMessage = document.createElement('div');
-          noGamesMessage.className = 'error'; // Reusing error class for styling
+          noGamesMessage.className = 'error';
           noGamesMessage.textContent = 'No games found for your search.';
           elements.homePage.appendChild(noGamesMessage);
         }
       });
+      // Hide suggestions when clicking outside
+      document.addEventListener('click', (event) => {
+        if (!elements.searchBar?.contains(event.target)) {
+          elements.searchSuggestions.style.display = 'none';
+        }
+      });
+
 
       // Theme Toggle
+      const themeToggleButton = $('.theme-toggle'); // Use the class
+      if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', toggleTheme);
+      }
       function toggleTheme() {
         document.body.classList.toggle('light-mode');
-        $('#logo').src = document.body.classList.contains('light-mode') ? 'brand/logo-light.png' : 'brand/logo-dark.png';
-        localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-        $('#theme-toggle').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        const isLight = document.body.classList.contains('light-mode');
+        if (elements.logoContainer.querySelector('img')) {
+          elements.logoContainer.querySelector('img').src = isLight ? 'brand/logo-light.png' : 'brand/logo-dark.png';
+        }
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        if (elements.themeToggleIcon) {
+          elements.themeToggleIcon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+        }
       }
 
       // Back to Top
       window.addEventListener('scroll', () => {
-        elements.backToTop.style.display = window.scrollY > 400 ? 'block' : 'none';
+        elements.backToTop.style.display = window.scrollY > 300 ? 'block' : 'none'; // Show earlier
       }, { passive: true });
-
       elements.backToTop.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      // Logo Navigation - Updated to close sidebar
+      // Logo Navigation
       elements.logoContainer.addEventListener('click', () => {
         state.selectedCategory = '';
         state.selectedTag = '';
-        localStorage.setItem('selectedCategory', state.selectedCategory);
-        localStorage.setItem('selectedTag', state.selectedTag);
-
+        localStorage.setItem('selectedCategory', '');
+        localStorage.setItem('selectedTag', '');
         if (elements.gamePage.classList.contains('active')) {
-          backToHome(); // Go back to home if on game page
+          backToHome();
         } else {
-          // If already on home page, just repopulate and ensure correct category is active
-          populateCategories();
-          $$('.category-item', elements.categoryList).forEach(item => {
-            item.classList.remove('active');
-            item.setAttribute('aria-selected', 'false');
-          });
-          const homeButton = $$('.category-item', elements.categoryList)[0];
-          if (homeButton) {
-            homeButton.classList.add('active');
-            homeButton.setAttribute('aria-selected', 'true');
-          }
+          populateCategories(); // Refresh home page
+          $$('.category-item', elements.categoryList).forEach(item => item.classList.remove('active'));
+          const homeButton = elements.categoryList.querySelector('.category-item[data-category=""]');
+          if (homeButton) homeButton.classList.add('active');
         }
-        closeSidebar(); // Close sidebar
+        elements.searchInput.value = ''; // Clear search input on logo click
+        elements.searchSuggestions.style.display = 'none'; // Hide suggestions
+        closeSidebar();
       });
 
       // Initialize
-      if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-        $('#logo').src = 'brand/logo-light.png';
-        $('#theme-toggle').className = 'fas fa-sun';
+      function init() {
+        if (localStorage.getItem('theme') === 'light') {
+          document.body.classList.add('light-mode');
+          if (elements.logoContainer.querySelector('img')) {
+            elements.logoContainer.querySelector('img').src = 'brand/logo-light.png';
+          }
+          if (elements.themeToggleIcon) {
+            elements.themeToggleIcon.className = 'fas fa-sun';
+          }
+        }
+        loadGameData();
       }
 
-      // Adjust resize listener if needed for the new layout - probably not necessary for iframe height
-      window.addEventListener('resize', () => {
-        if (elements.gameIframe.style.display !== 'none' && elements.gameIframe.closest('.game-page.active')) { // Check if game page is active
-          // Set a max height, but allow it to be smaller on smaller viewports
-          const availableHeight = window.innerHeight - elements.gamePage.querySelector('.game-main').offsetTop - 150; // Approximate available space
-          elements.gameIframe.style.height = `${Math.min(availableHeight, 650)}px`;
-        }
-        // Re-calculate main-content margin if sidebar width is dynamic (it's fixed now, so not needed)
-      }, { passive: true });
-
-      loadGameData();
+      init();
     </script>
   </body>
 

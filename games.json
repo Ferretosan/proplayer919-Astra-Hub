@@ -96,7 +96,7 @@
     {
       "id": "whack-a-mole",
       "title": "Whack a Mole",
-      "description": "Whack as many moles as you can in this classic game.",
+      "description": "Whack as many moles as you can in this classic game's neon style remake.",
       "developer": "proplayer919",
       "image": "images/whack-a-mole.png",
       "url": "games/whack-a-mole/index.html",
@@ -145,6 +145,25 @@
         "featured",
         "tool"
       ]
+    },
+    {
+      "id": "avoid-the-blocks",
+      "title": "Avoid the Blocks",
+      "description": "Dodge falling blocks, collect powerups, and upgrade your skills in this fast-paced neon arcade game.",
+      "developer": "Ferretosan",
+      "image": "images/avoid-the-blocks.png",
+      "url": "games/avoid-the-blocks/index.html",
+      "tags": [
+        "arcade",
+        "fast-paced",
+        "simple",
+        "reflex"
+      ],
+      "rating": 4.3,
+      "categories": [
+        "featured",
+        "arcade"
+      ]
     }
   ],
   "categories": [
@@ -187,6 +206,11 @@
       "id": "classic",
       "name": "Classic",
       "icon": "fa-gamepad"
+    },
+    {
+      "id": "arcade",
+      "name": "Arcade",
+      "icon": "fa-gamepad"
     }
   ],
   "tags": {
@@ -204,6 +228,8 @@
     "multiplayer": "fa-users",
     "simulator": "fa-robot",
     "simple": "fa-thumbs-up",
-    "utility": "fa-wrench"
+    "utility": "fa-wrench",
+    "arcade": "fa-gamepad",
+    "reflex": "fa-tachometer-alt"
   }
 }

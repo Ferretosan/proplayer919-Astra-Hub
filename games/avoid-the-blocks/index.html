@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avoid the Blocks</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: black; font-family: 'Segoe UI', sans-serif; }
+    canvas { display: block; touch-action: none; }
+    .hidden { display: none; }
+
+    .btn {
+      position: fixed;
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid #00ffff;
+      border-radius: 50%;
+      color: #00ffff;
+      font-size: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      user-select: none;
+      z-index: 10;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .btn:hover {
+      box-shadow: 0 0 15px #00ffff;
+    }
+    .btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    #btn-left  { bottom: 100px; left: 20px; }
+    #btn-right { bottom: 100px; left: 130px; }
+    #btn-up    { bottom: 200px; left: 75px; }
+    #btn-down  { bottom: 20px;  left: 75px; }
+    #btn-pause { top: 10px; right: 10px; width: 50px; height: 50px; font-size: 24px; }
+    #btn-shop  { top: 10px; right: 70px; width: 50px; height: 50px; font-size: 24px; }
+
+    #scoreboard {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      color: #00ffff;
+      font-size: 20px;
+      font-weight: 600;
+      text-shadow: 0 0 5px black;
+      z-index: 5;
+    }
+
+    #game-over, #shop {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      padding: 30px;
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      color: #00ffff;
+      text-align: center;
+      z-index: 20;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    }
+
+    #shop {
+      width: 320px;
+    }
+
+    .shop-item {
+      margin: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .shop-btn {
+      background: #00ffff;
+      color: black;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .shop-btn:hover {
+      box-shadow: 0 0 10px #00ffff;
+    }
+    .shop-btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .game-over-btn {
+      background: rgba(0, 255, 255, 0.1);
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      padding: 12px 24px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 600;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .game-over-btn:hover {
+      box-shadow: 0 0 15px #00ffff;
+      transform: scale(1.05);
+    }
+    .game-over-btn:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div id="scoreboard">Score: 0<br>High: 0</div>
+  <div class="btn" id="btn-left">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2">
+      <path d="M15 18l-6-6 6-6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-right">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2">
+      <path d="M9 18l6-6-6-6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-up">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-down">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2">
+      <path d="M18 9l-6 6-6-6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-pause">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#00ffff">
+      <rect x="6" y="4" width="4" height="16"/>
+      <rect x="14" y="4" width="4" height="16"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-shop">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <path d="M3 6h18"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+  </div>
+  <div id="game-over" class="hidden">
+    <h2>Game Over</h2>
+    <p id="final-score">Score: 0</p>
+    <p id="current-points">Points: 0</p>
+    <button id="play-again" class="game-over-btn">Play Again</button>
+    <button id="go-to-shop" class="game-over-btn">Shop</button>
+  </div>
+  <div id="shop" class="hidden">
+    <h2>Shop</h2>
+    <p id="shop-points">Points: 0</p>
+    <div id="shop-items"></div>
+    <button id="back" class="game-over-btn">Back</button>
+  </div>
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const scoreboard = document.getElementById("scoreboard");
+    const gameOverScreen = document.getElementById("game-over");
+    const shopScreen = document.getElementById("shop");
+    const shopItems = document.getElementById("shop-items");
+
+    let keys = {}, touches = {};
+    let blocks = [], powerups = [];
+    let notifications = [];
+    let points = parseInt(localStorage.getItem("points")) || 0;
+    let sessionScore = 0;
+    let highScore = parseInt(localStorage.getItem("highScore")) || 0;
+    let playerSpeed = 5;
+    let paused = false;
+    let gameState = "playing";
+    let previousState = "playing";
+
+    const player = { 
+      x: 0, 
+      y: 0, 
+      size: 40, 
+      baseSpeed: 5, 
+      color: "#00ffff",
+      shielded: false,
+      multiplier: 1
+    };
+
+    const powerupTypes = [
+      { type: "speed", color: "#00b7eb", effect: () => {
+        playerSpeed = player.baseSpeed + 3;
+        setTimeout(() => playerSpeed = player.baseSpeed, 5000);
+      }},
+      { type: "shield", color: "#00ff00", effect: () => {
+        player.shielded = true;
+        setTimeout(() => player.shielded = false, 5000);
+      }},
+      { type: "slow", color: "#ff00ff", effect: () => {
+        blocks.forEach(b => b.speed /= 2);
+        setTimeout(() => blocks.forEach(b => b.speed *= 2), 5000);
+      }},
+      { type: "multiplier", color: "#ff9900", effect: () => {
+        player.multiplier = 2;
+        setTimeout(() => player.multiplier = 1, 5000);
+      }}
+    ];
+
+    // Initialize shop upgrades with defaults and merge with localStorage
+    const defaultUpgrades = [
+      { name: "Speed +1", cost: 100, effect: () => player.baseSpeed += 1, purchased: 0, max: 3 },
+      { name: "Smaller Size", cost: 150, effect: () => player.size = Math.max(20, player.size - 5), purchased: 0, max: 2 }
+    ];
+    let storedUpgrades = JSON.parse(localStorage.getItem("shopUpgrades")) || [];
+    const shopUpgrades = defaultUpgrades.map((defaultItem, index) => {
+      const storedItem = storedUpgrades[index] || {};
+      return {
+        ...defaultItem,
+        purchased: Math.min(storedItem.purchased || 0, defaultItem.max)
+      };
+    });
+
+    // Apply existing upgrades on load
+    shopUpgrades.forEach(item => {
+      for (let i = 0; i < item.purchased; i++) {
+        item.effect();
+      }
+    });
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      player.x = canvas.width / 2 - player.size / 2;
+      player.y = canvas.height - player.size - 20;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function createBlock() {
+      if (gameState !== "playing" || paused) return;
+      const size = Math.random() * 30 + 30;
+      blocks.push({
+        x: Math.random() * (canvas.width - size),
+        y: -size,
+        size,
+        speed: Math.random() * 2 + 2,
+        color: "#ff4c4c"
+      });
+    }
+
+    function createPowerup() {
+      if (gameState !== "playing" || paused) return;
+      const size = 30;
+      const type = powerupTypes[Math.floor(Math.random() * powerupTypes.length)];
+      powerups.push({
+        x: Math.random() * (canvas.width - size),
+        y: -size,
+        size,
+        speed: 2,
+        color: type.color,
+        type: type.type,
+        effect: type.effect
+      });
+    }
+
+    function movePlayer() {
+      if (paused) return;
+      const left = keys["a"] || keys["arrowleft"] || touches.left;
+      const right = keys["d"] || keys["arrowright"] || touches.right;
+      const up = keys["w"] || keys["arrowup"] || touches.up;
+      const down = keys["s"] || keys["arrowdown"] || touches.down;
+
+      if (left) player.x -= playerSpeed;
+      if (right) player.x += playerSpeed;
+      if (up) player.y -= playerSpeed;
+      if (down) player.y += playerSpeed;
+
+      player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+      player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+    }
+
+    function update() {
+      if (gameState !== "playing" || paused) return;
+
+      movePlayer();
+
+      blocks.forEach(b => {
+        b.y += b.speed;
+        if (
+          b.x < player.x + player.size &&
+          b.x + b.size > player.x &&
+          b.y < player.y + player.size &&
+          b.y + b.size > player.y
+        ) {
+          if (player.shielded) {
+            blocks.splice(blocks.indexOf(b), 1);
+            player.shielded = false;
+          } else {
+            gameState = "gameover";
+            showGameOver();
+          }
+        }
+      });
+
+      powerups.forEach(p => {
+        p.y += p.speed;
+        if (
+          p.x < player.x + player.size &&
+          p.x + p.size > player.x &&
+          p.y < player.y + player.size &&
+          p.y + p.size > player.y
+        ) {
+          points += 25 * player.multiplier;
+          sessionScore += 25 * player.multiplier;
+          p.effect();
+          notifications.push({
+            text: `${p.type.charAt(0).toUpperCase() + p.type.slice(1)} Powerup Collected!`,
+            x: player.x + player.size / 2,
+            y: player.y - 20,
+            opacity: 1,
+            timer: 2000
+          });
+          powerups.splice(powerups.indexOf(p), 1);
+        }
+      });
+
+      blocks = blocks.filter(b => b.y < canvas.height);
+      powerups = powerups.filter(p => p.y < canvas.height);
+      points += player.multiplier;
+      sessionScore += player.multiplier;
+
+      notifications.forEach(n => {
+        n.y -= 0.5;
+        n.timer -= 16;
+        n.opacity = n.timer / 2000;
+      });
+      notifications = notifications.filter(n => n.timer > 0);
+
+      scoreboard.innerHTML = `Score: ${sessionScore}<br>High: ${Math.max(sessionScore, highScore)}`;
+    }
+
+    function drawPlayer() {
+      ctx.shadowColor = player.color;
+      ctx.shadowBlur = player.shielded ? 30 : 20;
+      ctx.fillStyle = player.shielded ? "#00ff00" : player.color;
+      ctx.beginPath();
+      ctx.arc(player.x + player.size/2, player.y + player.size/2, player.size/2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function drawBlock(b) {
+      ctx.shadowColor = b.color;
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = b.color;
+      ctx.beginPath();
+      ctx.roundRect(b.x, b.y, b.size, b.size, 10);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function drawPowerup(p) {
+      console.log(`Drawing powerup: ${p.type}`);
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x + p.size/2, p.y + p.size/2, p.size/2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function drawNotifications() {
+      ctx.font = "bold 16px 'Segoe UI'";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      notifications.forEach(n => {
+        ctx.fillStyle = `rgba(0, 255, 255, ${n.opacity})`;
+        ctx.shadowColor = "#00ffff";
+        ctx.shadowBlur = 5;
+        ctx.fillText(n.text, n.x, n.y);
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    function draw() {
+      if (gameState === "playing" && !paused) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPlayer();
+        blocks.forEach(drawBlock);
+        powerups.forEach(drawPowerup);
+        drawNotifications();
+      }
+    }
+
+    function resetGame() {
+      player.x = canvas.width / 2 - player.size / 2;
+      player.y = canvas.height - player.size - 20;
+      player.shielded = false;
+      player.multiplier = 1;
+      playerSpeed = player.baseSpeed;
+      blocks = [];
+      powerups = [];
+      sessionScore = 0;
+      gameState = "playing";
+      paused = false;
+      gameOverScreen.classList.add("hidden");
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    setInterval(createBlock, 500);
+    setInterval(createPowerup, 7000);
+    gameLoop();
+
+    window.addEventListener("keydown", e => {
+      const key = e.key.toLowerCase();
+      keys[key] = true;
+      if (key === "p" && gameState === "playing") {
+        paused = !paused;
+        console.log("Paused state toggled to:", paused);
+      }
+    });
+    window.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
+
+    const btns = {
+      "btn-left": "left",
+      "btn-right": "right",
+      "btn-up": "up",
+      "btn-down": "down"
+    };
+
+    for (let id in btns) {
+      const dir = btns[id];
+      const el = document.getElementById(id);
+      el.addEventListener("touchstart", e => {
+        e.preventDefault();
+        touches[dir] = true;
+      });
+      el.addEventListener("touchend", e => {
+        e.preventDefault();
+        touches[dir] = false;
+      });
+      el.addEventListener("touchmove", e => e.preventDefault());
+
+      el.addEventListener("mousedown", e => {
+        e.preventDefault();
+        touches[dir] = true;
+      });
+    }
+
+    document.addEventListener("mouseup", e => {
+      e.preventDefault();
+      for (let dir in touches) {
+        touches[dir] = false;
+      }
+    });
+
+    document.getElementById("btn-pause").addEventListener("click", () => {
+      console.log("Pause button clicked, gameState:", gameState, "paused:", paused);
+      if (gameState === "playing") {
+        paused = !paused;
+        console.log("Paused state toggled to:", paused);
+      }
+    });
+
+    document.getElementById("btn-shop").addEventListener("click", () => {
+      console.log("Shop button clicked, gameState:", gameState, "paused:", paused);
+      if (gameState === "playing") {
+        paused = true;
+        previousState = "playing";
+        gameState = "shop";
+        showShop();
+      } else if (gameState === "gameover") {
+        previousState = "gameover";
+        gameState = "shop";
+        showShop();
+      }
+    });
+
+    function showGameOver() {
+      gameOverScreen.classList.remove("hidden");
+      document.getElementById("final-score").textContent = `Score: ${sessionScore}`;
+      document.getElementById("current-points").textContent = `Points: ${points}`;
+      localStorage.setItem("points", points);
+      localStorage.setItem("highScore", Math.max(sessionScore, highScore));
+    }
+
+    function showShop() {
+      shopScreen.classList.remove("hidden");
+      if (previousState === "gameover") {
+        gameOverScreen.classList.add("hidden");
+      }
+      document.getElementById("shop-points").textContent = `Points: ${points}`;
+      shopItems.innerHTML = "";
+      shopUpgrades.forEach((item, index) => {
+        console.log(`Shop item: ${item.name}, cost: ${item.cost}, purchased: ${item.purchased}, max: ${item.max}, points: ${points}`);
+        const div = document.createElement("div");
+        div.className = "shop-item";
+        div.innerHTML = `${item.name} - ${item.cost} pts (Purchased: ${item.purchased}/${item.max})`;
+        const btn = document.createElement("button");
+        btn.className = "shop-btn";
+        btn.textContent = "Buy";
+        btn.disabled = points < item.cost || item.purchased >= item.max;
+        btn.onclick = () => {
+          if (points >= item.cost && item.purchased < item.max) {
+            points -= item.cost;
+            item.purchased++;
+            item.effect();
+            localStorage.setItem("points", points);
+            localStorage.setItem("shopUpgrades", JSON.stringify(shopUpgrades));
+            showShop();
+          }
+        };
+        div.appendChild(btn);
+        shopItems.appendChild(div);
+      });
+    }
+
+    document.getElementById("play-again").addEventListener("click", () => {
+      resetGame();
+    });
+
+    document.getElementById("go-to-shop").addEventListener("click", () => {
+      previousState = "gameover";
+      gameState = "shop";
+      showShop();
+    });
+
+    document.getElementById("back").addEventListener("click", () => {
+      shopScreen.classList.add("hidden");
+      if (previousState === "gameover") {
+        gameState = "gameover";
+        gameOverScreen.classList.remove("hidden");
+      } else {
+        gameState = "playing";
+      }
+    });
+
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + w, y, r);
+        this.closePath();
+        return this;
+      };
+    }
+  </script>
+</body>
+</html>

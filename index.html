@@ -1424,7 +1424,7 @@
 
         state.gameData.categories.forEach(category => {
           if (category.id === 'favorites') return;
-
+          
           const button = document.createElement('a');
           button.href = '#';
           button.className = 'category-item';
@@ -1437,6 +1437,11 @@
           }
           button.addEventListener('click', (e) => {
             e.preventDefault();
+
+            if (elements.gamePage.classList.contains('active')) {
+              backToHome();
+            }
+
             state.selectedCategory = category.id;
             state.selectedTag = '';
             localStorage.setItem('selectedCategory', state.selectedCategory);

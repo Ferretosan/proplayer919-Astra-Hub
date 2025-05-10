@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Flappy Bird</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        /* Removed pixelated rendering */
       }
 
       body,
@@ -18,176 +20,520 @@
         height: 100%;
         overflow: hidden;
         background: #70c5ce;
+        /* Original background color */
         display: flex;
         justify-content: center;
         align-items: center;
+        font-family: 'Press Start 2P', cursive;
+        /* Pixelated font */
+        color: #fff;
       }
 
       #gameContainer {
         position: relative;
         width: 360px;
         height: 640px;
+        border: none;
+        /* Removed pixelated border */
+        box-shadow: none;
+        /* Removed pixelated shadow */
+        background: #70c5ce;
+        /* Default background */
+        overflow: hidden;
       }
 
       canvas {
         display: block;
+        width: 100%;
+        height: 100%;
+        /* Keep scaling for coordinate system consistency, but rendering is smoother */
+        transform: scale(2);
+        transform-origin: top left;
       }
 
       #scoreboard {
         position: absolute;
         top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        font: 24px sans-serif;
+        right: 10px;
+        /* Position score on the right */
+        font-size: 16px;
+        /* Adjusted font size for pixel font */
         color: #fff;
-        text-shadow: 1px 1px #000;
-        text-align: center;
+        text-shadow: 2px 2px #000;
+        /* Adjusted text shadow for pixel font */
+        text-align: right;
+        /* Align text to the right */
         pointer-events: none;
+        z-index: 10;
+        /* Ensure it's above canvas */
+        font-family: 'Press Start 2P', cursive;
+        /* Pixelated font */
       }
 
-      #titleScreen {
+      #moneyDisplay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        /* Position money on the left */
+        font-size: 16px;
+        /* Adjusted font size for pixel font */
+        color: #FFD700;
+        /* Gold color for money */
+        text-shadow: 2px 2px #000;
+        /* Adjusted text shadow for pixel font */
+        z-index: 10;
+        font-family: 'Press Start 2P', cursive;
+        /* Pixelated font */
+      }
+
+      #titleScreen,
+      #gameOverScreen,
+      #shopScreen {
         position: absolute;
         inset: 0;
         background: rgba(0, 0, 0, 0.6);
+        /* Original overlay */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         opacity: 1;
         transition: opacity .5s;
+        z-index: 20;
+        /* Ensure it's above everything */
+        font-family: 'Press Start 2P', cursive;
+        /* Pixelated font */
       }
 
-      #titleScreen.hidden {
+      #titleScreen.hidden,
+      #gameOverScreen.hidden,
+      #shopScreen.hidden {
         opacity: 0;
         pointer-events: none;
       }
 
-      #titleScreen h1 {
-        font-size: 48px;
+      #titleScreen h1,
+      #gameOverScreen h2,
+      #shopScreen h2 {
+        font-size: 32px;
+        /* Adjusted font size for pixel font */
         color: #FFD700;
-        margin-bottom: 10px;
-        animation: float 2s ease-in-out infinite;
+        margin-bottom: 20px;
+        /* Adjusted margin */
+        text-shadow: 4px 4px #000;
+        /* Adjusted text shadow for pixel font */
+        text-align: center;
+        /* Centered text */
       }
 
-      @keyframes float {
-
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-
-      #titleScreen button {
-        font: 20px sans-serif;
-        padding: 8px 16px;
+      .button {
+        font-family: 'Press Start 2P', cursive;
+        /* Pixelated font */
+        font-size: 16px;
+        /* Adjusted button font size */
+        padding: 12px 24px;
+        /* Adjusted button padding */
         border: none;
-        border-radius: 4px;
+        border-radius: 0;
+        /* Removed border radius for pixel look */
         background: #FFD700;
+        color: #000;
         cursor: pointer;
-        transition: transform .2s;
+        margin: 5px;
+        border: 2px solid #000;
+        /* Added pixelated button border */
+        box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+        /* Added pixelated button shadow */
+        transition: transform .1s;
+        /* Adjusted transition */
       }
 
-      #titleScreen button:hover {
-        transform: scale(1.1);
+      .button:active {
+        transform: translate(2px, 2px);
+        /* Pixelated press effect */
+        box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+      }
+
+      .button:hover {
+        transform: scale(1.05);
+        /* Adjusted hover effect */
+      }
+
+
+      #shopScreen {
+        justify-content: flex-start;
+        /* Align items to top */
+        padding-top: 50px;
+      }
+
+      #shopItems {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        /* Responsive grid */
+        gap: 20px;
+        padding: 20px;
+        max-width: 300px;
+        width: 100%;
+        overflow-y: auto;
+        /* Allow scrolling if many items */
+      }
+
+      .shop-item {
+        background: #a0e0f0;
+        /* Lighter background for shop items */
+        border: 2px solid #70c5ce;
+        /* Adjusted border */
+        box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+        /* Adjusted shadow */
+        padding: 10px;
+        text-align: center;
+        font-size: 12px;
+        /* Adjusted font size */
+        cursor: pointer;
+        transition: transform .1s;
+      }
+
+      .shop-item:hover {
+        transform: scale(1.05);
+      }
+
+      .shop-item.owned {
+        background: #c0a060;
+        /* Ground color */
+        border-color: #ded895;
+        pointer-events: none;
+        /* Cannot buy again */
+        opacity: 0.7;
+      }
+
+      .shop-item .color-preview {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        /* Round color preview */
+        margin: 0 auto 5px;
+        border: 2px solid #000;
+      }
+
+
+      .shop-item .cost {
+        color: #000;
+        /* Black text for cost */
+        margin-top: 5px;
+        text-shadow: none;
+        /* No text shadow on cost */
+      }
+
+      #gameOverScreen .button {
+        margin-top: 20px;
+      }
+
+      #backButton {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* Message Box for alerts */
+      #messageBox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        /* White background */
+        border: 2px solid #000;
+        /* Black border */
+        box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+        /* Pixelated shadow */
+        padding: 20px;
+        text-align: center;
+        font-size: 14px;
+        /* Adjusted font size */
+        z-index: 30;
+        display: none;
+        /* Hidden by default */
+        color: #000;
+        /* Black text */
+        font-family: 'Press Start 2P', cursive;
+        /* Pixelated font */
+      }
+
+      #messageBox button {
+        margin-top: 15px;
       }
     </style>
   </head>
 
   <body>
     <div id="gameContainer">
-      <canvas id="gameCanvas" width="360" height="640"></canvas>
+      <canvas id="gameCanvas" width="180" height="320"></canvas>
       <div id="scoreboard">
         <div>Score: <span id="score">0</span></div>
         <div>Best: <span id="best">0</span></div>
       </div>
+      <div id="moneyDisplay">Money: <span id="money">0</span></div>
+
       <div id="titleScreen">
         <h1>Flappy Bird</h1>
-        <button id="startBtn">Start</button>
+        <button id="startBtn" class="button">Start</button>
+        <button id="shopBtn" class="button">Shop</button>
       </div>
+
+      <div id="gameOverScreen" class="hidden">
+        <h2>Game Over</h2>
+        <button id="restartBtn" class="button">Restart</button>
+        <button id="gameOverShopBtn" class="button">Shop</button>
+      </div>
+
+      <div id="shopScreen" class="hidden">
+        <h2>Shop</h2>
+        <div id="shopItems">
+        </div>
+        <button id="backButton" class="button">Back</button>
+      </div>
+
+      <div id="messageBox">
+        <p id="messageText"></p>
+        <button id="messageBoxClose" class="button">OK</button>
+      </div>
+
     </div>
     <script>
-      // Game UI
-      const scoreEl = document.getElementById('score'), bestEl = document.getElementById('best');
-      const title = document.getElementById('titleScreen'), startBtn = document.getElementById('startBtn');
-      let best = +localStorage.getItem('fb_best') || 0; bestEl.textContent = best;
+      // Game UI elements
+      const scoreEl = document.getElementById('score');
+      const bestEl = document.getElementById('best');
+      const moneyEl = document.getElementById('money');
+      const titleScreen = document.getElementById('titleScreen');
+      const gameOverScreen = document.getElementById('gameOverScreen');
+      const shopScreen = document.getElementById('shopScreen');
+      const shopItemsContainer = document.getElementById('shopItems');
+      const startBtn = document.getElementById('startBtn');
+      const shopBtn = document.getElementById('shopBtn');
+      const restartBtn = document.getElementById('restartBtn');
+      const gameOverShopBtn = document.getElementById('gameOverShopBtn');
+      const backButton = document.getElementById('backButton');
+      const messageBox = document.getElementById('messageBox');
+      const messageText = document.getElementById('messageText');
+      const messageBoxClose = document.getElementById('messageBoxClose');
+
+      // Load saved data
+      let bestScore = +localStorage.getItem('fb_best_original') || 0; // Use a new key for original version
+      bestEl.textContent = bestScore;
+      let currentMoney = +localStorage.getItem('fb_money_original') || 0; // Use a new key for original version
+      moneyEl.textContent = currentMoney;
+      let ownedItems = JSON.parse(localStorage.getItem('fb_owned_items_original')) || []; // Use a new key for original version
 
       // Game state
-      const canvas = document.getElementById('gameCanvas'), ctx = canvas.getContext('2d');
-      const bgCanvas = document.createElement('canvas'); bgCanvas.width = 360; bgCanvas.height = 640;
+      // Use a smaller canvas for coordinate consistency, scaled up for smoother rendering
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+      const PIXEL_SCALE = 2; // Keep scale for coordinate system
+
+      // Offscreen canvases for background and ground (can keep these as they are procedural)
+      const bgCanvas = document.createElement('canvas');
+      bgCanvas.width = canvas.width;
+      bgCanvas.height = canvas.height;
       const bgCtx = bgCanvas.getContext('2d');
-      const groundCanvas = document.createElement('canvas'); groundCanvas.width = 360; groundCanvas.height = 112;
+
+      const groundCanvas = document.createElement('canvas');
+      groundCanvas.width = canvas.width;
+      groundCanvas.height = Math.floor(112 / PIXEL_SCALE); // Scale ground height
       const groundCtx = groundCanvas.getContext('2d');
-      const pipeCanvas = document.createElement('canvas'); pipeCanvas.width = 52; pipeCanvas.height = 320;
+
+      const pipeCanvas = document.createElement('canvas');
+      pipeCanvas.width = Math.floor(52 / PIXEL_SCALE); // Scale pipe width
+      pipeCanvas.height = Math.floor(320 / PIXEL_SCALE); // Scale pipe height
       const pipeCtx = pipeCanvas.getContext('2d');
 
-      // Procedural generation calls
+      // Procedural generation calls (adapted for smaller canvases)
       (function () {
         // Background gradient and clouds
-        const grad = bgCtx.createLinearGradient(0, 0, 0, 640);
-        grad.addColorStop(0, '#70c5ce'); grad.addColorStop(1, '#a0e0f0');
-        bgCtx.fillStyle = grad; bgCtx.fillRect(0, 0, 360, 640);
+        const grad = bgCtx.createLinearGradient(0, 0, 0, bgCanvas.height);
+        grad.addColorStop(0, '#70c5ce');
+        grad.addColorStop(1, '#a0e0f0');
+        bgCtx.fillStyle = grad;
+        bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
         bgCtx.fillStyle = 'rgba(255,255,255,0.8)';
         for (let i = 0; i < 20; i++) {
-          const x = Math.random() * 360, y = Math.random() * 200;
-          const rx = 20 + Math.random() * 30, ry = 10 + Math.random() * 15;
-          bgCtx.beginPath(); bgCtx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI); bgCtx.fill();
+          const x = Math.random() * bgCanvas.width,
+            y = Math.random() * (bgCanvas.height * 0.3);
+          const rx = 10 + Math.random() * 15,
+            ry = 5 + Math.random() * 7;
+          bgCtx.beginPath();
+          bgCtx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI);
+          bgCtx.fill();
         }
       })();
       (function () {
         // Ground texture
-        const grd = groundCtx.createLinearGradient(0, 0, 0, 112);
-        grd.addColorStop(0, '#ded895'); grd.addColorStop(1, '#c0a060');
-        groundCtx.fillStyle = grd; groundCtx.fillRect(0, 0, 360, 112);
+        const grd = groundCtx.createLinearGradient(0, 0, 0, groundCanvas.height);
+        grd.addColorStop(0, '#ded895');
+        grd.addColorStop(1, '#c0a060');
+        groundCtx.fillStyle = grd;
+        groundCtx.fillRect(0, 0, groundCanvas.width, groundCanvas.height);
         groundCtx.fillStyle = 'rgba(0,0,0,0.1)';
-        for (let i = 0; i < 200; i++) {
-          const x = Math.random() * 360, y = Math.random() * 112;
-          groundCtx.fillRect(x, y, 2, 2);
+        for (let i = 0; i < 100; i++) {
+          const x = Math.random() * groundCanvas.width,
+            y = Math.random() * groundCanvas.height;
+          groundCtx.fillRect(x, y, 1, 1);
         }
       })();
       (function () {
         // Pipe texture
-        const grd2 = pipeCtx.createLinearGradient(0, 0, 52, 0);
-        grd2.addColorStop(0, '#3b7a3b'); grd2.addColorStop(1, '#1c5e1c');
-        pipeCtx.fillStyle = grd2; pipeCtx.fillRect(0, 0, 52, 320);
+        const grd2 = pipeCtx.createLinearGradient(0, 0, pipeCanvas.width, 0);
+        grd2.addColorStop(0, '#3b7a3b');
+        grd2.addColorStop(1, '#1c5e1c');
+        pipeCtx.fillStyle = grd2;
+        pipeCtx.fillRect(0, 0, pipeCanvas.width, pipeCanvas.height);
         pipeCtx.fillStyle = 'rgba(0,0,0,0.2)';
-        for (let i = 0; i < 100; i++) {
-          const x = Math.random() * 52, y = Math.random() * 320;
+        for (let i = 0; i < 50; i++) {
+          const x = Math.random() * pipeCanvas.width,
+            y = Math.random() * pipeCanvas.height;
           pipeCtx.fillRect(x, y, 1, 1);
         }
       })();
 
-      // Constants
-      const GRAVITY = 0.35;
-      const JUMP_VELOCITY = -7;
-      const PIPE_GAP = 140;
+
+      // Constants (adjusted for scaled canvas)
+      const GRAVITY = 0.35 / (PIXEL_SCALE * PIXEL_SCALE); // Adjust gravity
+      const JUMP_VELOCITY = (-7 / PIXEL_SCALE) / 2; // Jump velocit
+      const PIPE_GAP = 140 / PIXEL_SCALE; // Adjust pipe gap
       const PIPE_INTERVAL = 1500; // ms
 
       // Variables
       let bird, pipes, score, lastTime, accumulator, spawnTimer, gameState;
+      let birdColor = '#FFD700'; // Track the current bird color
 
-      // Bird entity
+
+      // Shop Items (now change bird color)
+      const shopItems = [{
+        id: 'color_red',
+        name: 'Red Bird',
+        cost: 100,
+        color: '#FF0000'
+      }, {
+        id: 'color_blue',
+        name: 'Blue Bird',
+        cost: 200,
+        color: '#0000FF'
+      }, {
+        id: 'color_green',
+        name: 'Green Bird',
+        cost: 150,
+        color: '#00FF00'
+      },
+        // Add more color options here
+      ];
+
+      // Bird entity (reverted to drawing a circle)
       class Bird {
-        constructor() { this.x = 80; this.y = 320; this.r = 14; this.vel = 0; this.wing = 0; }
-        update(dt) { this.vel += GRAVITY * (dt / 16); this.y += this.vel * (dt / 16); this.wing += dt * 0.01; if (this.y + this.r > 528 || this.y - this.r < 0) hit(); }
-        draw() { ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.vel / 50); ctx.fillStyle = '#FFD700'; ctx.beginPath(); ctx.arc(0, 0, this.r, 0, 2 * Math.PI); ctx.fill(); ctx.fillStyle = '#FFA500'; ctx.beginPath(); let flap = Math.sin(this.wing) * 6; ctx.ellipse(-6, flap, 8, 4, Math.PI / 4, 0, 2 * Math.PI); ctx.fill(); ctx.restore(); }
-        flap() { this.vel = JUMP_VELOCITY; }
+        constructor() {
+          // Spawn bird slightly left of center horizontally
+          this.x = canvas.width * 0.25; // Adjusted start position
+          // Spawn bird in the vertical middle of the scaled canvas
+          this.y = canvas.height / 2; // Corrected vertical start position
+          this.r = Math.floor(14 / PIXEL_SCALE); // Radius for collision and drawing
+          this.vel = 0;
+          this.wing = 0; // Keep wing for potential future animation
+        }
+        update(dt) {
+          this.vel += GRAVITY * (dt / 16);
+          this.y += this.vel * (dt / 16);
+          this.wing += dt * 0.01;
+          // Collision with top/bottom of scaled canvas
+          // Corrected ground collision to use scaled ground height
+          if (this.y + this.r > canvas.height - groundCanvas.height || this.y - this.r < 0) hit();
+        }
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.vel / 50); // Keep rotation based on velocity
+          ctx.fillStyle = birdColor; // Use current bird color
+          ctx.beginPath();
+          ctx.arc(0, 0, this.r, 0, 2 * Math.PI);
+          ctx.fill();
+          // Simple beak/feet drawing (can be refined)
+          ctx.fillStyle = '#FFA500'; // Orange beak/feet
+          ctx.beginPath();
+          ctx.moveTo(this.r, 0);
+          ctx.lineTo(this.r + this.r * 0.5, this.r * 0.3);
+          ctx.lineTo(this.r, this.r * 0.6);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.restore();
+        }
+        flap() {
+          this.vel = JUMP_VELOCITY;
+        }
       }
 
-      // Pipe entity
+      // Pipe entity (adapted for scaled rendering and centered opening)
       class Pipe {
-        constructor() { this.x = 360; this.top = 60 + Math.random() * (640 - PIPE_GAP - 120); this.bottom = this.top + PIPE_GAP; }
-        update(dt) { let speed = 2 + score * 0.02; this.x -= speed * (dt / 16); if (this.x + 52 < 0) { pipes.shift(); score++; scoreEl.textContent = score; } if (bird.x + bird.r > this.x && bird.x - bird.r < this.x + 52 && (bird.y - bird.r < this.top || bird.y + bird.r > this.bottom)) hit(); }
-        draw() { ctx.drawImage(pipeCanvas, 0, 0, 52, 320, this.x, this.top - 320, 52, 320); ctx.drawImage(pipeCanvas, 0, 0, 52, 320, this.x, this.bottom, 52, 320); }
+        constructor() {
+          this.x = canvas.width; // Start at the edge of the scaled canvas
+
+          // Calculate the available vertical space for the pipe opening
+          const availableHeight = canvas.height - groundCanvas.height;
+
+          // Define a minimum and maximum vertical position for the center of the pipe gap
+          // Adjusted min/max to keep the opening further from the top/bottom edges
+          const verticalPadding = Math.floor(40 / PIXEL_SCALE); // Increased padding
+          const minGapCenter = PIPE_GAP / 2 + verticalPadding;
+          const maxGapCenter = availableHeight - PIPE_GAP / 2 - verticalPadding;
+
+          // Ensure the range is valid and there's enough space for the gap and padding
+          const safeMaxGapCenter = Math.max(minGapCenter, maxGapCenter);
+
+          // Randomly select a center position for the pipe gap within the valid range
+          const gapCenter = minGapCenter + Math.random() * (safeMaxGapCenter - minGapCenter);
+
+          // Calculate the top and bottom positions of the pipe opening based on the gap center
+          this.top = gapCenter - PIPE_GAP / 2; // Bottom of the upper pipe
+          this.bottom = gapCenter + PIPE_GAP / 2; // Top of the lower pipe
+        }
+        update(dt) {
+          let speed = (2 + score * 0.02) / PIXEL_SCALE; // Adjust speed
+          this.x -= speed * (dt / 16);
+          // Check if pipe is offscreen left - corrected to use scaled pipe width
+          if (this.x + pipeCanvas.width < 0) {
+            pipes.shift();
+            score++;
+            scoreEl.textContent = score;
+            currentMoney += 10; // Earn money per pipe
+            moneyEl.textContent = currentMoney;
+            localStorage.setItem('fb_money_original', currentMoney); // Save to new key
+          }
+          // Collision detection (adjusted for scaled coordinates and pipe width)
+          if (bird.x + bird.r > this.x && bird.x - bird.r < this.x + pipeCanvas.width && (bird.y - bird.r < this.top || bird.y + bird.r > this.bottom)) hit();
+        }
+        draw() {
+          // Draw scaled pipe texture for the upper pipe
+          // Draw from the top of the pipe texture down to the calculated 'this.top' position
+          ctx.drawImage(pipeCanvas, 0, pipeCanvas.height - this.top, pipeCanvas.width, this.top, this.x, 0, pipeCanvas.width, this.top);
+
+          // Draw scaled pipe texture for the lower pipe
+          // Draw from the top of the pipe texture (y=0) for the height from 'this.bottom' to the ground
+          const lowerPipeHeight = canvas.height - groundCanvas.height - this.bottom;
+          ctx.drawImage(pipeCanvas, 0, 0, pipeCanvas.width, lowerPipeHeight, this.x, this.bottom, pipeCanvas.width, lowerPipeHeight);
+        }
       }
 
       // Initialization
       function init() {
-        bird = new Bird(); pipes = []; score = 0; scoreEl.textContent = 0;
-        lastTime = 0; accumulator = 0; spawnTimer = 0; gameState = 'playing';
+        applyOwnedEffects(); // Apply effects before creating the bird
+        bird = new Bird();
+        pipes = [];
+        score = 0;
+        scoreEl.textContent = 0;
+        lastTime = 0;
+        accumulator = 0;
+        spawnTimer = 0;
+        gameState = 'playing';
+        // Spawn the first pipe immediately
+        pipes.push(new Pipe());
         requestAnimationFrame(loop);
       }
 
@@ -212,9 +558,10 @@
 
       // Update game logic
       function update(dt) {
+        // Spawn new pipes based on interval *after* the first one
         if (spawnTimer >= PIPE_INTERVAL) {
           pipes.push(new Pipe());
-          spawnTimer = 0;
+          spawnTimer = 0; // Reset spawn timer
         }
         bird.update(dt);
         pipes.forEach(pipe => pipe.update(dt));
@@ -223,48 +570,156 @@
       // Render everything
       function render() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(bgCanvas, 0, 0);
+        // Draw scaled background
+        ctx.drawImage(bgCanvas, 0, 0, canvas.width, canvas.height);
         pipes.forEach(pipe => pipe.draw());
         bird.draw();
-        ctx.drawImage(groundCanvas, 0, 528);
+        // Draw scaled ground
+        ctx.drawImage(groundCanvas, 0, canvas.height - groundCanvas.height, canvas.width, groundCanvas.height);
       }
 
       // Game over sequence
       function hit() {
         if (gameState !== 'over') {
           gameState = 'over';
-          localStorage.setItem('fb_best', Math.max(best, score));
-          bestEl.textContent = Math.max(best, score);
+          bestScore = Math.max(bestScore, score);
+          localStorage.setItem('fb_best_original', bestScore); // Save to new key
+          bestEl.textContent = bestScore;
+          showGameOver();
         }
       }
 
       function showGameOver() {
-        ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0, 0, 360, 640);
-        ctx.fillStyle = '#fff'; ctx.font = '32px sans-serif'; ctx.textAlign = 'center';
-        ctx.fillText('Game Over', 180, 300);
-        ctx.font = '20px sans-serif'; ctx.fillText('Tap to Restart', 180, 340);
+        gameOverScreen.classList.remove('hidden');
+        titleScreen.classList.add('hidden');
+        shopScreen.classList.add('hidden');
+      }
+
+      function hideScreens() {
+        titleScreen.classList.add('hidden');
+        gameOverScreen.classList.add('hidden');
+        shopScreen.classList.add('hidden');
       }
 
       // Input handling with cool-down
       let lastInput = 0;
+
       function action() {
         let now = performance.now();
         if (now - lastInput > 100 && gameState === 'playing') {
-          bird.flap(); lastInput = now;
+          bird.flap();
+          lastInput = now;
         } else if (gameState === 'over') {
-          start();
+          restartGame();
         }
       }
 
-      function start() {
-        title.classList.add('hidden'); setTimeout(() => title.style.display = 'none', 500);
+      function restartGame() {
+        hideScreens();
         init();
       }
 
+      function showShop() {
+        hideScreens();
+        shopScreen.classList.remove('hidden');
+        populateShop();
+      }
+
+      function showTitleScreen() {
+        hideScreens();
+        titleScreen.classList.remove('hidden');
+      }
+
+      function populateShop() {
+        shopItemsContainer.innerHTML = ''; // Clear previous items
+        shopItems.forEach(item => {
+          const itemElement = document.createElement('div');
+          itemElement.classList.add('shop-item');
+          if (ownedItems.includes(item.id)) {
+            itemElement.classList.add('owned');
+            itemElement.innerHTML = `
+                        <div class="color-preview" style="background-color: ${item.color};"></div>
+                        <div>${item.name}</div>
+                        <div class="cost">Owned</div>
+                    `;
+          } else {
+            itemElement.innerHTML = `
+                         <div class="color-preview" style="background-color: ${item.color};"></div>
+                        <div>${item.name}</div>
+                        <div class="cost">${item.cost} 💰</div>
+                    `;
+            itemElement.addEventListener('click', () => buyItem(item));
+          }
+          shopItemsContainer.appendChild(itemElement);
+        });
+      }
+
+      function buyItem(item) {
+        if (currentMoney >= item.cost) {
+          currentMoney -= item.cost;
+          moneyEl.textContent = currentMoney;
+          localStorage.setItem('fb_money_original', currentMoney); // Save to new key
+          ownedItems.push(item.id);
+          localStorage.setItem('fb_owned_items_original', JSON.stringify(ownedItems)); // Save to new key
+          item.effect(); // Apply the item's effect immediately
+          showMessage(`Purchased ${item.name}!`);
+          populateShop(); // Refresh shop display
+        } else {
+          showMessage("Not enough money!");
+        }
+      }
+
+      function showMessage(text) {
+        messageText.textContent = text;
+        messageBox.style.display = 'block';
+      }
+
+      function hideMessage() {
+        messageBox.style.display = 'none';
+      }
+
+      // Apply effects of owned items on game start/load
+      function applyOwnedEffects() {
+        // Reset to default first
+        birdColor = '#FFD700'; // Default bird color
+
+        // Apply any purchased color skins
+        ownedItems.forEach(itemId => {
+          const item = shopItems.find(shopItem => shopItem.id === itemId);
+          if (item && item.color) {
+            birdColor = item.color;
+          }
+        });
+        // Update the bird's color if the bird object exists
+        if (bird) {
+          bird.color = birdColor;
+        }
+      }
+
+      // Event Listeners
       canvas.addEventListener('mousedown', action);
-      canvas.addEventListener('touchstart', e => { e.preventDefault(); action(); });
-      window.addEventListener('keydown', e => { if (e.code === 'Space') action(); });
-      startBtn.addEventListener('click', start);
+      canvas.addEventListener('touchstart', e => {
+        e.preventDefault();
+        action();
+      });
+      window.addEventListener('keydown', e => {
+        if (e.code === 'Space' && gameState === 'playing') action();
+        else if (e.code === 'Space' && gameState === 'over') restartGame();
+      });
+
+      startBtn.addEventListener('click', () => {
+        hideScreens();
+        applyOwnedEffects(); // Apply effects before starting
+        init();
+      });
+      shopBtn.addEventListener('click', showShop);
+      restartBtn.addEventListener('click', restartGame);
+      gameOverShopBtn.addEventListener('click', showShop);
+      backButton.addEventListener('click', showTitleScreen);
+      messageBoxClose.addEventListener('click', hideMessage);
+
+      // Initial screen
+      showTitleScreen(); // Ensure title screen is shown on load
     </script>
   </body>
 

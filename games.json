@@ -18,7 +18,8 @@
       "categories": [
         "featured",
         "action"
-      ]
+      ],
+      "ribbon": "popular"
     },
     {
       "id": "eat-that-food",
@@ -38,7 +39,8 @@
         "featured",
         "satisfying",
         "arcade"
-      ]
+      ],
+      "ribbon": "astra hub original"
     },
     {
       "id": "money-clicker",
@@ -96,7 +98,8 @@
       "categories": [
         "simulator",
         "strategy"
-      ]
+      ],
+      "ribbon": "astra hub original"
     },
     {
       "id": "whack-a-mole",
@@ -138,7 +141,8 @@
       "categories": [
         "classic",
         "arcade"
-      ]
+      ],
+      "ribbon": "updated"
     },
     {
       "id": "chat",
@@ -171,7 +175,8 @@
       "rating": 4.3,
       "categories": [
         "arcade"
-      ]
+      ],
+      "ribbon": "new"
     },
     {
       "id": "2048-game",

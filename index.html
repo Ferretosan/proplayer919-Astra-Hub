@@ -32,6 +32,17 @@
         --glow: 0 0 20px rgba(0, 212, 255, 0.4);
         --glass-bg: rgba(10, 5, 34, 0.7);
         --glass-light-bg: rgba(255, 255, 255, 0.7);
+
+        /* Ribbon Colors */
+        --ribbon-new-bg: #007bff;
+        /* Blue */
+        --ribbon-updated-bg: #fd7e14;
+        /* Orange */
+        --ribbon-popular-bg: #6f42c1;
+        /* Purple */
+        --ribbon-original-bg: #28a745;
+        /* Green */
+        --ribbon-text-color: #ffffff;
       }
 
       * {
@@ -509,9 +520,11 @@
         background: var(--card-bg);
         border-radius: 20px;
         overflow: hidden;
+        /* Important for ribbon positioning */
         cursor: pointer;
         transition: all 0.4s ease;
         position: relative;
+        /* Required for absolute positioning of the ribbon */
         background: linear-gradient(135deg, var(--card-bg), #2a1a7b);
         box-shadow: var(--shadow);
       }
@@ -530,6 +543,49 @@
         outline: 3px solid var(--primary);
         outline-offset: 2px;
       }
+
+      /* Ribbon Styles */
+      .game-card .ribbon {
+        position: absolute;
+        top: 15px;
+        /* Adjust as needed */
+        right: -30px;
+        /* Start off-screen to create the slant */
+        background-color: var(--primary);
+        /* Default color, will be overridden */
+        color: var(--ribbon-text-color);
+        padding: 6px 30px;
+        /* Adjust padding for text and slant */
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        transform: rotate(45deg);
+        transform-origin: top right;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        /* Ensure ribbon is above the image */
+        line-height: 1.2;
+        text-align: center;
+        min-width: 120px;
+        /* Ensure text fits */
+      }
+
+      .game-card .ribbon.ribbon-new {
+        background-color: var(--ribbon-new-bg);
+      }
+
+      .game-card .ribbon.ribbon-updated {
+        background-color: var(--ribbon-updated-bg);
+      }
+
+      .game-card .ribbon.ribbon-popular {
+        background-color: var(--ribbon-popular-bg);
+      }
+
+      .game-card .ribbon.ribbon-astra-hub-original {
+        background-color: var(--ribbon-original-bg);
+      }
+
 
       .game-card img {
         width: 100%;
@@ -656,6 +712,8 @@
         padding: 2.5rem;
         border-radius: 20px;
         box-shadow: var(--shadow);
+        position: relative;
+        /* For potential ribbon placement on game page */
       }
 
       body.light-mode .game-main {
@@ -666,8 +724,45 @@
         font-size: 2.8rem;
         font-weight: 700;
         color: var(--secondary);
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem;
+        /* Adjusted margin for ribbon */
+        display: inline-block;
+        /* To allow ribbon next to it */
+        margin-right: 1rem;
+        /* Space for ribbon */
       }
+
+      /* Ribbon on Game Page Title */
+      .game-title-ribbon {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ribbon-text-color);
+        border-radius: 5px;
+        text-transform: uppercase;
+        vertical-align: middle;
+        /* Align with title text */
+        margin-bottom: 0.5rem;
+        /* Align with title's original margin */
+      }
+
+      .game-title-ribbon.ribbon-new {
+        background-color: var(--ribbon-new-bg);
+      }
+
+      .game-title-ribbon.ribbon-updated {
+        background-color: var(--ribbon-updated-bg);
+      }
+
+      .game-title-ribbon.ribbon-popular {
+        background-color: var(--ribbon-popular-bg);
+      }
+
+      .game-title-ribbon.ribbon-astra-hub-original {
+        background-color: var(--ribbon-original-bg);
+      }
+
 
       body.light-mode .game-main h2 {
         color: var(--light-text);
@@ -679,6 +774,8 @@
         margin-bottom: 2rem;
         align-items: center;
         flex-wrap: wrap;
+        margin-top: 1rem;
+        /* Added margin if ribbon is above */
       }
 
       .game-tags span {
@@ -904,6 +1001,37 @@
         color: var(--secondary);
       }
 
+      /* Ribbon for fullscreen bar title */
+      .fullscreen-title-ribbon {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--ribbon-text-color);
+        border-radius: 4px;
+        text-transform: uppercase;
+        vertical-align: middle;
+        margin-left: 0.5rem;
+        /* Space from title */
+      }
+
+      .fullscreen-title-ribbon.ribbon-new {
+        background-color: var(--ribbon-new-bg);
+      }
+
+      .fullscreen-title-ribbon.ribbon-updated {
+        background-color: var(--ribbon-updated-bg);
+      }
+
+      .fullscreen-title-ribbon.ribbon-popular {
+        background-color: var(--ribbon-popular-bg);
+      }
+
+      .fullscreen-title-ribbon.ribbon-astra-hub-original {
+        background-color: var(--ribbon-original-bg);
+      }
+
+
       body.light-mode .fullscreen-info h3 {
         color: var(--light-text);
       }
@@ -1082,6 +1210,15 @@
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         }
 
+        .game-card .ribbon {
+          top: 12px;
+          right: -35px;
+          /* Adjust for smaller cards */
+          padding: 5px 25px;
+          font-size: 0.75rem;
+        }
+
+
         .game-content {
           flex-direction: column;
         }
@@ -1109,6 +1246,12 @@
         .fullscreen-info {
           flex-direction: column;
           align-items: flex-start;
+        }
+
+        .fullscreen-title-ribbon {
+          margin-left: 0;
+          margin-top: 0.3rem;
+          /* Stack below title on small screens */
         }
 
         .fullscreen-controls {
@@ -1147,6 +1290,13 @@
           height: 160px;
         }
 
+        .game-card .ribbon {
+          top: 10px;
+          right: -38px;
+          padding: 4px 20px;
+          font-size: 0.7rem;
+        }
+
         .game-main iframe {
           height: 350px;
         }
@@ -1161,7 +1311,18 @@
 
         .game-main h2 {
           font-size: 2.2rem;
+          display: block;
+          /* Stack title and ribbon */
+          margin-right: 0;
         }
+
+        .game-title-ribbon {
+          margin-top: 0.5rem;
+          /* Space below title */
+          margin-bottom: 1rem;
+          /* Space before meta */
+        }
+
 
         .branding-section h2 {
           font-size: 1.8rem;
@@ -1225,7 +1386,9 @@
             <div class="game-main">
               <span class="back-to-home" onclick="backToHome()" role="button" aria-label="Back to home"><i
                   class="fas fa-arrow-left"></i> Back</span>
-              <h2 id="game-title"></h2>
+              <div id="game-title-container">
+                <h2 id="game-title"></h2>
+              </div>
               <p id="game-developer"></p>
               <div class="game-meta">
                 <div class="game-tags" id="game-tags"></div>
@@ -1250,7 +1413,9 @@
           </div>
           <div class="fullscreen-bar" id="fullscreen-bar" role="toolbar" aria-hidden="true">
             <div class="fullscreen-info">
-              <h3 id="fullscreen-title"></h3>
+              <div id="fullscreen-title-container">
+                <h3 id="fullscreen-title"></h3>
+              </div>
               <p id="fullscreen-developer"></p>
               <div class="fullscreen-tags" id="fullscreen-tags"></div>
               <div class="fullscreen-rating" id="fullscreen-rating"></div>
@@ -1298,7 +1463,9 @@
         hamburger: $('#hamburger'), // Hamburger to toggle sidebar on small screens
         sidebar: $('#sidebar'), // Reference to the new sidebar element
         mainContent: $('.main-content'), // Reference to the main content wrapper
-        overlay: null // Will be created dynamically for mobile sidebar overlay
+        overlay: null, // Will be created dynamically for mobile sidebar overlay
+        gameTitleContainer: $('#game-title-container'), // Container for game page title and ribbon
+        fullscreenTitleContainer: $('#fullscreen-title-container') // Container for fullscreen bar title and ribbon
       };
 
       // Hamburger Menu: Toggle Sidebar on small screens
@@ -1306,11 +1473,15 @@
         elements.sidebar.classList.toggle('active');
         if (elements.sidebar.classList.contains('active')) {
           // Create and show overlay when sidebar is active
-          elements.overlay = document.createElement('div');
-          elements.overlay.className = 'overlay active';
-          document.body.appendChild(elements.overlay);
-          // Close sidebar when clicking on the overlay
-          elements.overlay.addEventListener('click', closeSidebar);
+          if (!elements.overlay) { // Create overlay only if it doesn't exist
+            elements.overlay = document.createElement('div');
+            elements.overlay.className = 'overlay active';
+            document.body.appendChild(elements.overlay);
+            // Close sidebar when clicking on the overlay
+            elements.overlay.addEventListener('click', closeSidebar);
+          } else {
+            elements.overlay.classList.add('active'); // Show existing overlay
+          }
         } else {
           // Hide and remove overlay when sidebar is not active
           closeSidebar();
@@ -1321,8 +1492,10 @@
       function closeSidebar() {
         elements.sidebar.classList.remove('active');
         if (elements.overlay) {
-          elements.overlay.remove();
-          elements.overlay = null;
+          elements.overlay.classList.remove('active');
+          // Optionally remove the overlay from DOM if you prefer:
+          // elements.overlay.remove();
+          // elements.overlay = null;
         }
       }
 
@@ -1378,11 +1551,18 @@
           state.gameData = await response.json();
           // Keep the branding section, clear only the loading/category content
           const brandingSection = elements.homePage.querySelector('.branding-section');
-          elements.homePage.innerHTML = '';
-          elements.homePage.appendChild(brandingSection); // Add branding section back
+          elements.homePage.innerHTML = ''; // Clear previous content
+          if (brandingSection) { // Ensure branding section exists before appending
+            elements.homePage.appendChild(brandingSection); // Add branding section back
+          }
           populateCategories();
           populateCategoryList();
         } catch (error) {
+          const brandingSection = elements.homePage.querySelector('.branding-section');
+          elements.homePage.innerHTML = ''; // Clear previous content
+          if (brandingSection) {
+            elements.homePage.appendChild(brandingSection);
+          }
           elements.homePage.innerHTML += `<div class="error">Error loading games: ${error.message}</div>`; // Append error below branding
         }
       }
@@ -1424,7 +1604,7 @@
 
         state.gameData.categories.forEach(category => {
           if (category.id === 'favorites') return;
-          
+
           const button = document.createElement('a');
           button.href = '#';
           button.className = 'category-item';
@@ -1460,12 +1640,46 @@
         });
       }
 
+      // Helper function to create and add ribbon to game card
+      function addRibbonToCard(game, gameCardElement) {
+        if (game.ribbon) {
+          const ribbonElement = document.createElement('div');
+          ribbonElement.className = `ribbon ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}`;
+          ribbonElement.textContent = game.ribbon;
+          gameCardElement.appendChild(ribbonElement);
+        }
+      }
+
+      // Helper function to create and add ribbon to game title sections
+      function addRibbonToTitle(game, titleContainerElement, isFullscreen = false) {
+        // Clear any existing ribbon first
+        const existingRibbon = titleContainerElement.querySelector(isFullscreen ? '.fullscreen-title-ribbon' : '.game-title-ribbon');
+        if (existingRibbon) {
+          existingRibbon.remove();
+        }
+
+        if (game.ribbon) {
+          const ribbonElement = document.createElement('span');
+          ribbonElement.className = `${isFullscreen ? 'fullscreen-title-ribbon' : 'game-title-ribbon'} ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}`;
+          ribbonElement.textContent = game.ribbon;
+          // Insert after the h2/h3 title element
+          const titleElement = titleContainerElement.querySelector(isFullscreen ? 'h3' : 'h2');
+          if (titleElement) {
+            titleElement.insertAdjacentElement('afterend', ribbonElement);
+          }
+        }
+      }
+
+
       // Category Population
       function populateCategories(filterTag = state.selectedTag, filterCategory = state.selectedCategory) {
         // Keep the branding section, clear only the category content
         const brandingSection = elements.homePage.querySelector('.branding-section');
-        elements.homePage.innerHTML = '';
-        elements.homePage.appendChild(brandingSection); // Add branding section back
+        elements.homePage.innerHTML = ''; // Clear previous content
+        if (brandingSection) { // Ensure branding section exists before appending
+          elements.homePage.appendChild(brandingSection); // Add branding section back
+        }
+
 
         state.gameData.categories.forEach(category => {
           if (filterCategory && category.id !== filterCategory && category.id !== 'favorites') return;
@@ -1496,14 +1710,17 @@
               gameCard.style.animationDelay = `${index * 0.1}s`;
               const stars = Math.round(game.rating);
               const isFavorited = localStorage.getItem(`favorite-${game.id}`) === 'true';
-              gameCard.innerHTML = `
+
+              // Add ribbon to game card
+              addRibbonToCard(game, gameCard);
+
+              gameCard.innerHTML += `
               <img src="${game.image}" alt="${game.title}" loading="lazy">
               <div class="game-card-info">
                 <h3>${game.title}</h3>
-                <p>${game.description}</p>
-                <p class="game-card-developer">By ${game.developer}</p>
+                <p>${game.description}</p> <p class="game-card-developer">By ${game.developer}</p>
                 <div class="game-card-meta">
-                  <span class="rating" aria-label="Rating ${stars} out of 5">${'⭐'.repeat(stars)}</span>
+                  <span class="rating" aria-label="Rating ${stars} out of 5">${'тнР'.repeat(stars)}</span>
                   <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Favorited' : 'Not favorited'}"></span>
                 </div>
               </div>
@@ -1540,22 +1757,26 @@
         elements.gameIframe.style.display = 'none';
 
         $('#game-title').textContent = game.title;
+        addRibbonToTitle(game, elements.gameTitleContainer); // Add ribbon to game page title
+
         $('#game-developer').textContent = 'By ' + game.developer;
         elements.gameIframe.src = game.url;
         $('#game-description').textContent = game.description;
 
         $('#game-tags').innerHTML = game.tags.map(tag => `<span>${tag}</span>`).join('');
         const stars = Math.round(game.rating);
-        $('#game-rating').innerHTML = '⭐'.repeat(stars);
+        $('#game-rating').innerHTML = 'тнР'.repeat(stars);
 
         const favoriteBtn = $('#favorite-btn');
         favoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
         favoriteBtn.onclick = () => toggleFavorite(game);
 
         $('#fullscreen-title').textContent = game.title;
+        addRibbonToTitle(game, elements.fullscreenTitleContainer, true); // Add ribbon to fullscreen bar title
+
         $('#fullscreen-developer').textContent = 'By ' + game.developer;
         $('#fullscreen-tags').innerHTML = game.tags.map(tag => `<span>${tag}</span>`).join('');
-        $('#fullscreen-rating').innerHTML = '⭐'.repeat(stars);
+        $('#fullscreen-rating').innerHTML = 'тнР'.repeat(stars);
         const fullscreenFavoriteBtn = $('#fullscreen-favorite-btn');
         fullscreenFavoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
         fullscreenFavoriteBtn.onclick = () => toggleFavorite(game);
@@ -1567,7 +1788,11 @@
             const similarGame = document.createElement('div');
             similarGame.className = 'similar-game';
             similarGame.tabIndex = 0;
-            similarGame.innerHTML = `
+
+            // Add ribbon to similar game cards if needed (optional, could be too much)
+            // addRibbonToCard(g, similarGame); // Example if you want ribbons here too
+
+            similarGame.innerHTML += `
             <img src="${g.image}" alt="${g.title}" loading="lazy">
             <span>${g.title}</span>
           `;
@@ -1587,6 +1812,17 @@
         $('#favorite-btn').classList.toggle('favorited', !isFavorited);
         $('#fullscreen-favorite-btn').classList.toggle('favorited', !isFavorited);
         showToast(isFavorited ? 'Removed from favorites' : 'Added to favorites');
+
+        // Update game card favorite status on home page if visible
+        const gameCardOnHomePage = $(`#home-page .game-card img[alt="${game.title}"]`)?.closest('.game-card');
+        if (gameCardOnHomePage) {
+          const favIcon = gameCardOnHomePage.querySelector('.favorite');
+          if (favIcon) {
+            favIcon.classList.toggle('favorited', !isFavorited);
+            favIcon.setAttribute('aria-label', !isFavorited ? 'Favorited' : 'Not favorited');
+          }
+        }
+
         if (state.selectedCategory === 'favorites') {
           populateCategories(state.selectedTag, state.selectedCategory);
         }
@@ -1604,10 +1840,13 @@
         setTimeout(() => {
           elements.gamePage.style.display = 'none';
           elements.homePage.style.display = 'block';
-          elements.gameIframe.src = '';
-          populateCategories(state.selectedTag, state.selectedCategory);
+          elements.gameIframe.src = ''; // Clear iframe src to stop game
+          // No need to call populateCategories here if filters haven't changed.
+          // If you want to always refresh, uncomment the line below.
+          // populateCategories(state.selectedTag, state.selectedCategory);
+          window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top of home page
           closeSidebar(); // Close sidebar
-        }, 600);
+        }, 600); // Match transition duration
       }
 
       // Fullscreen Controls
@@ -1617,6 +1856,7 @@
           elements.gameIframe.requestFullscreen();
           state.isFullscreen = true;
           elements.fullscreenBar.style.display = 'flex';
+          elements.fullscreenBar.classList.remove('hidden'); // Ensure it's visible initially
           clearTimeout(autoHideTimeout);
           autoHideTimeout = setTimeout(() => {
             elements.fullscreenBar.classList.add('hidden');
@@ -1627,10 +1867,7 @@
       function exitFullscreen() {
         if (document.fullscreenElement) {
           document.exitFullscreen();
-          state.isFullscreen = false;
-          elements.fullscreenBar.style.display = 'none';
-          elements.fullscreenBar.classList.remove('hidden');
-          clearTimeout(autoHideTimeout);
+          // fullscreenchange event will handle state.isFullscreen and bar visibility
         }
       }
 
@@ -1650,6 +1887,14 @@
           elements.fullscreenBar.style.display = 'none';
           elements.fullscreenBar.classList.remove('hidden');
           clearTimeout(autoHideTimeout);
+        } else {
+          // When entering fullscreen, ensure bar is visible and auto-hide is set
+          elements.fullscreenBar.style.display = 'flex';
+          elements.fullscreenBar.classList.remove('hidden');
+          clearTimeout(autoHideTimeout);
+          autoHideTimeout = setTimeout(() => {
+            elements.fullscreenBar.classList.add('hidden');
+          }, 3000);
         }
       });
 
@@ -1665,7 +1910,9 @@
 
       // Refresh Game
       function refreshGame() {
-        elements.gameIframe.contentWindow.location.reload();
+        if (elements.gameIframe.contentWindow) {
+          elements.gameIframe.contentWindow.location.reload();
+        }
       }
 
       // Toast Notification
@@ -1689,12 +1936,17 @@
           const suggestion = document.createElement('div');
           suggestion.className = 'search-suggestion';
           suggestion.setAttribute('role', 'option');
+          // Add ribbon to search suggestions (optional, simple text version here)
+          let ribbonText = '';
+          if (game.ribbon) {
+            ribbonText = `<span class="search-suggestion-ribbon ribbon-${game.ribbon.toLowerCase().replace(/\s+/g, '-')}">${game.ribbon}</span>`;
+          }
           suggestion.innerHTML = `
-          <img src="${game.image}" alt="${game.title}" loading="lazy">
-          <span>${game.title}</span>
-        `;
+            <img src="${game.image}" alt="${game.title}" loading="lazy">
+            <span>${game.title} ${ribbonText}</span>
+          `;
           suggestion.addEventListener('click', () => {
-            elements.searchInput.value = game.title;
+            elements.searchInput.value = game.title; // Keep this to fill input
             elements.searchSuggestions.style.display = 'none';
             showGamePage(game);
           });
@@ -1702,18 +1954,13 @@
         });
 
         // Filter and display games on the home page based on search query
-        elements.homePage.innerHTML = '';
-        const brandingSection = document.createElement('div'); // Recreate branding section
-        brandingSection.className = 'branding-section';
-        brandingSection.innerHTML = `
-            <h2>Welcome to Astra Hub!</h2>
-            <p>Discover over 4000+ games, no installation needed, on any device.</p>
-            <div class="branding-features">
-                <span><i class="fas fa-gamepad" aria-hidden="true"></i> Play with friends</span>
-                <span><i class="fas fa-dollar-sign" aria-hidden="true"></i> All for free</span>
-            </div>
-          `;
-        elements.homePage.appendChild(brandingSection); // Add branding section back
+        // Keep the branding section, clear only the category content
+        const brandingSection = elements.homePage.querySelector('.branding-section');
+        elements.homePage.innerHTML = ''; // Clear previous content
+        if (brandingSection) { // Ensure branding section exists before appending
+          elements.homePage.appendChild(brandingSection); // Add branding section back
+        }
+
 
         state.gameData.categories.forEach(category => {
           const matchingGames = state.gameData.games
@@ -1742,14 +1989,17 @@
               gameCard.style.animationDelay = `${index * 0.1}s`;
               const stars = Math.round(game.rating);
               const isFavorited = localStorage.getItem(`favorite-${game.id}`) === 'true';
-              gameCard.innerHTML = `
+
+              addRibbonToCard(game, gameCard); // Add ribbon
+
+              gameCard.innerHTML += `
               <img src="${game.image}" alt="${game.title}" loading="lazy">
               <div class="game-card-info">
                 <h3>${game.title}</h3>
                 <p>${game.description}</p>
                 <p class="game-card-developer">By ${game.developer}</p>
                 <div class="game-card-meta">
-                  <span class="rating" aria-label="Rating ${stars} out of 5">${'⭐'.repeat(stars)}</span>
+                  <span class="rating" aria-label="Rating ${stars} out of 5">${'тнР'.repeat(stars)}</span>
                   <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Favorited' : 'Not favorited'}"></span>
                 </div>
               </div>
@@ -1767,7 +2017,7 @@
         if (elements.homePage.querySelectorAll('.category-section').length === 0 && !elements.homePage.querySelector('.loading') && !elements.homePage.querySelector('.error')) {
           const noGamesMessage = document.createElement('div');
           noGamesMessage.className = 'error'; // Reusing error class for styling
-          noGamesMessage.textContent = 'No games found for the selected filters.';
+          noGamesMessage.textContent = 'No games found for your search.';
           elements.homePage.appendChild(noGamesMessage);
         }
       });
@@ -1795,15 +2045,22 @@
         state.selectedTag = '';
         localStorage.setItem('selectedCategory', state.selectedCategory);
         localStorage.setItem('selectedTag', state.selectedTag);
-        backToHome();
-        // Select category items within the sidebar's category list
-        $$('.category-item', elements.categoryList).forEach(item => {
-          item.classList.remove('active');
-          item.setAttribute('aria-selected', 'false');
-        });
-        const homeButton = $$('.category-item', elements.categoryList)[0]; // Select within categoryList
-        homeButton.classList.add('active');
-        homeButton.setAttribute('aria-selected', 'true');
+
+        if (elements.gamePage.classList.contains('active')) {
+          backToHome(); // Go back to home if on game page
+        } else {
+          // If already on home page, just repopulate and ensure correct category is active
+          populateCategories();
+          $$('.category-item', elements.categoryList).forEach(item => {
+            item.classList.remove('active');
+            item.setAttribute('aria-selected', 'false');
+          });
+          const homeButton = $$('.category-item', elements.categoryList)[0];
+          if (homeButton) {
+            homeButton.classList.add('active');
+            homeButton.setAttribute('aria-selected', 'true');
+          }
+        }
         closeSidebar(); // Close sidebar
       });
 
@@ -1816,8 +2073,10 @@
 
       // Adjust resize listener if needed for the new layout - probably not necessary for iframe height
       window.addEventListener('resize', () => {
-        if (elements.gameIframe.style.display !== 'none') {
-          elements.gameIframe.style.height = `${Math.min(window.innerHeight * 0.65, 650)}px`;
+        if (elements.gameIframe.style.display !== 'none' && elements.gameIframe.closest('.game-page.active')) { // Check if game page is active
+          // Set a max height, but allow it to be smaller on smaller viewports
+          const availableHeight = window.innerHeight - elements.gamePage.querySelector('.game-main').offsetTop - 150; // Approximate available space
+          elements.gameIframe.style.height = `${Math.min(availableHeight, 650)}px`;
         }
         // Re-calculate main-content margin if sidebar width is dynamic (it's fixed now, so not needed)
       }, { passive: true });

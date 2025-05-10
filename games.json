@@ -30,12 +30,14 @@
       "tags": [
         "satisfying",
         "relaxing",
-        "multiplayer"
+        "multiplayer",
+        "arcade"
       ],
       "rating": 4.0,
       "categories": [
         "featured",
-        "satisfying"
+        "satisfying",
+        "arcade"
       ]
     },
     {
@@ -52,7 +54,6 @@
       ],
       "rating": 4.2,
       "categories": [
-        "featured",
         "clicker"
       ]
     },
@@ -66,13 +67,17 @@
       "tags": [
         "clicker",
         "satisfying",
-        "relaxing"
+        "relaxing",
+        "arcade",
+        "reflex",
+        "fast-paced"
       ],
       "rating": 4.5,
       "categories": [
         "featured",
         "clicker",
-        "classic"
+        "classic",
+        "arcade"
       ]
     },
     {
@@ -89,8 +94,8 @@
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
-        "simulator"
+        "simulator",
+        "strategy"
       ]
     },
     {
@@ -103,13 +108,16 @@
       "tags": [
         "clicker",
         "simple",
-        "relaxing"
+        "relaxing",
+        "arcade",
+        "reflex",
+        "fast-paced"
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
         "clicker",
-        "classic"
+        "classic",
+        "arcade"
       ]
     },
     {
@@ -122,12 +130,14 @@
       "tags": [
         "simple",
         "fast-paced",
-        "relaxing"
+        "relaxing",
+        "arcade",
+        "reflex"
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
-        "classic"
+        "classic",
+        "arcade"
       ]
     },
     {
@@ -142,7 +152,6 @@
       ],
       "rating": 5,
       "categories": [
-        "featured",
         "tool"
       ]
     },
@@ -161,8 +170,363 @@
       ],
       "rating": 4.3,
       "categories": [
+        "arcade"
+      ]
+    },
+    {
+      "id": "2048-game",
+      "title": "2048",
+      "description": "Play the classic 2048 game.",
+      "developer": "proplayer919",
+      "image": "images/2048-game.png",
+      "url": "games/2048-game/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "puzzle",
+        "logic"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "arcade",
+        "classic",
+        "puzzle"
+      ]
+    },
+    {
+      "id": "archery",
+      "title": "Archery",
+      "description": "Improve your accuracy in this realistic archery simulator.",
+      "developer": "proplayer919",
+      "image": "images/archery.png",
+      "url": "games/archery/index.html",
+      "tags": [
+        "simple",
+        "simulator",
+        "sports",
+        "reflex"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "simulator",
+        "sports"
+      ]
+    },
+    {
+      "id": "card-memory",
+      "title": "Card Memory",
+      "description": "Test your memory with this memory card game.",
+      "developer": "proplayer919",
+      "image": "images/card-memory.png",
+      "url": "games/card-memory/index.html",
+      "tags": [
+        "simple",
+        "memory",
+        "puzzle"
+      ],
+      "rating": 4.2,
+      "categories": [
+        "puzzle",
+        "memory"
+      ]
+    },
+    {
+      "id": "colour-memory",
+      "title": "Colour Memory",
+      "description": "Test your memory by remembering and matching colours.",
+      "developer": "Community Developer",
+      "image": "images/colour-memory.png",
+      "url": "games/colour-memory/index.html",
+      "tags": [
+        "memory",
+        "puzzle",
+        "simple"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "memory"
+      ]
+    },
+    {
+      "id": "connect-four",
+      "title": "Connect Four",
+      "description": "Play the classic game of Connect Four against a friend or the computer.",
+      "developer": "Community Developer",
+      "image": "images/connect-four.png",
+      "url": "games/connect-four/index.html",
+      "tags": [
+        "strategy",
+        "classic",
+        "multiplayer",
+        "puzzle"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "classic",
+        "puzzle",
+        "strategy"
+      ]
+    },
+    {
+      "id": "crossy-road",
+      "title": "Crossy Road",
+      "description": "Help the chicken cross the road while avoiding obstacles.",
+      "developer": "Community Developer",
+      "image": "images/crossy-road.png",
+      "url": "games/crossy-road/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
         "featured",
         "arcade"
+      ]
+    },
+    {
+      "id": "dice-roll",
+      "title": "Dice Roll",
+      "description": "A simple dice rolling simulator.",
+      "developer": "Community Developer",
+      "image": "images/dice-roll.png",
+      "url": "games/dice-roll/index.html",
+      "tags": [
+        "utility",
+        "simple"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "tool"
+      ]
+    },
+    {
+      "id": "emoji-catcher",
+      "title": "Emoji Catcher",
+      "description": "Catch falling emojis in this fun arcade game.",
+      "developer": "Community Developer",
+      "image": "images/emoji-catcher.png",
+      "url": "games/emoji-catcher/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "arcade"
+      ]
+    },
+    {
+      "id": "hangman",
+      "title": "Hangman",
+      "description": "Guess the word before the hangman is complete.",
+      "developer": "Community Developer",
+      "image": "images/hangman.png",
+      "url": "games/hangman/index.html",
+      "tags": [
+        "word",
+        "puzzle",
+        "simple"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "featured",
+        "puzzle",
+        "word"
+      ]
+    },
+    {
+      "id": "insect-catch",
+      "title": "Insect Catch",
+      "description": "Catch as many insects as you can before time runs out.",
+      "developer": "Community Developer",
+      "image": "images/insect-catch.png",
+      "url": "games/insect-catch/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "arcade"
+      ]
+    },
+    {
+      "id": "minesweeper",
+      "title": "Minesweeper",
+      "description": "Play the classic game of Minesweeper.",
+      "developer": "Community Developer",
+      "image": "images/minesweeper.png",
+      "url": "games/minesweeper/index.html",
+      "tags": [
+        "puzzle",
+        "classic",
+        "logic"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "classic",
+        "logic"
+      ]
+    },
+    {
+      "id": "number-guess",
+      "title": "Number Guess",
+      "description": "Guess the random number within a limited number of tries.",
+      "developer": "Community Developer",
+      "image": "images/number-guess.png",
+      "url": "games/number-guess/index.html",
+      "tags": [
+        "puzzle",
+        "simple",
+        "logic"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "logic"
+      ]
+    },
+    {
+      "id": "quiz-game",
+      "title": "Quiz Game",
+      "description": "Test your knowledge with a variety of quiz questions.",
+      "developer": "Community Developer",
+      "image": "images/quiz-game.png",
+      "url": "games/quiz-game/index.html",
+      "tags": [
+        "quiz",
+        "simple",
+        "skill"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "quiz",
+        "educational"
+      ]
+    },
+    {
+      "id": "rock-paper-scissors",
+      "title": "Rock Paper Scissors",
+      "description": "Play the classic game of Rock Paper Scissors against the computer.",
+      "developer": "Community Developer",
+      "image": "images/rock-paper-scissors.png",
+      "url": "games/rock-paper-scissors/index.html",
+      "tags": [
+        "simple",
+        "classic",
+        "multiplayer"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "classic",
+        "multiplayer"
+      ]
+    },
+    {
+      "id": "shape-clicker",
+      "title": "Shape Clicker",
+      "description": "Click the shapes as fast as you can.",
+      "developer": "Community Developer",
+      "image": "images/shape-clicker.png",
+      "url": "games/shape-clicker/index.html",
+      "tags": [
+        "clicker",
+        "simple",
+        "reflex",
+        "arcade",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "clicker",
+        "arcade"
+      ]
+    },
+    {
+      "id": "tic-tac-toe",
+      "title": "Tic Tac Toe",
+      "description": "Play the classic game of Tic Tac Toe against a friend or the computer.",
+      "developer": "Community Developer",
+      "image": "images/tic-tac-toe.png",
+      "url": "games/tic-tac-toe/index.html",
+      "tags": [
+        "classic",
+        "simple",
+        "multiplayer",
+        "puzzle",
+        "strategy"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "classic",
+        "puzzle",
+        "multiplayer",
+        "strategy"
+      ]
+    },
+    {
+      "id": "tilting-maze",
+      "title": "Tilting Maze",
+      "description": "Tilt the maze to guide the ball to the end.",
+      "developer": "Community Developer",
+      "image": "images/tilting-maze.png",
+      "url": "games/tilting-maze/index.html",
+      "tags": [
+        "puzzle",
+        "reflex",
+        "arcade"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "arcade"
+      ]
+    },
+    {
+      "id": "tower-blocks",
+      "title": "Tower Blocks",
+      "description": "Stack the blocks as high as you can.",
+      "developer": "Community Developer",
+      "image": "images/tower-blocks.png",
+      "url": "games/tower-blocks/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "featured",
+        "arcade"
+      ]
+    },
+    {
+      "id": "typing-game",
+      "title": "Typing Game",
+      "description": "Improve your typing speed and accuracy.",
+      "developer": "Community Developer",
+      "image": "images/typing-game.png",
+      "url": "games/typing-game/index.html",
+      "tags": [
+        "simple",
+        "utility",
+        "skill"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "tool",
+        "educational",
+        "skill"
       ]
     }
   ],
@@ -211,6 +575,56 @@
       "id": "arcade",
       "name": "Arcade",
       "icon": "fa-gamepad"
+    },
+    {
+      "id": "puzzle",
+      "name": "Puzzle",
+      "icon": "fa-puzzle-piece"
+    },
+    {
+      "id": "memory",
+      "name": "Memory",
+      "icon": "fa-brain"
+    },
+    {
+      "id": "word",
+      "name": "Word",
+      "icon": "fa-font"
+    },
+    {
+      "id": "quiz",
+      "name": "Quiz",
+      "icon": "fa-question-circle"
+    },
+    {
+      "id": "strategy",
+      "name": "Strategy",
+      "icon": "fa-chess"
+    },
+    {
+      "id": "multiplayer",
+      "name": "Multiplayer",
+      "icon": "fa-users"
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "icon": "fa-cogs"
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "icon": "fa-dumbbell"
+    },
+    {
+      "id": "educational",
+      "name": "Educational",
+      "icon": "fa-lightbulb"
+    },
+    {
+      "id": "skill",
+      "name": "Skill",
+      "icon": "fa-star"
     }
   ],
   "tags": {
@@ -230,6 +644,11 @@
     "simple": "fa-thumbs-up",
     "utility": "fa-wrench",
     "arcade": "fa-gamepad",
-    "reflex": "fa-tachometer-alt"
+    "reflex": "fa-tachometer-alt",
+    "memory": "fa-brain",
+    "word": "fa-font",
+    "quiz": "fa-brain",
+    "sports": "fa-dumbbell",
+    "skill": "fa-lightbulb"
   }
 }

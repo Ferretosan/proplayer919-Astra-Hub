@@ -1501,7 +1501,7 @@
               <div class="game-card-info">
                 <h3>${game.title}</h3>
                 <p>${game.description}</p>
-                <p class="game-card-developer">By ${game.developer}</p>
+                <p class="game-card-developer">Added by ${game.developer}</p>
                 <div class="game-card-meta">
                   <span class="rating" aria-label="Rating ${stars} out of 5">${'⭐'.repeat(stars)}</span>
                   <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Favorited' : 'Not favorited'}"></span>
@@ -1540,7 +1540,7 @@
         elements.gameIframe.style.display = 'none';
 
         $('#game-title').textContent = game.title;
-        $('#game-developer').textContent = 'By ' + game.developer;
+        $('#game-developer').textContent = 'Added by ' + game.developer;
         elements.gameIframe.src = game.url;
         $('#game-description').textContent = game.description;
 
@@ -1553,7 +1553,7 @@
         favoriteBtn.onclick = () => toggleFavorite(game);
 
         $('#fullscreen-title').textContent = game.title;
-        $('#fullscreen-developer').textContent = 'By ' + game.developer;
+        $('#fullscreen-developer').textContent = 'Added by ' + game.developer;
         $('#fullscreen-tags').innerHTML = game.tags.map(tag => `<span>${tag}</span>`).join('');
         $('#fullscreen-rating').innerHTML = '⭐'.repeat(stars);
         const fullscreenFavoriteBtn = $('#fullscreen-favorite-btn');
@@ -1747,7 +1747,7 @@
               <div class="game-card-info">
                 <h3>${game.title}</h3>
                 <p>${game.description}</p>
-                <p class="game-card-developer">By ${game.developer}</p>
+                <p class="game-card-developer">Added by ${game.developer}</p>
                 <div class="game-card-meta">
                   <span class="rating" aria-label="Rating ${stars} out of 5">${'⭐'.repeat(stars)}</span>
                   <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Favorited' : 'Not favorited'}"></span>

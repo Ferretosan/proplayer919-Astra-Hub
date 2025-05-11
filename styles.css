@@ -16,7 +16,7 @@
   --ribbon-new-bg: #007bff;
   --ribbon-updated-bg: #fd7e14;
   --ribbon-popular-bg: #6f42c1;
-  --ribbon-original-bg: #28a745;
+  --ribbon-exclusive-bg: #28a745;
   --ribbon-text-color: #ffffff;
 }
 
@@ -505,8 +505,8 @@ body.light-mode .game-card {
   background-color: var(--ribbon-popular-bg);
 }
 
-.ribbon-badge.ribbon-astragames-original {
-  background-color: var(--ribbon-original-bg);
+.ribbon-badge.ribbon-astragames-exclusive {
+  background-color: var(--ribbon-exclusive-bg);
 }
 
 .search-suggestion-ribbon.ribbon-new {
@@ -521,8 +521,8 @@ body.light-mode .game-card {
   background-color: var(--ribbon-popular-bg);
 }
 
-.search-suggestion-ribbon.ribbon-astragames-original {
-  background-color: var(--ribbon-original-bg);
+.search-suggestion-ribbon.ribbon-astragames-exclusive {
+  background-color: var(--ribbon-exclusive-bg);
 }
 
 .game-card img {
@@ -548,12 +548,6 @@ body.light-mode .game-card {
   color: var(--text);
 }
 
-.game-card-developer {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  margin-top: 0.3rem;
-}
-
 .game-card-description {
   font-size: 0.9rem;
   color: var(--text-secondary);
@@ -566,7 +560,6 @@ body.light-mode .game-card h3 {
   color: var(--light-text);
 }
 
-body.light-mode .game-card-developer,
 body.light-mode .game-card-description {
   color: var(--light-text);
   opacity: 0.85;
@@ -697,8 +690,8 @@ body.light-mode .game-main {
   background-color: var(--ribbon-popular-bg);
 }
 
-.game-title-ribbon.ribbon-astragames-original {
-  background-color: var(--ribbon-original-bg);
+.game-title-ribbon.ribbon-astragames-exclusive {
+  background-color: var(--ribbon-exclusive-bg);
 }
 
 body.light-mode .game-main h2 {
@@ -1436,10 +1429,6 @@ body.light-mode .feed-game-main p {
   .game-card-description {
     font-size: 0.85rem;
     min-height: 30px;
-  }
-
-  .game-card-developer {
-    font-size: 0.9rem;
   }
 
   .game-card img {

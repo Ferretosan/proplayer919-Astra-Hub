@@ -4,7 +4,6 @@
       "id": "battlegrounds",
       "title": "Battlegrounds",
       "description": "Explore the world map and engage in intense battles across the globe.",
-      "developer": "proplayer919",
       "image": "images/battlegrounds.png",
       "url": "games/battlegrounds/index.html",
       "tags": [
@@ -25,7 +24,6 @@
       "id": "eat-that-food",
       "title": "Eat that Food",
       "description": "Eat orbs to become the biggest player in this satisfying, addictive game.",
-      "developer": "Riley",
       "image": "images/eat-that-food.png",
       "url": "games/eat-that-food/index.html",
       "tags": [
@@ -40,13 +38,12 @@
         "satisfying",
         "arcade"
       ],
-      "ribbon": "astragames original"
+      "ribbon": "astragames exclusive"
     },
     {
       "id": "money-clicker",
       "title": "Money Clicker",
       "description": "Make the most money by clicking and upgrading your business.",
-      "developer": "proplayer919",
       "image": "images/money-clicker.png",
       "url": "games/money-clicker/index.html",
       "tags": [
@@ -57,13 +54,13 @@
       "rating": 4.2,
       "categories": [
         "clicker"
-      ]
+      ],
+      "ribbon": "astragames exclusive"
     },
     {
       "id": "flappy-bird",
       "title": "Flappy Bird",
       "description": "Play the classic Flappy Bird game.",
-      "developer": "proplayer919",
       "image": "images/flappy-bird.png",
       "url": "games/flappy-bird/index.html",
       "tags": [
@@ -85,7 +82,6 @@
       "id": "president-sim",
       "title": "President Simulator",
       "description": "Can you lead the nation to prosperity and secure your re-election?",
-      "developer": "proplayer919",
       "image": "images/president-sim.png",
       "url": "games/president-sim/index.html",
       "tags": [
@@ -98,13 +94,12 @@
         "simulator",
         "strategy"
       ],
-      "ribbon": "astragames original"
+      "ribbon": "astragames exclusive"
     },
     {
       "id": "whack-a-mole",
       "title": "Whack a Mole",
       "description": "Whack as many moles as you can in this classic game's neon style remake.",
-      "developer": "proplayer919",
       "image": "images/whack-a-mole.png",
       "url": "games/whack-a-mole/index.html",
       "tags": [
@@ -126,7 +121,6 @@
       "id": "snake",
       "title": "Snake",
       "description": "Snake - but glowing",
-      "developer": "proplayer919",
       "image": "images/snake.png",
       "url": "games/snake/index.html",
       "tags": [
@@ -141,14 +135,12 @@
         "featured",
         "classic",
         "arcade"
-      ],
-      "ribbon": "updated"
+      ]
     },
     {
       "id": "chat",
       "title": "Chat",
       "description": "A global peer-to-peer chat room.",
-      "developer": "proplayer919",
       "image": "images/chat.png",
       "url": "games/chat/index.html",
       "tags": [
@@ -182,7 +174,6 @@
       "id": "2048-game",
       "title": "2048",
       "description": "Play the classic 2048 game.",
-      "developer": "proplayer919",
       "image": "images/2048-game.png",
       "url": "games/2048-game/index.html",
       "tags": [
@@ -203,7 +194,6 @@
       "id": "archery",
       "title": "Archery",
       "description": "Improve your accuracy in this realistic archery simulator.",
-      "developer": "proplayer919",
       "image": "images/archery.png",
       "url": "games/archery/index.html",
       "tags": [
@@ -222,7 +212,6 @@
       "id": "card-memory",
       "title": "Card Memory",
       "description": "Test your memory with this memory card game.",
-      "developer": "proplayer919",
       "image": "images/card-memory.png",
       "url": "games/card-memory/index.html",
       "tags": [
@@ -240,7 +229,6 @@
       "id": "colour-memory",
       "title": "Colour Memory",
       "description": "Test your memory by remembering and matching colours.",
-      "developer": "proplayer919",
       "image": "images/colour-memory.png",
       "url": "games/colour-memory/index.html",
       "tags": [
@@ -258,7 +246,6 @@
       "id": "connect-four",
       "title": "Connect Four",
       "description": "Play the classic game of Connect Four against a friend or the computer.",
-      "developer": "proplayer919",
       "image": "images/connect-four.png",
       "url": "games/connect-four/index.html",
       "tags": [
@@ -278,7 +265,6 @@
       "id": "crossy-road",
       "title": "Crossy Road",
       "description": "Help the chicken cross the road while avoiding obstacles.",
-      "developer": "proplayer919",
       "image": "images/crossy-road.png",
       "url": "games/crossy-road/index.html",
       "tags": [
@@ -297,7 +283,6 @@
       "id": "dice-roll",
       "title": "Dice Roll",
       "description": "A simple dice rolling simulator.",
-      "developer": "proplayer919",
       "image": "images/dice-roll.png",
       "url": "games/dice-roll/index.html",
       "tags": [
@@ -313,7 +298,6 @@
       "id": "emoji-catcher",
       "title": "Emoji Catcher",
       "description": "Catch falling emojis in this fun arcade game.",
-      "developer": "proplayer919",
       "image": "images/emoji-catcher.png",
       "url": "games/emoji-catcher/index.html",
       "tags": [
@@ -330,7 +314,6 @@
       "id": "hangman",
       "title": "Hangman",
       "description": "Guess the word before the hangman is complete.",
-      "developer": "proplayer919",
       "image": "images/hangman.png",
       "url": "games/hangman/index.html",
       "tags": [
@@ -349,7 +332,6 @@
       "id": "insect-catch",
       "title": "Insect Catch",
       "description": "Catch as many insects as you can before time runs out.",
-      "developer": "proplayer919",
       "image": "images/insect-catch.png",
       "url": "games/insect-catch/index.html",
       "tags": [
@@ -367,7 +349,6 @@
       "id": "minesweeper",
       "title": "Minesweeper",
       "description": "Play the classic game of Minesweeper.",
-      "developer": "proplayer919",
       "image": "images/minesweeper.png",
       "url": "games/minesweeper/index.html",
       "tags": [
@@ -386,7 +367,6 @@
       "id": "number-guess",
       "title": "Number Guess",
       "description": "Guess the random number within a limited number of tries.",
-      "developer": "proplayer919",
       "image": "images/number-guess.png",
       "url": "games/number-guess/index.html",
       "tags": [
@@ -404,7 +384,6 @@
       "id": "quiz-game",
       "title": "Quiz Game",
       "description": "Test your knowledge with a variety of quiz questions.",
-      "developer": "proplayer919",
       "image": "images/quiz-game.png",
       "url": "games/quiz-game/index.html",
       "tags": [
@@ -422,7 +401,6 @@
       "id": "rock-paper-scissors",
       "title": "Rock Paper Scissors",
       "description": "Play the classic game of Rock Paper Scissors against the computer.",
-      "developer": "proplayer919",
       "image": "images/rock-paper-scissors.png",
       "url": "games/rock-paper-scissors/index.html",
       "tags": [
@@ -440,7 +418,6 @@
       "id": "shape-clicker",
       "title": "Shape Clicker",
       "description": "Click the shapes as fast as you can.",
-      "developer": "proplayer919",
       "image": "images/shape-clicker.png",
       "url": "games/shape-clicker/index.html",
       "tags": [
@@ -460,7 +437,6 @@
       "id": "tic-tac-toe",
       "title": "Tic Tac Toe",
       "description": "Play the classic game of Tic Tac Toe against a friend or the computer.",
-      "developer": "proplayer919",
       "image": "images/tic-tac-toe.png",
       "url": "games/tic-tac-toe/index.html",
       "tags": [
@@ -482,7 +458,6 @@
       "id": "tilting-maze",
       "title": "Tilting Maze",
       "description": "Tilt the maze to guide the ball to the end.",
-      "developer": "proplayer919",
       "image": "images/tilting-maze.png",
       "url": "games/tilting-maze/index.html",
       "tags": [
@@ -500,7 +475,6 @@
       "id": "tower-blocks",
       "title": "Tower Blocks",
       "description": "Stack the blocks as high as you can.",
-      "developer": "proplayer919",
       "image": "images/tower-blocks.png",
       "url": "games/tower-blocks/index.html",
       "tags": [
@@ -519,7 +493,6 @@
       "id": "typing-game",
       "title": "Typing Game",
       "description": "Improve your typing speed and accuracy.",
-      "developer": "proplayer919",
       "image": "images/typing-game.png",
       "url": "games/typing-game/index.html",
       "tags": [

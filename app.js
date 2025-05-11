@@ -200,7 +200,6 @@ const debouncedPopulateGamesFeed = debounce(() => {
           <div class="game-title-container" id="feed-title-container-${game.id}">
             <h2>${game.title}</h2>
           </div>
-          <p id="feed-developer-${game.id}">By ${game.developer || 'Unknown Developer'}</p>
           <div class="game-meta">
             <div class="game-tags" id="feed-tags-${game.id}">${game.tags && game.tags.length > 0 ? game.tags.map(tag => `<span>${tag}</span>`).join('') : '<span>No tags</span>'}</div>
             <div class="game-rating" id="feed-rating-${game.id}">${'<i class="fas fa-star" style="color: var(--secondary);"></i>'.repeat(Math.round(game.rating || 0))}${'<i class="far fa-star"></i>'.repeat(5 - Math.round(game.rating || 0))}</div>
@@ -515,7 +514,6 @@ function populateCategories(filterTag = state.selectedTag, filterCategory = stat
           <div class="game-card-info">
             <h3>${game.title}</h3>
             <p class="game-card-description">${shortDescription}</p>
-            <p class="game-card-developer">By ${game.developer || 'Unknown Developer'}</p>
             <div class="game-card-meta">
               <span class="rating" aria-label="Rating ${stars} out of 5">${'<i class="fas fa-star" style="color: var(--secondary);"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}</span>
               <span class="favorite ${isFavorited ? 'favorited' : ''}" aria-label="${isFavorited ? 'Add to favorites' : 'Remove from favorites'}" role="button" tabindex="0"></span>
@@ -558,8 +556,6 @@ function showGamePage(game) {
   elements.gameFrameContainer.classList.add('show-blur-bg');
   $('#game-title').textContent = game.title;
   addRibbonToTitle(game, elements.gameTitleContainer);
-  $('#game-developer').textContent = 'By ' + (game.developer || 'Unknown Developer');
-  $('#game-developer').style = 'text-align: center; margin-bottom: 1rem;';
   $('#game-description').textContent = game.description || "No description available.";
   $('#game-tags').innerHTML = game.tags && game.tags.length > 0 ? game.tags.map(tag => `<span>${tag}</span>`).join('') : '<span>No tags</span>';
   const stars = Math.round(game.rating || 0);
@@ -698,7 +694,6 @@ elements.searchInput.addEventListener('input', debounce(() => {
   }
   const suggestions = state.gameData.games.filter(game =>
     game.title.toLowerCase().includes(query) ||
-    (game.developer && game.developer.toLowerCase().includes(query)) ||
     (game.tags && game.tags.some(tag => tag.toLowerCase().includes(query)))
   ).slice(0, 10);
   if (suggestions.length === 0) {

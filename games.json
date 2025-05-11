@@ -510,7 +510,7 @@
     {
       "id": "minecraft-1.8",
       "title": "Minecraft 1.8",
-      "description": "Play Minecraft 1.8 right in your browser!",
+      "description": "Play Minecraft 1.8 right in your browser! Fullscreen doesn't work.",
       "image": "images/minecraft.png",
       "url": "games/minecraft-1.8/index.html",
       "tags": [
@@ -529,7 +529,7 @@
     {
       "id": "minecraft-1.12.2",
       "title": "Minecraft 1.12.2",
-      "description": "Play Minecraft 1.12.2 right in your browser!",
+      "description": "Play Minecraft 1.12.2 right in your browser! Fullscreen doesn't work.",
       "image": "images/minecraft.png",
       "url": "games/minecraft-1.12.2/index.html",
       "tags": [

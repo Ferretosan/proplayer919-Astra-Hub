@@ -169,7 +169,7 @@
       #minimap {
         position: absolute;
         top: 15px;
-        right: 170px;
+        left: 350px;
         width: 280px;
         height: 200px;
         border: 4px solid #00d4ff;
@@ -339,7 +339,7 @@
         #minimap {
           width: 180px;
           height: 120px;
-          right: 110px;
+          left: 250px;
         }
 
         #warp-menu {
@@ -523,7 +523,8 @@
         iconAnchor: [12, 12]
       });
 
-      function getBotIconSvg(color) {
+      function getBotIconSvg(color, health, maxHealth) {
+        const healthPercent = (health / maxHealth) * 100;
         return `
                 <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -532,6 +533,8 @@
                             <stop offset="100%" style="stop-color:${color.replace(/#[0-9a-fA-F]{6}/, '#333')};stop-opacity:1" />
                         </linearGradient>
                     </defs>
+                    <rect x="8" y="2" width="32" height="4" fill="#1a1a1a" stroke="#ffffff" stroke-width="0.5"/>
+                    <rect x="8" y="2" width="${(32 * healthPercent) / 100}" height="4" fill="#00ff88"/>
                     <path d="M24 6 L18 16 H21 V28 H27 V16 H30 L24 6 Z" fill="url(#botGrad)"/>
                     <path d="M21 28 H27 L28 32 H20 L21 28 Z" fill="url(#botGrad)"/>
                     <path d="M18 16 H12 L14 22 H18 Z" fill="${color}"/>
@@ -540,7 +543,8 @@
                 </svg>`;
       }
 
-      function getBaseIconSvg(color) {
+      function getBaseIconSvg(color, health, maxHealth) {
+        const healthPercent = (health / maxHealth) * 100;
         return `
                 <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -549,6 +553,8 @@
                             <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
                         </linearGradient>
                     </defs>
+                    <rect x="4" y="2" width="32" height="4" fill="#1a1a1a" stroke="#ffffff" stroke-width="0.5"/>
+                    <rect x="4" y="2" width="${(32 * healthPercent) / 100}" height="4" fill="#00ff88"/>
                     <rect x="8" y="8" width="24" height="24" fill="url(#baseGrad)" stroke="#ffffff" stroke-width="1"/>
                     <path d="M10 10 H30 V30 H10 Z" fill="#0a0a0a" fill-opacity="0.5"/>
                     <circle cx="20" cy="20" r="6" fill="${color}" stroke="#ffffff" stroke-width="1"/>
@@ -786,6 +792,12 @@
             if (playerBase) {
               playerBase.maxHealth += 100;
               playerBase.health = playerBase.maxHealth;
+              playerBase.marker.setIcon(L.divIcon({
+                html: getBaseIconSvg(teams.find(t => t.country === 'USA').color, playerBase.health, playerBase.maxHealth),
+                className: '',
+                iconSize: [40, 40],
+                iconAnchor: [20, 20]
+              }));
             }
           } else if (type === 'speed') {
             baseSpeed += 0.025;
@@ -875,6 +887,7 @@
             doubleClickZoom: false,
             touchZoom: false,
             scrollWheelZoom: false,
+            boxZoom: false,
             dragging: false
           });
           L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -899,6 +912,7 @@
             doubleClickZoom: false,
             touchZoom: false,
             scrollWheelZoom: false,
+            boxZoom: false,
             dragging: false
           });
           L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -920,14 +934,16 @@
               team.pos[0] + (Math.random() - 0.5) * 2,
               team.pos[1] + (Math.random() - 0.5) * 2
             ];
+            const botHealth = 80;
+            const botMaxHealth = 80;
             const botIcon = L.divIcon({
-              html: getBotIconSvg(team.color),
+              html: getBotIconSvg(team.color, botHealth, botMaxHealth),
               className: '',
               iconSize: [48, 48],
               iconAnchor: [24, 24]
             });
             const botMiniIcon = L.divIcon({
-              html: getBotIconSvg(team.color),
+              html: getBotIconSvg(team.color, botHealth, botMaxHealth),
               className: '',
               iconSize: [24, 24],
               iconAnchor: [12, 12]
@@ -937,8 +953,8 @@
             botMarkers.push({
               marker: bot,
               pos: botPos,
-              health: 80,
-              maxHealth: 80,
+              health: botHealth,
+              maxHealth: botMaxHealth,
               lastShot: 0,
               team: team.country,
               target: null,
@@ -956,14 +972,16 @@
           bases = [];
           baseMiniMarkers = [];
           teams.forEach(team => {
+            const baseHealth = 200;
+            const baseMaxHealth = 200;
             const baseIcon = L.divIcon({
-              html: getBaseIconSvg(team.color),
+              html: getBaseIconSvg(team.color, baseHealth, baseMaxHealth),
               className: '',
               iconSize: [40, 40],
               iconAnchor: [20, 20]
             });
             const baseMiniIcon = L.divIcon({
-              html: getBaseIconSvg(team.color),
+              html: getBaseIconSvg(team.color, baseHealth, baseMaxHealth),
               className: '',
               iconSize: [20, 20],
               iconAnchor: [10, 10]
@@ -974,8 +992,8 @@
               marker: base,
               pos: team.pos,
               country: team.country,
-              health: 200,
-              maxHealth: 200,
+              health: baseHealth,
+              maxHealth: baseMaxHealth,
               active: true
             });
             baseMiniMarkers.push({ marker: baseMini, pos: team.pos });
@@ -1045,7 +1063,8 @@
           speed,
           shooter,
           distanceTraveled: 0,
-          startTime: Date.now()
+          startTime: Date.now(),
+          size: 0.04 // Approximate projectile size in lat/lng units
         });
         playSound('shoot');
       }
@@ -1066,11 +1085,9 @@
           p.miniMarker.setLatLng(p.pos);
 
           if (p.shooter !== 'player') {
-            const dist = Math.sqrt(
-              (playerPos[0] - p.pos[0]) ** 2 +
-              (playerPos[1] - p.pos[1]) ** 2
-            );
-            if (dist < 0.12 && !shield.active) {
+            const dist = Math.hypot(playerPos[0] - p.pos[0], playerPos[1] - p.pos[1]);
+            const hitDistance = 0.08 + p.size; // Tighter hitbox for player
+            if (dist < hitDistance && !shield.active) {
               playerHealth -= p.damage;
               if (playerMarker._icon) {
                 playerMarker._icon.classList.add('hit-effect');
@@ -1090,12 +1107,22 @@
           for (let i = 0; i < botMarkers.length; i++) {
             const bot = botMarkers[i];
             if (p.shooter === bot.team) continue;
-            const dist = Math.sqrt(
-              (bot.pos[0] - p.pos[0]) ** 2 +
-              (bot.pos[1] - p.pos[1]) ** 2
-            );
-            if (dist < 0.12) {
+            const dist = Math.hypot(bot.pos[0] - p.pos[0], bot.pos[1] - p.pos[1]);
+            const hitDistance = 0.08 + p.size; // Tighter hitbox for bots
+            if (dist < hitDistance) {
               bot.health -= p.damage;
+              bot.marker.setIcon(L.divIcon({
+                html: getBotIconSvg(teams.find(t => t.country === bot.team).color, bot.health, bot.maxHealth),
+                className: '',
+                iconSize: [48, 48],
+                iconAnchor: [24, 24]
+              }));
+              botMiniMarkers[i].marker.setIcon(L.divIcon({
+                html: getBotIconSvg(teams.find(t => t.country === bot.team).color, bot.health, bot.maxHealth),
+                className: '',
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+              }));
               if (bot.marker._icon) {
                 bot.marker._icon.classList.add('hit-effect');
                 setTimeout(() => {
@@ -1120,12 +1147,22 @@
           for (let i = 0; i < bases.length; i++) {
             const base = bases[i];
             if (!base.active || (p.shooter === 'player' && base.country === 'USA') || (p.shooter === base.country)) continue;
-            const dist = Math.sqrt(
-              (base.pos[0] - p.pos[0]) ** 2 +
-              (base.pos[1] - p.pos[1]) ** 2
-            );
-            if (dist < 0.25) {
+            const dist = Math.hypot(base.pos[0] - p.pos[0], base.pos[1] - p.pos[1]);
+            const hitDistance = 0.15 + p.size; // Tighter hitbox for bases
+            if (dist < hitDistance) {
               base.health -= p.damage;
+              base.marker.setIcon(L.divIcon({
+                html: getBaseIconSvg(teams.find(t => t.country === base.country).color, base.health, base.maxHealth),
+                className: '',
+                iconSize: [40, 40],
+                iconAnchor: [20, 20]
+              }));
+              baseMiniMarkers[i].marker.setIcon(L.divIcon({
+                html: getBaseIconSvg(teams.find(t => t.country === base.country).color, base.health, base.maxHealth),
+                className: '',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+              }));
               if (base.marker._icon) {
                 base.marker._icon.classList.add('hit-effect');
                 setTimeout(() => {
@@ -1167,7 +1204,7 @@
           const dx = mousePos.x - playerScreenPos.x;
           const dy = mousePos.y - playerScreenPos.y;
           const dist = Math.sqrt(dx ** 2 + dy ** 2);
-          if (dist > 5) { // Reduced threshold for more responsive aiming
+          if (dist > 5) {
             const targetLatLng = map.containerPointToLatLng([
               playerScreenPos.x + dx,
               playerScreenPos.y + dy
@@ -1179,7 +1216,7 @@
           }
         } else if (aimJoystick.active) {
           const dist = Math.sqrt(aimJoystick.dx ** 2 + aimJoystick.dy ** 2);
-          if (dist > 3) { // Lowered threshold for finer joystick control
+          if (dist > 3) {
             const dx = aimJoystick.dx * joystickSensitivity;
             const dy = aimJoystick.dy * joystickSensitivity;
             const magnitude = Math.sqrt(dx ** 2 + dy ** 2);
@@ -1193,9 +1230,9 @@
         const direction = getAimDirection();
         if (direction) {
           const playerScreenPos = map.latLngToContainerPoint(playerPos);
-          const offset = 40; // Reduced offset for better precision
-          aimIndicator.style.left = `${playerScreenPos.x + direction[1] * offset}px`; // Use lng for x-axis
-          aimIndicator.style.top = `${playerScreenPos.y - direction[0] * offset}px`; // Use lat for y-axis (inverted)
+          const offset = 40;
+          aimIndicator.style.left = `${playerScreenPos.x + direction[1] * offset}px`;
+          aimIndicator.style.top = `${playerScreenPos.y - direction[0] * offset}px`;
           aimIndicator.style.display = 'block';
         } else {
           aimIndicator.style.display = 'none';

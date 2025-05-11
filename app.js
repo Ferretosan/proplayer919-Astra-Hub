@@ -52,13 +52,11 @@ const elements = {
   toast: $('#toast'),
   backToTop: $('#back-to-top'),
   logoContainer: $('#logoContainer'),
-  fullscreenBar: $('#fullscreen-bar'),
   hamburger: $('#hamburger'),
   sidebar: $('#sidebar'),
   mainContent: $('.main-content'),
   mobileOverlay: $('#mobile-overlay'),
   gameTitleContainer: $('#game-title-container'),
-  fullscreenTitleContainer: $('#fullscreen-title-container'),
   themeToggleIcon: $('#theme-toggle-icon')
 };
 
@@ -358,7 +356,6 @@ function goFullscreen(feedIndex) {
   }
   state.currentGame = state.feedGames[feedIndex];
   state.isFullscreen = true;
-  elements.fullscreenBar.style.display = 'flex';
   updateFullscreenBar(state.currentGame);
 }
 
@@ -569,15 +566,7 @@ function showGamePage(game) {
   $('#game-rating').innerHTML = `${'<i class="fas fa-star" style="color: var(--secondary);"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}`;
   const favoriteBtn = $('#favorite-btn');
   favoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
-  favoriteBtn.onclick = () => toggleFavorite(game, favoriteBtn, $('#fullscreen-favorite-btn'));
-  $('#fullscreen-title').textContent = game.title;
-  addRibbonToTitle(game, elements.fullscreenTitleContainer, true);
-  $('#fullscreen-developer').textContent = 'By ' + (game.developer || 'Unknown Developer');
-  $('#fullscreen-tags').innerHTML = game.tags && game.tags.length > 0 ? game.tags.map(tag => `<span>${tag}</span>`).join('') : '';
-  $('#fullscreen-rating').innerHTML = `${'<i class="fas fa-star" style="color: var(--secondary);"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}`;
-  const fullscreenFavoriteBtn = $('#fullscreen-favorite-btn');
-  fullscreenFavoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
-  fullscreenFavoriteBtn.onclick = () => toggleFavorite(game, fullscreenFavoriteBtn, favoriteBtn);
+  favoriteBtn.onclick = () => toggleFavorite(game, favoriteBtn);
   populateSimilarGames(game);
   if (state.playGameBtnClickListener) {
     elements.playGameBtn.removeEventListener('click', state.playGameBtnClickListener);
@@ -684,7 +673,6 @@ function goFullscreen() {
     elements.gameIframe.msRequestFullscreen();
   }
   state.isFullscreen = true;
-  elements.fullscreenBar.style.display = 'flex';
   updateFullscreenBar(state.currentGame);
 }
 
@@ -697,38 +685,6 @@ function exitFullscreen() {
     document.webkitExitFullscreen();
   } else if (document.msExitFullscreen) {
     document.msExitFullscreen();
-  }
-}
-
-function toggleFullscreenBar() {
-  elements.fullscreenBar.classList.toggle('hidden');
-}
-
-function updateFullscreenBar(game) {
-  $('#fullscreen-title').textContent = game.title;
-  addRibbonToTitle(game, elements.fullscreenTitleContainer, true);
-  $('#fullscreen-developer').textContent = 'By ' + (game.developer || 'Unknown Developer');
-  $('#fullscreen-tags').innerHTML = game.tags && game.tags.length > 0 ? game.tags.map(tag => `<span>${tag}</span>`).join('') : '';
-  const stars = Math.round(game.rating || 0);
-  $('#fullscreen-rating').innerHTML = `${'<i class="fas fa-star" style="color: var(--secondary);"></i>'.repeat(stars)}${'<i class="far fa-star"></i>'.repeat(5 - stars)}`;
-  const fullscreenFavoriteBtn = $('#fullscreen-favorite-btn');
-  fullscreenFavoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
-  fullscreenFavoriteBtn.onclick = () => toggleFavorite(game, fullscreenFavoriteBtn, $('#favorite-btn'));
-}
-
-// Fullscreen Event Listeners
-document.addEventListener('fullscreenchange', handleFullscreenChange);
-document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-function handleFullscreenChange() {
-  if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
-    state.isFullscreen = false;
-    elements.fullscreenBar.style.display = 'none';
-    elements.fullscreenBar.classList.remove('hidden');
-  } else if (state.isFullscreen) {
-    elements.fullscreenBar.style.display = 'flex';
   }
 }
 

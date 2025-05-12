@@ -544,6 +544,23 @@
         "arcade",
         "action"
       ]
+    },
+    {
+      "id": "pizza-clicker",
+      "title": "Pizza Clicker",
+      "description": "A fun foodie clicker. Full with upgrades and all!",
+      "image": "images/pizza-clicker.png",
+      "url": "games/pizza-clicker/index.html",
+      "tags": [
+        "clicker",
+        "arcade"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "clicker",
+        "arcade"
+      ]
     }
   ],
   "categories": [

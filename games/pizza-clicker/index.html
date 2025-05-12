@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Clicker Deluxe</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', Arial, sans-serif;
+            background: linear-gradient(to bottom, #ffecd2, #fcb69f);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        #game-container {
+            display: flex;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        #main-game {
+            flex: 2;
+            padding: 20px;
+            text-align: center;
+        }
+        #upgrades-sidebar {
+            flex: 1;
+            background: #ffe5b4;
+            padding: 20px;
+            border-left: 2px solid #ff6f61;
+        }
+        #pizza, #golden-pizza {
+            width: 250px;
+            height: 250px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        #pizza:hover, #golden-pizza:hover {
+            transform: scale(1.15);
+        }
+        #pizza:active, #golden-pizza:active {
+            transform: scale(0.9) rotate(5deg);
+        }
+        #golden-pizza {
+            position: absolute;
+            filter: brightness(1.2) sepia(0.5) hue-rotate(30deg); /* Golden effect */
+            animation: pulse 1.5s infinite;
+            display: none; /* Hidden by default */
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        #slice-count, #ppc, #sps {
+            font-size: 24px;
+            margin: 10px 0;
+            color: #d32f2f;
+        }
+        #milestone {
+            font-size: 18px;
+            color: #388e3c;
+        }
+        .upgrade-btn {
+            display: block;
+            background: #ff6f61;
+            color: white;
+            border: none;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.1s;
+        }
+        .upgrade-btn:hover {
+            background: #e55a50;
+            transform: translateY(-2px);
+        }
+        .upgrade-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        #progress-bar {
+            width: 80%;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            margin: 10px auto;
+            overflow: hidden;
+        }
+        #progress-fill {
+            height: 100%;
+            background: #4caf50;
+            transition: width 0.5s ease;
+        }
+        h1 {
+            color: #d32f2f;
+            font-size: 36px;
+            margin: 0 0 20px;
+        }
+        h2 {
+            color: #d32f2f;
+            font-size: 24px;
+            margin: 0 0 15px;
+        }
+        .slice-popup {
+            position: absolute;
+            color: #d32f2f;
+            font-size: 20px;
+            pointer-events: none;
+            animation: float 1s ease-out forwards;
+        }
+        @keyframes float {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="main-game">
+            <h1>Pizza Clicker Deluxe</h1>
+            <p id="slice-count">Pizza Slices: 0</p>
+            <p id="ppc">Pizza per Click: 1</p>
+            <p id="sps">Slices per Second: 0</p>
+            <p id="milestone">Next Milestone: 100 slices</p>
+            <div id="progress-bar"><div id="progress-fill" style="width: 0%"></div></div>
+            <div style="position: relative;">
+                <img id="pizza" src="https://img.icons8.com/color/250/000000/pizza.png" alt="Pizza">
+                <img id="golden-pizza" src="https://img.icons8.com/color/250/000000/pizza.png" alt="Golden Pizza">
+            </div>
+        </div>
+        <div id="upgrades-sidebar">
+            <h2>Pizza per Click Upgrades</h2>
+            <button class="upgrade-btn" onclick="buyPpcUpgrade(0)">Sharp Knife (+1 slice/click, Cost: 100)</button>
+            <button class="upgrade-btn" onclick="buyPpcUpgrade(1)">Pizza Press (+5 slices/click, Cost: 500)</button>
+            <button class="upgrade-btn" onclick="buyPpcUpgrade(2)">Master Chef (+10 slices/click, Cost: 2000)</button>
+            <h2>Slices per Second Upgrades</h2>
+            <button class="upgrade-btn" onclick="buySpsUpgrade(0)">Extra Cheese (+1 slice/sec, Cost: 50)</button>
+            <button class="upgrade-btn" onclick="buySpsUpgrade(1)">Pepperoni Power (+5 slices/sec, Cost: 200)</button>
+            <button class="upgrade-btn" onclick="buySpsUpgrade(2)">Pizza Oven (+20 slices/sec, Cost: 1000)</button>
+            <button class="upgrade-btn" onclick="buySpsUpgrade(3)">Delivery Scooter (+50 slices/sec, Cost: 5000)</button>
+            <button class="upgrade-btn" onclick="buySpsUpgrade(4)">Pizzeria Chain (+100 slices/sec, Cost: 20000)</button>
+            <button class="upgrade-btn" onclick="buySpsUpgrade(5)">Pizza Empire (+500 slices/sec, Cost: 100000)</button>
+        </div>
+    </div>
+
+    <script>
+        let slices = 0;
+        let ppc = 1; // Pizza per Click
+        let sps = 0; // Slices per Second
+        let ppcUpgrades = [
+            { name: "Sharp Knife", cost: 100, ppc: 1, count: 0 },
+            { name: "Pizza Press", cost: 500, ppc: 5, count: 0 },
+            { name: "Master Chef", cost: 2000, ppc: 10, count: 0 }
+        ];
+        let spsUpgrades = [
+            { name: "Extra Cheese", cost: 50, sps: 1, count: 0 },
+            { name: "Pepperoni Power", cost: 200, sps: 5, count: 0 },
+            { name: "Pizza Oven", cost: 1000, sps: 20, count: 0 },
+            { name: "Delivery Scooter", cost: 5000, sps: 50, count: 0 },
+            { name: "Pizzeria Chain", cost: 20000, sps: 100, count: 0 },
+            { name: "Pizza Empire", cost: 100000, sps: 500, count: 0 }
+        ];
+        const milestones = [100, 500, 1000, 5000, 10000, 50000, 100000];
+        let currentMilestoneIndex = 0;
+        let goldenPizzaActive = false;
+
+        const pizza = document.getElementById("pizza");
+        const goldenPizza = document.getElementById("golden-pizza");
+        const sliceCount = document.getElementById("slice-count");
+        const ppcDisplay = document.getElementById("ppc");
+        const spsDisplay = document.getElementById("sps");
+        const milestoneText = document.getElementById("milestone");
+        const progressFill = document.getElementById("progress-fill");
+        const ppcUpgradeButtons = document.querySelectorAll(".upgrade-btn[onclick^='buyPpcUpgrade']");
+        const spsUpgradeButtons = document.querySelectorAll(".upgrade-btn[onclick^='buySpsUpgrade']");
+
+        // Click regular pizza
+        pizza.addEventListener("click", (event) => {
+            slices += ppc;
+            createSlicePopup(event, `+${ppc}`);
+            updateDisplay();
+            updateUpgradeButtons();
+        });
+
+        // Click golden pizza
+        goldenPizza.addEventListener("click", (event) => {
+            if (goldenPizzaActive) {
+                slices += 20;
+                createSlicePopup(event, "+20");
+                hideGoldenPizza();
+                updateDisplay();
+                updateUpgradeButtons();
+            }
+        });
+
+        // Create popup effect
+        function createSlicePopup(event, text) {
+            const popup = document.createElement("div");
+            popup.className = "slice-popup";
+            popup.textContent = text;
+            popup.style.left = `${event.clientX - 20}px`;
+            popup.style.top = `${event.clientY - 20}px`;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        // Show golden pizza
+        function showGoldenPizza() {
+            if (!goldenPizzaActive) {
+                goldenPizzaActive = true;
+                goldenPizza.style.display = "block";
+                goldenPizza.style.left = `${pizza.offsetLeft + 50}px`; // Offset slightly
+                goldenPizza.style.top = `${pizza.offsetTop + 50}px`;
+                setTimeout(hideGoldenPizza, 10000); // Hide after 10 seconds
+            }
+        }
+
+        // Hide golden pizza
+        function hideGoldenPizza() {
+            goldenPizzaActive = false;
+            goldenPizza.style.display = "none";
+        }
+
+        // Buy PPC upgrades
+        function buyPpcUpgrade(index) {
+            const upgrade = ppcUpgrades[index];
+            if (slices >= upgrade.cost) {
+                slices -= upgrade.cost;
+                upgrade.count += 1;
+                ppc += upgrade.ppc;
+                upgrade.cost = Math.round(upgrade.cost * 1.15);
+                updateDisplay();
+                updateUpgradeButtons();
+            }
+        }
+
+        // Buy SPS upgrades
+        function buySpsUpgrade(index) {
+            const upgrade = spsUpgrades[index];
+            if (slices >= upgrade.cost) {
+                slices -= upgrade.cost;
+                upgrade.count += 1;
+                upgrade.cost = Math.round(upgrade.cost * 1.15);
+                updateDisplay();
+                updateUpgradeButtons();
+            }
+        }
+
+        // Update display
+        function updateDisplay() {
+            sliceCount.textContent = `Pizza Slices: ${Math.floor(slices)}`;
+            ppcDisplay.textContent = `Pizza per Click: ${ppc}`;
+            sps = 0;
+            spsUpgrades.forEach(upgrade => {
+                sps += upgrade.sps * upgrade.count;
+            });
+            spsDisplay.textContent = `Slices per Second: ${sps}`;
+            // Check for milestone
+            if (currentMilestoneIndex < milestones.length && slices >= milestones[currentMilestoneIndex]) {
+                showGoldenPizza();
+                currentMilestoneIndex++;
+            }
+            const nextMilestone = milestones[currentMilestoneIndex] || milestones[milestones.length - 1];
+            milestoneText.textContent = `Next Milestone: ${nextMilestone} slices`;
+            const progress = Math.min((slices / nextMilestone) * 100, 100);
+            progressFill.style.width = `${progress}%`;
+        }
+
+        // Update upgrade buttons
+        function updateUpgradeButtons() {
+            ppcUpgradeButtons.forEach((button, index) => {
+                const upgrade = ppcUpgrades[index];
+                button.textContent = `${upgrade.name} (+${upgrade.ppc} slice/click, Cost: ${upgrade.cost})`;
+                button.disabled = slices < upgrade.cost;
+            });
+            spsUpgradeButtons.forEach((button, index) => {
+                const upgrade = spsUpgrades[index];
+                button.textContent = `${upgrade.name} (+${upgrade.sps} slice/sec, Cost: ${upgrade.cost})`;
+                button.disabled = slices < upgrade.cost;
+            });
+        }
+
+        // Auto-generate slices
+        function autoGenerateSlices() {
+            slices += sps / 10; // Update 10 times per second
+            updateDisplay();
+            updateUpgradeButtons();
+        }
+
+        // Game loop
+        setInterval(autoGenerateSlices, 100);
+        updateDisplay();
+        updateUpgradeButtons();
+    </script>
+</body>
+</html>

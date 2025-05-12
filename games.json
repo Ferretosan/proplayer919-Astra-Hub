@@ -561,6 +561,25 @@
         "clicker",
         "arcade"
       ]
+    },
+    {
+      "id": "pixel-io",
+      "title": "Pixel.IO",
+      "description": "A Minecraft Creative clone - best performance",
+      "image": "images/pixel-io.png",
+      "url": "games/pixel-io/index.html",
+      "tags": [
+        "adventure",
+        "arcade",
+        "fast-paced",
+        "exploration"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "action"
+      ]
     }
   ],
   "categories": [

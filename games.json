@@ -561,6 +561,23 @@
         "clicker",
         "arcade"
       ]
+    },
+    {
+      "id": "food-dropper",
+      "title": "Food Dropper",
+      "description": "Catch the food to earn points!",
+      "image": "images/food-dropper.png",
+      "url": "games/food-dropper/index.html",
+      "tags": [
+        "satisfying",
+        "simulator"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "satisfying",
+        "simulator"
+      ]
     }
   ],
   "categories": [

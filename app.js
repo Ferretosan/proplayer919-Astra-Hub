@@ -265,9 +265,28 @@ const debouncedPopulateGamesFeed = debounce(() => {
 }, 300);
 
 // Track Play Time
+function showAchievement(title) {
+  const achievement = document.createElement('div');
+  achievement.className = 'achievement';
+  achievement.innerHTML = `
+    <i class="fas fa-trophy"></i>
+    <span>${title}</span>
+  `;
+  document.body.appendChild(achievement);
+  setTimeout(() => achievement.classList.add('show'), 100);
+  setTimeout(() => {
+    achievement.classList.remove('show');
+    setTimeout(() => achievement.remove(), 300);
+  }, 3000);
+}
+
 function trackPlayTime(game) {
   const startTime = Date.now();
+  let playDuration = 0;
   const interval = setInterval(() => {
+    playDuration = Math.floor((Date.now() - startTime) / 1000);
+    if (playDuration === 300) showAchievement('5 Minutes Played!');
+    if (playDuration === 600) showAchievement('10 Minutes Played!');
     if (!elements.gamesFeedPage.classList.contains('active') || state.currentGame?.id !== game.id) {
       clearInterval(interval);
       const playTime = (Date.now() - startTime) / 1000;
@@ -306,6 +325,31 @@ elements.feedNextBtn.addEventListener('click', () => {
     updateFeedNavigation();
   }
 });
+
+let touchStartY = 0;
+let touchEndY = 0;
+
+elements.gamesFeedPage.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+elements.gamesFeedPage.addEventListener('touchend', (e) => {
+  touchEndY = e.changedTouches[0].clientY;
+  const diff = touchStartY - touchEndY;
+  
+  if (Math.abs(diff) > 50) {
+    if (diff > 0 && state.feedIndex < state.feedGames.length - 1) {
+      state.feedIndex++;
+    } else if (diff < 0 && state.feedIndex > 0) {
+      state.feedIndex--;
+    }
+    elements.gamesFeedPage.scrollTo({
+      top: state.feedIndex * window.innerHeight,
+      behavior: 'smooth'
+    });
+    updateFeedNavigation();
+  }
+}, { passive: true });
 
 elements.gamesFeedPage.addEventListener('scroll', () => {
   const index = Math.round(elements.gamesFeedPage.scrollTop / window.innerHeight);

@@ -563,6 +563,23 @@
       ]
     },
     {
+      "id": "food-dropper",
+      "title": "Food Dropper",
+      "description": "Catch the food to earn points!",
+      "image": "images/food-dropper.png",
+      "url": "games/food-dropper/index.html",
+      "tags": [
+        "satisfying",
+        "simulator"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "satisfying",
+        "simulator"
+      ]
+    },
+    {
       "id": "pixel-io",
       "title": "Pixel.IO",
       "description": "A Minecraft Creative clone - best performance",

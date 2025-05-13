@@ -50,5 +50,5 @@ class Astragames {
   }
 }
 
-// Export as global object
-window.AstraGames = new Astragames();
+// Export
+export default Astragames;

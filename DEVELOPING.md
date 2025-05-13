@@ -6,7 +6,7 @@ To develop games for Astragames, simply:
 2. Add your game to the `games.json` file
 3. Add a screenshot to the `images/` folder
 
-**How to add to the `games.json`**
+## How to add to the `games.json`
 
 Use this format:
 
@@ -28,25 +28,29 @@ Use this format:
 }
 ```
 
-**How to use the Astragames SDK**
+## How to use the Astragames SDK
 
-To use the Astragames SDK, simply include the `sdk/astragames.js` file in your game.
+To use the Astragames SDK, simply import the `sdk/astragames.js` file in your JavaScript.
 
-```html
-<script src="sdk/astragames.js"></script>
+```javascript
+import Astragames from './sdk/astragames.js';
+
+const astra = new Astragames();
 ```
 
-Then, in JavaScript:
+**Note:** Make sure your script is set to `type="module"`
+
+Then:
 
 ```javascript
 // Registering achievements
-Astragames.registerAchievement('achievement_id', 'Name', 'Description', 'fa-icon-name');
+astra.registerAchievement('achievement_id', 'Name', 'Description', 'fa-icon-name');
 
 // Earning achievements
-Astragames.earnAchievement('achievement_id');
+astra.earnAchievement('achievement_id');
 
 // Checking if an achievement is earned
-if (Astragames.hasAchievement('achievement_id')) {
+if (astra.hasAchievement('achievement_id')) {
   // ...
 }
 ```

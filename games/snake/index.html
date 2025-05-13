@@ -158,10 +158,13 @@
       </div>
     </div>
 
-    <script defer src="/sdk/astragames.js"></script>
-    <script>
+    <script type="module">
+      import Astragames from "/sdk/astragames.js";
+
+      const astra = new Astragames();
+
       // Register achievements
-      Astragames.registerAchievement('first_bite', 'First Bite', 'You got your first bite', 'fa-apple-alt');
+      astra.registerAchievement('first_bite', 'First Bite', 'You got your first bite', 'fa-apple-alt');
 
       let dom_replay = document.querySelector("#replay");
       let dom_score = document.querySelector("#score");
@@ -484,7 +487,7 @@
         dom_score.innerText = score.toString().padStart(2, "0");
 
         if (score == 1) {
-          Astragames.earnAchievement('first_bite');
+          astra.earnAchievement('first_bite');
         }
       }
 

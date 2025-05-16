@@ -1,3 +1,35 @@
+.level-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.level {
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.exp-bar {
+  width: 150px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.exp-progress {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.exp-text {
+  color: var(--text);
+  font-size: 0.8em;
+}
+
 :root {
   --primary: #00d4ff;
   --secondary: #ffd700;
@@ -220,6 +252,19 @@ body.light-mode header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+}
+
+.level-display-nav {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px 15px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body.light-mode .level-display-nav {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .search-bar {

@@ -28,7 +28,9 @@ const state = {
   userData: {
     favorites: [],
     playTime: {},
-    interactions: {}
+    interactions: {},
+    exp: parseInt(localStorage.getItem('userExp') || '0'),
+    level: parseInt(localStorage.getItem('userLevel') || '1')
   }
 };
 
@@ -280,6 +282,22 @@ function showAchievement(title) {
   }, 3000);
 }
 
+function calculateExpGain(duration) {
+  return Math.floor(duration / 60 * 10);
+}
+
+function calculateLevelThreshold(level) {
+  return 100 * level;
+}
+
+function updateLevel() {
+  while (state.userData.exp >= calculateLevelThreshold(state.userData.level)) {
+    state.userData.level++;
+    showAchievement(`Level Up! You're now level ${state.userData.level}!`);
+  }
+  localStorage.setItem('userLevel', state.userData.level.toString());
+}
+
 function trackPlayTime(game) {
   const startTime = Date.now();
   let playDuration = 0;
@@ -287,6 +305,15 @@ function trackPlayTime(game) {
     playDuration = Math.floor((Date.now() - startTime) / 1000);
     if (playDuration === 300) showAchievement('5 Minutes Played!');
     if (playDuration === 600) showAchievement('10 Minutes Played!');
+    
+    // Add EXP every minute
+    if (playDuration % 60 === 0) {
+      const expGain = calculateExpGain(playDuration);
+      state.userData.exp += expGain;
+      localStorage.setItem('userExp', state.userData.exp.toString());
+      updateLevel();
+      showAchievement(`+${expGain} EXP!`);
+    }
     if (!elements.gamesFeedPage.classList.contains('active') || state.currentGame?.id !== game.id) {
       clearInterval(interval);
       const playTime = (Date.now() - startTime) / 1000;
@@ -521,7 +548,23 @@ function addRibbonToTitle(game, titleContainerElement, isFullscreen = false) {
   }
 }
 
+function updateLevelDisplay() {
+  const levelDisplay = document.querySelector('.level-display-nav');
+  if (levelDisplay) {
+    levelDisplay.innerHTML = `
+      <div class="level-info">
+        <span class="level">Level ${state.userData.level}</span>
+        <div class="exp-bar">
+          <div class="exp-progress" style="width: ${(state.userData.exp / calculateLevelThreshold(state.userData.level)) * 100}%"></div>
+        </div>
+        <span class="exp-text">${state.userData.exp}/${calculateLevelThreshold(state.userData.level)} EXP</span>
+      </div>
+    `;
+  }
+}
+
 function populateCategories(filterTag = state.selectedTag, filterCategory = state.selectedCategory) {
+  updateLevelDisplay();
   $$('.category-section, .error', elements.homePage).forEach(el => el.remove());
   let gamesDisplayed = false;
   state.gameData.categories.forEach(category => {

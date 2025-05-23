@@ -41,6 +41,29 @@
       "ribbon": "astragames exclusive"
     },
     {
+      "id": "snow-rider-3d",
+      "title": "Snow Rider 3D",
+      "description": "The popular Snow Rider 3D game!",
+      "image": "images/snow-rider-3d.png",
+      "url": "games/snow-rider-3d/index.html",
+      "tags": [
+        "3d",
+        "arcade",
+        "fast-paced",
+        "reflex",
+        "skill",
+        "sports"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "skill",
+        "sports"
+      ],
+      "ribbon": "popular"
+    },
+    {
       "id": "money-clicker",
       "title": "Money Clicker",
       "description": "Make the most money by clicking and upgrading your business.",
@@ -718,6 +741,7 @@
     "word": "fa-font",
     "quiz": "fa-brain",
     "sports": "fa-dumbbell",
-    "skill": "fa-lightbulb"
+    "skill": "fa-lightbulb",
+    "3d": "fa-cube"
   }
 }

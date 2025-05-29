@@ -819,15 +819,24 @@ function exitFullscreen() {
 // Search Functionality
 elements.searchInput.addEventListener('input', debounce(() => {
   const query = elements.searchInput.value.trim().toLowerCase();
+
+  // Check for "$sudo heck" and redirect
+  if (query === "$sudo heck") {
+    window.location.href = 'https://proplayer929.github.io/hacker-type';
+    return;
+  }
+
   elements.searchSuggestions.innerHTML = '';
   if (query.length < 2) {
     elements.searchSuggestions.style.display = 'none';
     return;
   }
+
   const suggestions = state.gameData.games.filter(game =>
     game.title.toLowerCase().includes(query) ||
     (game.tags && game.tags.some(tag => tag.toLowerCase().includes(query)))
   ).slice(0, 10);
+
   if (suggestions.length === 0) {
     elements.searchSuggestions.innerHTML = '<div class="search-suggestion">No results found</div>';
   } else {
@@ -846,6 +855,7 @@ elements.searchInput.addEventListener('input', debounce(() => {
       elements.searchSuggestions.appendChild(suggestion);
     });
   }
+
   elements.searchSuggestions.style.display = suggestions.length > 0 ? 'block' : 'none';
 }, 300));
 

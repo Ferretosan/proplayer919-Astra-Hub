@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminders!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .add-remind {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .plus-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .plus-btn:hover {
+            background-color: #45a049;
+        }
+        #remind-input, #username-input {
+            display: none;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #username-input {
+            width: 150px;
+        }
+        #remind-input {
+            flex: 1;
+        }
+        .remind-list {
+            list-style: none;
+            padding: 0;
+        }
+        .remind-item {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .remind-username {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>remind Creator</h1>
+    <div class="add-remind">
+        <button class="plus-btn" onclick="toggleInput()">+</button>
+        <input type="text" id="username-input" placeholder="Your username..." onkeypress="handleKeyPress(event)">
+        <input type="text" id="remind-input" placeholder="Type your remind..." onkeypress="handleKeyPress(event)">
+    </div>
+    <ul class="remind-list" id="remind-list"></ul>
+
+    <script>
+        function toggleInput() {
+            const usernameInput = document.getElementById('username-input');
+            const remindInput = document.getElementById('remind-input');
+            const isHidden = usernameInput.style.display === 'none';
+            usernameInput.style.display = isHidden ? 'block' : 'none';
+            remindInput.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) {
+                usernameInput.focus();
+            }
+        }
+
+        function addremind(username, text) {
+            if (username.trim() === '' || text.trim() === '') return;
+            const remindList = document.getElementById('remind-list');
+            const remindItem = document.createElement('li');
+            remindItem.className = 'remind-item';
+            const usernameDiv = document.createElement('div');
+            usernameDiv.className = 'remind-username';
+            usernameDiv.textContent = username;
+            const remindContent = document.createElement('div');
+            remindContent.textContent = text;
+            remindItem.appendChild(usernameDiv);
+            remindItem.appendChild(remindContent);
+            remindList.prepend(remindItem);
+            document.getElementById('username-input').value = '';
+            document.getElementById('remind-input').value = '';
+            document.getElementById('username-input').style.display = 'none';
+            document.getElementById('remind-input').style.display = 'none';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                const usernameInput = document.getElementById('username-input');
+                const remindInput = document.getElementById('remind-input');
+                addremind(usernameInput.value, remindInput.value);
+            }
+        }
+    </script>
+</body>
+</html>

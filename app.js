@@ -661,6 +661,7 @@ function showGamePage(game) {
     elements.gameIframe.src = game.url;
 
     if (game.blocked) {
+      console.log('blocked content')
       const doc = elements.gameIframe.contentDocument || elements.gameIframe.contentWindow.document;
       doc.open();
       doc.write(`

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Typer</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+        #output {
+            white-space: pre-wrap;
+            font-size: 16px;
+            line-height: 1.2;
+            max-width: 100%;
+            min-height: 100vh;
+            cursor: default;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+        #output::selection {
+            background: #0f0;
+            color: #000;
+        }
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+    <script>
+        const output = document.getElementById('output');
+        const codeSnippets = [
+            `#include <iostream>
+#include <string>
+#include <vector>
+#include <thread>
+#include <chrono>
+#include <random>
+using namespace std;
+
+class NetworkHacker {
+private:
+    string targetIP;
+    vector<int> openPorts;
+    bool isConnected;
+
+public:
+    NetworkHacker(const string& ip) : targetIP(ip), isConnected(false) {
+        cout << "Initializing hacker for target: " << targetIP << "\\n";
+    }
+`,
+            `    void scanPorts() {
+        cout << "Scanning ports on " << targetIP << "...\\n";
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dis(1, 65535);
+        for (int i = 0; i < 10; ++i) {
+            int port = dis(gen);
+            openPorts.push_back(port);
+            cout << "Found open port: " << port << "\\n";
+            this_thread::sleep_for(chrono::milliseconds(100));
+        }
+    }
+`,
+            `    bool attemptConnection() {
+        cout << "Attempting connection to " << targetIP << "...\\n";
+        isConnected = (rand() % 2 == 0);
+        if (isConnected) {
+            cout << "Connection established!\\n";
+        } else {
+            cout << "Connection failed. Retrying...\\n";
+        }
+        return isConnected;
+    }
+`,
+            `    void bruteForceCredentials(const string& username) {
+        cout << "Initiating brute force attack for user: " << username << "\\n";
+        vector<string> passwords = {"admin123", "password", "root", "123456"};
+        for (const auto& pass : passwords) {
+            cout << "Trying password: " << pass << "...\\n";
+            this_thread::sleep_for(chrono::milliseconds(200));
+            if (pass == "root" && isConnected) {
+                cout << "Access granted for user: " << username << "\\n";
+                return;
+            }
+        }
+        cout << "Brute force failed.\\n";
+    }
+`,
+            `    void exploitVulnerability() {
+        if (!isConnected) {
+            cout << "Cannot exploit: No connection to " << targetIP << "\\n";
+            return;
+        }
+        cout << "Injecting payload into " << targetIP << "...\\n";
+        char buffer[128];
+        strcpy(buffer, "exploit_code");
+        cout << "Executing malicious payload: " << buffer << "\\n";
+        this_thread::sleep_for(chrono::milliseconds(150));
+        cout << "System compromised!\\n";
+    }
+`,
+            `    void establishReverseShell() {
+        cout << "Setting up reverse shell on " << targetIP << "...\\n";
+        int shellPort = openPorts.empty() ? 4444 : openPorts[0];
+        cout << "Binding to port " << shellPort << " for reverse shell\\n";
+        cout << "Shell active. Awaiting commands...\\n";
+        this_thread::sleep_for(chrono::milliseconds(300));
+    }
+`,
+            `    void logActivity() {
+        cout << "Logging hacking activity...\\n";
+        vector<string> logs = {
+            "Port scan completed: " + to_string(openPorts.size()) + " ports found",
+            "Connection status: " + string(isConnected ? "Active" : "Inactive"),
+            "Exploit status: " + string(isConnected ? "Successful" : "Failed")
+        };
+        for (const auto& log : logs) {
+            cout << "LOG: " << log << "\\n";
+            this_thread::sleep_for(chrono::milliseconds(100));
+        }
+    }
+`,
+            `    ~NetworkHacker() {
+        cout << "Cleaning up resources for " << targetIP << "...\\n";
+        openPorts.clear();
+        isConnected = false;
+        cout << "Hacker instance terminated.\\n";
+    }
+};
+`,
+            `int main() {
+    cout << "Starting network infiltration...\\n";
+    NetworkHacker hacker("192.168.1.100");
+    hacker.scanPorts();
+    if (hacker.attemptConnection()) {
+        hacker.bruteForceCredentials("admin");
+        hacker.exploitVulnerability();
+        hacker.establishReverseShell();
+        hacker.logActivity();
+    } else {
+        cout << "Operation aborted: Connection failure.\\n";
+    }
+    return 0;
+}
+`
+        ];
+
+        let currentText = '';
+        let charIndex = 0;
+        let snippetQueue = [];
+        const charsPerKeypress = 5; // Output 5 characters per keypress
+
+        function getRandomSnippet() {
+            const index = Math.floor(Math.random() * codeSnippets.length);
+            return codeSnippets[index];
+        }
+
+        function generateLongSnippet() {
+            // Combine all snippets in order for a cohesive program
+            let combined = '';
+            for (let i = 0; i < codeSnippets.length; i++) {
+                combined += codeSnippets[i];
+            }
+            // Add a random snippet for variety
+            combined += getRandomSnippet();
+            return combined;
+        }
+
+        function appendNewSnippet() {
+            snippetQueue.push(generateLongSnippet());
+            if (!currentText) {
+                currentText = snippetQueue.shift();
+                charIndex = 0;
+            }
+        }
+
+        function typeCode() {
+            const charsToType = Math.min(charsPerKeypress, currentText.length - charIndex);
+            if (charIndex >= currentText.length) {
+                if (snippetQueue.length === 0) {
+                    appendNewSnippet();
+                }
+                currentText += snippetQueue.shift();
+                appendNewSnippet();
+            }
+            output.textContent = currentText.substring(0, charIndex + charsToType) + '_';
+            charIndex += charsToType;
+            // Auto-scroll to the bottom
+            output.scrollTop = output.scrollHeight;
+        }
+
+        document.addEventListener('keydown', (event) => {
+            event.preventDefault();
+            if (event.key === 'Escape') {
+                output.textContent = '';
+                charIndex = 0;
+                currentText = generateLongSnippet();
+                snippetQueue = [];
+                appendNewSnippet();
+                output.scrollTop = 0; // Reset scroll on clear
+            } else {
+                typeCode();
+            }
+        });
+
+        // Initialize with a long snippet and preload another
+        appendNewSnippet();
+        currentText = generateLongSnippet();
+        output.textContent = '_';
+    </script>
+</body>
+</html>

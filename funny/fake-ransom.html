@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Locked!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #1a1a1a;
+      font-family: 'Courier New', Courier, monospace;
+      color: #ff0000;
+      overflow: hidden;
+    }
+    .container {
+      text-align: center;
+      background: #000;
+      padding: 40px;
+      border: 2px solid #ff0000;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+      border-radius: 10px;
+      max-width: 600px;
+    }
+    h1 {
+      font-size: 36px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px #ff0000;
+    }
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    .warning {
+      color: #00ff00;
+      font-weight: bold;
+      animation: blink 1s infinite;
+    }
+    .timer {
+      font-size: 24px;
+      margin: 20px 0;
+      color: #ffffff;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #ff0000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #cc0000;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>YOUR SYSTEM IS LOCKED!</h1>
+    <p class="warning">All your files have been encrypted!</p>
+    <p>Your personal files, photos, and documents are now inaccessible. To regain access, you must send 1 BTC to the address below within the time limit, or your files will be deleted permanently!</p>
+    <p><strong>Bitcoin Address:</strong> 1PrAnK5cam123456789abcdefg</p>
+    <div class="timer" id="timer">Time remaining: 24:00:00</div>
+    <p>Do not attempt to close this window or restart your computer. Any such action will result in immediate data loss.</p>
+    <button onclick="revealPrank()">Click Here to Pay</button>
+  </div>
+
+  <script>
+    // Countdown timer
+    let timeLeft = 24 * 60 * 60; // 24 hours in seconds
+    const timerElement = document.getElementById('timer');
+
+    function updateTimer() {
+      const hours = Math.floor(timeLeft / 3600);
+      const minutes = Math.floor((timeLeft % 3600) / 60);
+      const seconds = timeLeft % 60;
+      timerElement.textContent = `Time remaining: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      if (timeLeft > 0) {
+        timeLeft--;
+        setTimeout(updateTimer, 1000);
+      } else {
+        timerElement.textContent = "Time's up! Your files are gone!";
+      }
+    }
+
+    // Prank reveal
+    function revealPrank() {
+      document.querySelector('.container').innerHTML = `
+        <h1>Gotcha!</h1>
+        <p style="color: #00ff00;">Haha, this was just a prank! No files were harmed. 😜</p>
+        <p>Hope you had a good laugh! Now go tell your friend how you got them!</p>
+      `;
+    }
+
+    // Start the timer
+    updateTimer();
+  </script>
+</body>
+</html>

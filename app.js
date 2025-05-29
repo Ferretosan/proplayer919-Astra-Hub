@@ -821,10 +821,10 @@ elements.searchInput.addEventListener('input', debounce(() => {
   const query = elements.searchInput.value.trim().toLowerCase();
 
   if (query === "$sudo heck") {
-    window.location.href = 'https://proplayer929.github.io/hacker-type';
+    window.location.href = 'funny/hacker-typer.html';
     return;
   } else if (query === "$sudo yay") {
-    window.location.href = 'https://dsullivan-afk.github.io/fake-ransom/';
+    window.location.href = 'funny/fake-ransom.html';
     return;
   }
 

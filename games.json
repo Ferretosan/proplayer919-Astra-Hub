@@ -454,7 +454,8 @@
       "categories": [
         "clicker",
         "arcade"
-      ]
+      ],
+      "removed": true
     },
     {
       "id": "tic-tac-toe",

@@ -305,7 +305,7 @@ function trackPlayTime(game) {
     playDuration = Math.floor((Date.now() - startTime) / 1000);
     if (playDuration === 300) showAchievement('5 Minutes Played!');
     if (playDuration === 600) showAchievement('10 Minutes Played!');
-    
+
     // Add EXP every minute
     if (playDuration % 60 === 0) {
       const expGain = calculateExpGain(playDuration);
@@ -363,7 +363,7 @@ elements.gamesFeedPage.addEventListener('touchstart', (e) => {
 elements.gamesFeedPage.addEventListener('touchend', (e) => {
   touchEndY = e.changedTouches[0].clientY;
   const diff = touchStartY - touchEndY;
-  
+
   if (Math.abs(diff) > 50) {
     if (diff > 0 && state.feedIndex < state.feedGames.length - 1) {
       state.feedIndex++;
@@ -656,8 +656,53 @@ function showGamePage(game) {
   }
   state.playGameBtnClickListener = () => {
     elements.gamePlayOverlay.style.display = 'none';
+
     elements.gameLoaderContainer.style.display = 'flex';
     elements.gameIframe.src = game.url;
+
+    if (game.blocked) {
+      const doc = elements.gameIframe.contentDocument || elements.gameIframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <html>
+        <head>
+            <style>
+                body {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                    background-color: #f0f0f0;
+                    font-family: Arial, sans-serif;
+                    color: #333;
+                }
+                .container {
+                    text-align: center;
+                }
+                .icon {
+                    font-size: 48px;
+                    color: #ff4444;
+                    margin-bottom: 20px;
+                }
+                .message {
+                    font-size: 24px;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="icon">🚫</div>
+                <div class="message">This content has been removed</div>
+            </div>
+        </body>
+        </html>
+    `);
+      doc.close();
+    }
+
     trackPlayTime(game);
   };
   elements.playGameBtn.addEventListener('click', state.playGameBtnClickListener);

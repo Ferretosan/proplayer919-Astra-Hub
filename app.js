@@ -660,10 +660,7 @@ function showGamePage(game) {
     elements.gameLoaderContainer.style.display = 'flex';
     elements.gameIframe.src = game.url;
 
-    console.log(game);
-
-    if (game.blocked) {
-      console.log('blocked content')
+    if (game.removed) {
       const doc = elements.gameIframe.contentDocument || elements.gameIframe.contentWindow.document;
       doc.open();
       doc.write(`

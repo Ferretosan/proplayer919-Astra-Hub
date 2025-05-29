@@ -820,9 +820,11 @@ function exitFullscreen() {
 elements.searchInput.addEventListener('input', debounce(() => {
   const query = elements.searchInput.value.trim().toLowerCase();
 
-  // Check for "$sudo heck" and redirect
   if (query === "$sudo heck") {
     window.location.href = 'https://proplayer929.github.io/hacker-type';
+    return;
+  } else if (query === "$sudo yay") {
+    window.location.href = 'https://dsullivan-afk.github.io/fake-ransom/';
     return;
   }
 

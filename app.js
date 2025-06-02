@@ -829,6 +829,9 @@ elements.searchInput.addEventListener('input', debounce(() => {
   } else if (query === "$sudo remind me") {
     window.location.href = 'funny/remind-me.html';
     return;
+  } else if (query === "$sudo rizz") {
+    window.location.href = 'funny/rizz.html';
+    return;
   }
 
   elements.searchSuggestions.innerHTML = '';

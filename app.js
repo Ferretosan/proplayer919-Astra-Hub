@@ -140,8 +140,6 @@ function initializeUserData() {
   state.userData.favorites = state.gameData.games
     .filter(game => localStorage.getItem(`favorite-${game.id}`) === 'true')
     .map(game => game.id);
-  state.userData.playTime = JSON.parse(localStorage.getItem('playTime') || '{}');
-  state.userData.interactions = JSON.parse(localStorage.getItem('interactions') || '{}');
 }
 
 // Recommendation Algorithm
@@ -150,7 +148,6 @@ function getRecommendedGames() {
   const scores = games.map(game => {
     let score = 0;
     if (state.userData.favorites.includes(game.id)) score += 50;
-    if (state.userData.playTime[game.id]) score += state.userData.playTime[game.id] / 60;
     if (game.tags && state.userData.favorites.length > 0) {
       const favoriteTags = state.gameData.games
         .filter(g => state.userData.favorites.includes(g.id))
@@ -432,8 +429,6 @@ function showGamePage(game) {
     `);
       doc.close();
     }
-
-    trackPlayTime(game);
   };
   elements.playGameBtn.addEventListener('click', state.playGameBtnClickListener);
   elements.gameIframe.onload = onGameLoadSuccess;

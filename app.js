@@ -23,12 +23,8 @@ const state = {
   selectedCategory: localStorage.getItem('selectedCategory') || '',
   isFullscreen: false,
   playGameBtnClickListener: null,
-  feedIndex: 0,
-  feedGames: [],
   userData: {
     favorites: [],
-    playTime: {},
-    interactions: {},
     exp: parseInt(localStorage.getItem('userExp') || '0'),
     level: parseInt(localStorage.getItem('userLevel') || '1')
   }
@@ -39,10 +35,6 @@ const elements = {
   canvas: $('#starfield'),
   homePage: $('#home-page'),
   gamePage: $('#game-page'),
-  gamesFeedPage: $('#games-feed-page'),
-  gamesFeed: $('#games-feed'),
-  feedPrevBtn: $('#feed-prev-btn'),
-  feedNextBtn: $('#feed-next-btn'),
   gameFrameContainer: $('#game-frame-container'),
   gamePlayOverlay: $('#game-play-overlay'),
   playGameBtn: $('#play-game-btn'),
@@ -135,7 +127,6 @@ async function loadGameData() {
     populateCategories();
     populateCategoryList();
     initializeUserData();
-    debouncedPopulateGamesFeed();
   } catch (error) {
     console.error("Error loading game data:", error);
     const homePageContent = elements.homePage.querySelector('.branding-section')?.nextElementSibling;
@@ -175,97 +166,6 @@ function getRecommendedGames() {
   return scores.map(s => s.game);
 }
 
-// Populate Games Feed
-const debouncedPopulateGamesFeed = debounce(() => {
-  const previousFavorites = [...state.userData.favorites];
-  const previousInteractions = { ...state.userData.interactions };
-
-  // Check if feed needs updating
-  const currentFavorites = state.gameData.games
-    .filter(game => localStorage.getItem(`favorite-${game.id}`) === 'true')
-    .map(game => game.id);
-  const favoritesChanged = JSON.stringify(previousFavorites.sort()) !== JSON.stringify(currentFavorites.sort());
-  const interactionsChanged = Object.keys(state.userData.interactions).some(
-    key => state.userData.interactions[key] !== previousInteractions[key]
-  );
-
-  if (favoritesChanged || interactionsChanged || state.feedGames.length === 0) {
-    state.feedGames = getRecommendedGames();
-    elements.gamesFeed.innerHTML = '';
-    state.feedGames.forEach((game, index) => {
-      const feedItem = document.createElement('div');
-      feedItem.className = 'feed-item';
-      feedItem.id = `feed-item-${game.id}`;
-      feedItem.innerHTML = `
-        <div class="feed-game-main">
-          <span class="back-to-home" onclick="backToHomeFromFeed()" role="button" tabindex="0" aria-label="Back to home"><i class="fas fa-arrow-left"></i> Back</span>
-          <div class="game-title-container" id="feed-title-container-${game.id}">
-            <h2>${game.title}</h2>
-          </div>
-          <div class="game-meta">
-            <div class="game-tags" id="feed-tags-${game.id}">${game.tags && game.tags.length > 0 ? game.tags.map(tag => `<span>${tag}</span>`).join('') : '<span>No tags</span>'}</div>
-            <div class="game-rating" id="feed-rating-${game.id}">${'<i class="fas fa-star" style="color: var(--secondary);"></i>'.repeat(Math.round(game.rating || 0))}${'<i class="far fa-star"></i>'.repeat(5 - Math.round(game.rating || 0))}</div>
-            <button class="favorite-btn" id="feed-favorite-btn-${game.id}" aria-label="Toggle favorite"></button>
-          </div>
-          <div class="game-controls">
-            <button class="fullscreen-btn" onclick="goFullscreen(${index})" aria-label="Enter fullscreen">Fullscreen</button>
-            <button class="refresh-btn" onclick="refreshFeedGame(${index})" aria-label="Refresh game">Refresh</button>
-          </div>
-          <div class="game-frame-container" id="feed-frame-container-${game.id}">
-            <div class="game-play-overlay" id="feed-play-overlay-${game.id}">
-              <button class="play-game-btn" id="feed-play-btn-${game.id}" aria-label="Play Game">
-                <i class="fas fa-play"></i>
-              </button>
-            </div>
-            <div class="game-loader-container" id="feed-loader-container-${game.id}">
-              <div class="loader"></div>
-              <span>Loading Game...</span>
-            </div>
-            <iframe id="feed-iframe-${game.id}" title="Game content" allowfullscreen></iframe>
-          </div>
-          <p id="feed-description-${game.id}">${game.description || "No description available."}</p>
-        </div>`;
-      elements.gamesFeed.appendChild(feedItem);
-      addRibbonToTitle(game, feedItem.querySelector(`#feed-title-container-${game.id}`));
-
-      const favoriteBtn = feedItem.querySelector(`#feed-favorite-btn-${game.id}`);
-      favoriteBtn.classList.toggle('favorited', localStorage.getItem(`favorite-${game.id}`) === 'true');
-      favoriteBtn.onclick = () => toggleFavorite(game, favoriteBtn);
-
-      const playBtn = feedItem.querySelector(`#feed-play-btn-${game.id}`);
-      playBtn.addEventListener('click', () => {
-        const overlay = feedItem.querySelector(`#feed-play-overlay-${game.id}`);
-        const loader = feedItem.querySelector(`#feed-loader-container-${game.id}`);
-        const iframe = feedItem.querySelector(`#feed-iframe-${game.id}`);
-        overlay.style.display = 'none';
-        loader.style.display = 'flex';
-        iframe.src = game.url;
-        iframe.onload = () => {
-          loader.style.display = 'none';
-          iframe.style.display = 'block';
-          feedItem.querySelector(`#feed-frame-container-${game.id}`).classList.remove('show-blur-bg');
-          try { iframe.focus(); } catch (e) { }
-        };
-        iframe.onerror = () => {
-          loader.style.display = 'none';
-          const frameContainer = feedItem.querySelector(`#feed-frame-container-${game.id}`);
-          if (!frameContainer.querySelector('p.error')) {
-            frameContainer.insertAdjacentHTML('beforeend', '<p class="error" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:5; color:var(--accent);">Could not load game.</p>');
-          }
-          frameContainer.classList.add('show-blur-bg');
-        };
-        trackPlayTime(game);
-      });
-
-      const frameContainer = feedItem.querySelector(`#feed-frame-container-${game.id}`);
-      frameContainer.style.setProperty('--game-bg-image', `url('${game.image || 'https://placehold.co/800x600/0b0326/00d4ff?text=Astra+Hub'}')`);
-      frameContainer.classList.add('show-blur-bg');
-    });
-
-    updateFeedNavigation();
-  }
-}, 300);
-
 // Track Play Time
 function showAchievement(title) {
   const achievement = document.createElement('div');
@@ -298,156 +198,6 @@ function updateLevel() {
   localStorage.setItem('userLevel', state.userData.level.toString());
 }
 
-function trackPlayTime(game) {
-  const startTime = Date.now();
-  let playDuration = 0;
-  const interval = setInterval(() => {
-    playDuration = Math.floor((Date.now() - startTime) / 1000);
-    if (playDuration === 300) showAchievement('5 Minutes Played!');
-    if (playDuration === 600) showAchievement('10 Minutes Played!');
-
-    // Add EXP every minute
-    if (playDuration % 60 === 0) {
-      const expGain = calculateExpGain(playDuration);
-      state.userData.exp += expGain;
-      localStorage.setItem('userExp', state.userData.exp.toString());
-      updateLevel();
-      showAchievement(`+${expGain} EXP!`);
-    }
-    if (!elements.gamesFeedPage.classList.contains('active') || state.currentGame?.id !== game.id) {
-      clearInterval(interval);
-      const playTime = (Date.now() - startTime) / 1000;
-      state.userData.playTime[game.id] = (state.userData.playTime[game.id] || 0) + playTime;
-      localStorage.setItem('playTime', JSON.stringify(state.userData.playTime));
-      state.userData.interactions[game.id] = (state.userData.interactions[game.id] || 0) + 1;
-      localStorage.setItem('interactions', JSON.stringify(state.userData.interactions));
-    }
-  }, 1000);
-}
-
-// Feed Navigation
-function updateFeedNavigation() {
-  elements.feedPrevBtn.disabled = state.feedIndex === 0;
-  elements.feedNextBtn.disabled = state.feedIndex === state.feedGames.length - 1;
-}
-
-elements.feedPrevBtn.addEventListener('click', () => {
-  if (state.feedIndex > 0) {
-    state.feedIndex--;
-    elements.gamesFeedPage.scrollTo({
-      top: state.feedIndex * window.innerHeight,
-      behavior: 'smooth'
-    });
-    updateFeedNavigation();
-  }
-});
-
-elements.feedNextBtn.addEventListener('click', () => {
-  if (state.feedIndex < state.feedGames.length - 1) {
-    state.feedIndex++;
-    elements.gamesFeedPage.scrollTo({
-      top: state.feedIndex * window.innerHeight,
-      behavior: 'smooth'
-    });
-    updateFeedNavigation();
-  }
-});
-
-let touchStartY = 0;
-let touchEndY = 0;
-
-elements.gamesFeedPage.addEventListener('touchstart', (e) => {
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-elements.gamesFeedPage.addEventListener('touchend', (e) => {
-  touchEndY = e.changedTouches[0].clientY;
-  const diff = touchStartY - touchEndY;
-
-  if (Math.abs(diff) > 50) {
-    if (diff > 0 && state.feedIndex < state.feedGames.length - 1) {
-      state.feedIndex++;
-    } else if (diff < 0 && state.feedIndex > 0) {
-      state.feedIndex--;
-    }
-    elements.gamesFeedPage.scrollTo({
-      top: state.feedIndex * window.innerHeight,
-      behavior: 'smooth'
-    });
-    updateFeedNavigation();
-  }
-}, { passive: true });
-
-elements.gamesFeedPage.addEventListener('scroll', () => {
-  const index = Math.round(elements.gamesFeedPage.scrollTop / window.innerHeight);
-  if (index !== state.feedIndex) {
-    state.feedIndex = index;
-    updateFeedNavigation();
-  }
-}, { passive: true });
-
-// Show Games Feed
-function showGamesFeed() {
-  elements.homePage.style.display = 'none';
-  elements.gamePage.style.display = 'none';
-  elements.gamesFeedPage.style.display = 'block';
-  elements.gamesFeedPage.classList.add('active');
-  state.feedIndex = 0;
-  elements.gamesFeedPage.scrollTo({ top: 0, behavior: 'smooth' });
-  updateFeedNavigation();
-  debouncedPopulateGamesFeed();
-  closeSidebar();
-}
-
-// Back to Home from Feed
-function backToHomeFromFeed() {
-  elements.gamesFeedPage.classList.remove('active');
-  setTimeout(() => {
-    elements.gamesFeedPage.style.display = 'none';
-    elements.homePage.style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    closeSidebar();
-    elements.gamesFeed.innerHTML = '';
-    debouncedPopulateGamesFeed();
-  }, 600);
-}
-
-// Feed Fullscreen and Refresh
-function goFullscreen(feedIndex) {
-  const iframe = $(`#feed-iframe-${state.feedGames[feedIndex].id}`);
-  if (iframe.requestFullscreen) {
-    iframe.requestFullscreen();
-  } else if (iframe.mozRequestFullScreen) {
-    iframe.mozRequestFullScreen();
-  } else if (iframe.webkitRequestFullscreen) {
-    iframe.webkitRequestFullscreen();
-  } else if (iframe.msRequestFullscreen) {
-    iframe.msRequestFullscreen();
-  }
-  state.currentGame = state.feedGames[feedIndex];
-  state.isFullscreen = true;
-  updateFullscreenBar(state.currentGame);
-}
-
-function refreshFeedGame(feedIndex) {
-  const game = state.feedGames[feedIndex];
-  const iframe = $(`#feed-iframe-${game.id}`);
-  const overlay = $(`#feed-play-overlay-${game.id}`);
-  const loader = $(`#feed-loader-container-${game.id}`);
-  const frameContainer = $(`#feed-frame-container-${game.id}`);
-  if (iframe.style.display === 'block') {
-    try {
-      iframe.contentWindow.location.reload();
-    } catch (e) {
-      iframe.src = game.url;
-    }
-  } else {
-    overlay.style.display = 'none';
-    loader.style.display = 'flex';
-    iframe.src = game.url;
-  }
-}
-
 // Category List Population
 function populateCategoryList() {
   elements.categoryList.innerHTML = '';
@@ -462,7 +212,6 @@ function populateCategoryList() {
   homeButton.addEventListener('click', (e) => {
     e.preventDefault();
     if (elements.gamePage.classList.contains('active')) backToHome();
-    if (elements.gamesFeedPage.classList.contains('active')) backToHomeFromFeed();
     state.selectedCategory = '';
     state.selectedTag = '';
     localStorage.setItem('selectedCategory', '');
@@ -473,23 +222,6 @@ function populateCategoryList() {
     closeSidebar();
   });
   elements.categoryList.appendChild(homeButton);
-
-  const feedButton = document.createElement('a');
-  feedButton.href = '#';
-  feedButton.className = 'category-item';
-  feedButton.innerHTML = `<i class="fas fa-stream" aria-hidden="true"></i> Games Feed`;
-  feedButton.dataset.category = 'feed';
-  feedButton.setAttribute('role', 'tab');
-  feedButton.setAttribute('aria-selected', false);
-  feedButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (elements.gamePage.classList.contains('active')) backToHome();
-    showGamesFeed();
-    $$('.category-item', elements.categoryList).forEach(item => item.classList.remove('active'));
-    feedButton.classList.add('active');
-    closeSidebar();
-  });
-  elements.categoryList.appendChild(feedButton);
 
   state.gameData.categories.forEach(category => {
     if (category.id === 'favorites') return;
@@ -504,7 +236,6 @@ function populateCategoryList() {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       if (elements.gamePage.classList.contains('active')) backToHome();
-      if (elements.gamesFeedPage.classList.contains('active')) backToHomeFromFeed();
       state.selectedCategory = category.id;
       state.selectedTag = '';
       localStorage.setItem('selectedCategory', category.id);
@@ -631,7 +362,6 @@ function getFavorites() {
 function showGamePage(game) {
   state.currentGame = game;
   elements.homePage.style.display = 'none';
-  elements.gamesFeedPage.style.display = 'none';
   elements.gamePage.style.display = 'block';
   elements.gamePage.classList.add('active');
   elements.gameIframe.src = 'about:blank';
@@ -771,7 +501,6 @@ function toggleFavorite(game, ...buttonsToUpdate) {
     }
   }
   showToast(isFavorited ? 'Removed from favorites' : 'Added to favorites');
-  debouncedPopulateGamesFeed(); // Update feed only when favorites change
 }
 
 function showToast(message) {
@@ -893,8 +622,6 @@ function toggleTheme() {
 elements.logoContainer.addEventListener('click', () => {
   if (elements.gamePage.classList.contains('active')) {
     backToHome();
-  } else if (elements.gamesFeedPage.classList.contains('active')) {
-    backToHomeFromFeed();
   } else {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

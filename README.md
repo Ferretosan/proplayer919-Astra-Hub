@@ -1,1 +1,1 @@
-# ![Main Image](brand/features.png)
+# ![Main Image](features.png)

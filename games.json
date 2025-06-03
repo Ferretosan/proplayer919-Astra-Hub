@@ -155,7 +155,6 @@
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
         "classic",
         "arcade"
       ]
@@ -207,7 +206,6 @@
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
         "arcade",
         "classic",
         "puzzle"
@@ -298,8 +296,9 @@
       ],
       "rating": 4.0,
       "categories": [
-        "featured",
-        "arcade"
+        "arcade",
+        "action",
+        "skill"
       ]
     },
     {
@@ -346,7 +345,6 @@
       ],
       "rating": 4.0,
       "categories": [
-        "featured",
         "puzzle",
         "word"
       ]
@@ -580,7 +578,6 @@
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
         "clicker",
         "arcade"
       ]
@@ -597,7 +594,6 @@
       ],
       "rating": 4.5,
       "categories": [
-        "featured",
         "satisfying",
         "simulator"
       ]
@@ -619,6 +615,25 @@
         "featured",
         "arcade",
         "action"
+      ]
+    },
+    {
+      "id": "slope",
+      "title": "Slope",
+      "description": "Play Slope Game Unblocked for Free!",
+      "image": "images/slope.png",
+      "url": "games/slope/index.html",
+      "tags": [
+        "arcade",
+        "fast-paced",
+        "reflex",
+        "simple"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "skill"
       ]
     }
   ],

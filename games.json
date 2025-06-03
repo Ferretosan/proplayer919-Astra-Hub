@@ -635,6 +635,71 @@
         "arcade",
         "skill"
       ]
+    },
+    {
+      "id": "crazycattle3d",
+      "title": "Crazy Cattle 3D",
+      "description": "A fun 3D game where you ram into other players to knock them out of the arena.",
+      "image": "images/crazycattle3d.png",
+      "url": "games/crazycattle3d/index.html",
+      "tags": [
+        "fast-paced",
+        "reflex",
+        "multiplayer",
+        "skill"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "multiplayer"
+      ]
+    },
+    {
+      "id": "motox3m",
+      "title": "Moto X3M",
+      "description": "A great 2D motorcycle racing game with many levels and challenges.",
+      "image": "images/motox3m.png",
+      "url": "games/motox3m/index.html",
+      "tags": [
+        "fast-paced",
+        "reflex",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ]
+    },
+    {
+      "id": "motox3m2",
+      "title": "Moto X3M 2",
+      "description": "The sequel to the popular Moto X3M game with new levels and challenges.",
+      "image": "images/motox3m2.png",
+      "url": "games/motox3m2/index.html",
+      "tags": [
+        "fast-paced",
+        "reflex",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ]
     }
   ],
   "categories": [

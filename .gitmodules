@@ -1,0 +1,3 @@
+[submodule "Bowl"]
+	path = Bowl
+	url = git://github.com/ButterToasty/Bowl.git

@@ -10,7 +10,7 @@ if (urlParams.has("v2")) {
   TEXTURE_PATH = "texture-v2"
 }
 
-const SERVER = urlParams.has("local") ? "http://localhost:8000" : "https://api.cors.lol/s3-eu-west-1.amazonaws.com/kd-flightsim"
+const SERVER = urlParams.has("local") ? "http://localhost:8000" : "https://api.cors.lol/?url=s3-eu-west-1.amazonaws.com/kd-flightsim"
 
 export default class Tile {
   constructor(scene, terrain, tileExtents, lowerLeft) {

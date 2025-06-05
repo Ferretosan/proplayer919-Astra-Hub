@@ -700,26 +700,6 @@
         "puzzle",
         "arcade"
       ]
-    },
-    {
-      "id": "flight-sim",
-      "title": "Flight Simulator",
-      "description": "A realistic flight simulator with a F-16 plane!",
-      "image": "images/flight-sim.jpeg",
-      "url": "games/flight-sim/index.html",
-      "tags": [
-        "simulator",
-        "3d",
-        "exploration",
-        "relaxing",
-        "skill"
-      ],
-      "rating": 5.0,
-      "categories": [
-        "featured",
-        "skill",
-        "simulator"
-      ]
     }
   ],
   "categories": [

@@ -706,6 +706,28 @@
         "arcade"
       ],
       "ribbon": "popular"
+    },
+    {
+      "id": "sand-tetris",
+      "title": "Sand Tetris",
+      "description": "A great take on the classic game of Tetris.",
+      "image": "images/sand-tetris.png",
+      "url": "games/sand-tetris/index.html",
+      "tags": [
+        "skill",
+        "puzzle",
+        "arcade",
+        "strategy"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "puzzle",
+        "arcade",
+        "strategy"
+      ],
+      "ribbon": "new"
     }
   ],
   "categories": [

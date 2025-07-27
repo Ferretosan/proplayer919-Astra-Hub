@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eat that Food</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        /* Use min-height for better responsiveness */
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+        /* Use Inter font */
+        color: white;
+        /* Default text color */
+      }
+
+      canvas {
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        /* Slightly more subtle border */
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+        /* Stronger shadow */
+        background-color: rgba(0, 0, 0, 0.1);
+        /* Semi-transparent background */
+        display: block;
+        /* Ensure canvas is block element */
+        width: 100%;
+        /* Make canvas width full screen */
+        height: 100vh;
+        /* Make canvas height full viewport height */
+        margin: 0;
+        /* Remove margin */
+        border-radius: 0;
+        /* Remove border radius for full screen */
+        box-shadow: none;
+        /* Remove shadow for full screen */
+      }
+
+      .game-ui {
+        position: absolute;
+        pointer-events: none;
+        /* Allow clicks to pass through */
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        /* Ensure UI is above canvas */
+      }
+
+      #score {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 1.5rem;
+        /* Responsive font size */
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        transition: transform 0.2s ease;
+        pointer-events: auto;
+        /* Re-enable pointer events for UI elements */
+        background: rgba(0, 0, 0, 0.4);
+        padding: 8px 12px;
+        border-radius: 5px;
+        opacity: 1;
+        /* Ensure visibility */
+        transition: opacity 0.5s ease-in-out;
+        /* Smooth fade */
+      }
+
+      #score.grow {
+        transform: scale(1.1);
+        /* Slightly less aggressive grow */
+      }
+
+      #leaderboard {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 1rem;
+        /* Responsive font size */
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        border-radius: 5px;
+        pointer-events: auto;
+        opacity: 1;
+        /* Ensure visibility */
+        transition: opacity 0.5s ease-in-out;
+        /* Smooth fade */
+      }
+
+      #leaderboard h3 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+      }
+
+      #leaderboard div {
+        margin-bottom: 3px;
+      }
+
+      #shop {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        /* More padding */
+        border-radius: 8px;
+        /* More rounded corners */
+        color: white;
+        display: none;
+        /* Handled by JS */
+        pointer-events: auto;
+        max-width: 300px;
+        /* Limit shop width */
+        opacity: 0;
+        /* Start hidden for transition */
+        transition: opacity 0.3s ease-in-out;
+        /* Smooth fade */
+      }
+
+      #shop.visible {
+        opacity: 1;
+      }
+
+      #shop h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+      }
+
+      #shop button {
+        display: block;
+        /* Make buttons block for better stacking */
+        width: 100%;
+        /* Full width buttons */
+        margin-bottom: 10px;
+        /* Space between buttons */
+        padding: 10px 15px;
+        /* More padding */
+        background: #6e8efb;
+        border: none;
+        border-radius: 5px;
+        /* More rounded buttons */
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.2s ease;
+      }
+
+      #shop button:hover {
+        background: #a777e3;
+      }
+
+      #titleScreen,
+      #gameOverScreen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        /* Darker overlay */
+        display: flex;
+        /* Handled by JS */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        z-index: 20;
+        /* Ensure title/game over screens are on top */
+        opacity: 1;
+        /* Start visible for transition */
+        transition: opacity 0.5s ease-in-out;
+        /* Smooth fade */
+      }
+
+      #titleScreen.hidden,
+      #gameOverScreen.hidden {
+        opacity: 0;
+        pointer-events: none;
+        /* Disable interaction when hidden */
+      }
+
+      #titleScreen h1,
+      #gameOverScreen h1 {
+        font-size: 3rem;
+        /* Larger title */
+        text-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+        margin-bottom: 20px;
+      }
+
+      #gameOverScreen h2 {
+        font-size: 2rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      #gameOverScreen p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      #titleScreen input,
+      #gameOverScreen button {
+        margin: 10px;
+        padding: 12px 15px;
+        /* More padding */
+        font-size: 1.1rem;
+        /* Larger font */
+        border-radius: 5px;
+        border: none;
+        text-align: center;
+      }
+
+      #titleScreen button,
+      #gameOverScreen button {
+        padding: 12px 25px;
+        /* More padding */
+        font-size: 1.2rem;
+        /* Larger font */
+        background: #6e8efb;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      #titleScreen button:hover,
+      #gameOverScreen button:hover {
+        background: #a777e3;
+      }
+
+      #gameOverScreen {
+        display: none;
+        /* Initially hidden */
+      }
+
+      /* Message box for game messages */
+      #messageBox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        font-size: 1.2rem;
+        text-align: center;
+        z-index: 30;
+        display: none;
+        /* Initially hidden */
+        opacity: 0;
+        /* Start hidden for transition */
+        transition: opacity 0.3s ease-in-out;
+        /* Smooth fade */
+      }
+
+      #messageBox.visible {
+        opacity: 1;
+      }
+
+      /* Title Screen Sections */
+      .title-section {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        max-width: 80%;
+        text-align: center;
+      }
+
+      .title-section h2 {
+        font-size: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 5px;
+      }
+
+      .title-section p {
+        margin-bottom: 10px;
+      }
+
+      .title-section ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .title-section li {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="game-ui">
+      <div id="score">Score: 0</div>
+      <div id="leaderboard"></div>
+      <div id="shop">
+        <h3>Shop (Points: <span id="shopPoints">0</span>)</h3>
+        <button onclick="buy('speed', 10)">Speed Boost (+1) - 10 pts</button>
+        <button onclick="buy('radius', 20)">Size Increase (+5) - 20 pts</button>
+        <button onclick="buy('skin_circle', 50)">Circle Skin - 50 pts</button>
+        <button onclick="buy('skin_star', 50)">Star Skin - 50 pts</button>
+        <button onclick="buy('skin_square', 50)">Square Skin - 50 pts</button>
+        <button onclick="buy('skin_gradient', 50)">Gradient Skin - 50 pts</button>
+      </div>
+    </div>
+
+    <div id="titleScreen">
+      <h1>Eat That Food</h1>
+      <input id="playerName" type="text" placeholder="Enter your name" maxlength="20">
+      <button id="startButton">Start Game</button>
+
+      <div class="title-section">
+        <h2>Controls</h2>
+        <ul>
+          <li>Move: Arrow Keys or W, A, S, D</li>
+          <li>Open/Close Shop: E</li>
+        </ul>
+      </div>
+
+      <div class="title-section">
+        <h2>Settings</h2>
+        <p>Future settings options will appear here.</p>
+      </div>
+    </div>
+
+    <div id="gameOverScreen">
+      <h1>Game Over!</h1>
+      <h2 id="finalScore"></h2>
+      <p>You were eaten!</p>
+      <button id="restartButton">Play Again</button>
+    </div>
+
+    <div id="messageBox"></div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+      // Get canvas and context
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+
+      // Get UI elements
+      const scoreDisplay = document.getElementById('score');
+      const leaderboardDisplay = document.getElementById('leaderboard');
+      const shopDisplay = document.getElementById('shop');
+      const shopPoints = document.getElementById('shopPoints');
+      const titleScreen = document.getElementById('titleScreen');
+      const playerNameInput = document.getElementById('playerName');
+      const startButton = document.getElementById('startButton');
+      const gameOverScreen = document.getElementById('gameOverScreen');
+      const finalScoreDisplay = document.getElementById('finalScore');
+      const restartButton = document.getElementById('restartButton');
+      const messageBox = document.getElementById('messageBox');
+
+      // Game constants
+      const MAP_WIDTH = 2500; // Increased map size
+      const MAP_HEIGHT = 2000; // Increased map size
+      const FOOD_COUNT = 50; // More food
+      const BOT_COUNT = 10; // More bots
+      const INITIAL_PLAYER_RADIUS = 15; // Player's starting radius (matches bot base radius)
+      const MAX_ZOOM_OUT_RADIUS = 300; // Player radius at which max zoom out is reached
+      const MIN_SCALE = 0.5; // Minimum scale factor (max zoom out)
+      const INITIAL_SCALE = 1.0; // Initial scale factor (no zoom)
+      const ZOOM_EASING_FACTOR = 0.05; // Factor for smooth zoom transition
+
+      // Darkening effect constants
+      const DARK_THRESHOLD_MULTIPLIER = 5; // Distance multiplier for darkening to start
+      const MAX_DARK_OPACITY = 0.7; // Maximum opacity of the darkening overlay
+      const DARK_EASING_FACTOR = 0.1; // Factor for smooth darkening transition
+
+      // Game state variables
+      let player = null;
+      let bots = [];
+      let foods = [];
+      let particles = [];
+      let bgParticles = [];
+      let camera = { x: 0, y: 0 };
+      let gameStarted = false;
+      let gameOver = false; // Game over state
+      const keys = {}; // Object to track pressed keys
+      let currentScale = INITIAL_SCALE; // Variable to track the current zoom level
+      let darkenOverlayAlpha = 0; // Variable to track the current opacity of the darkening overlay
+
+      // --- Event Listeners ---
+
+      // Handle title screen start button click
+      startButton.onclick = () => {
+        try {
+          const name = playerNameInput.value.trim() || `Player_${Math.random().toString(36).slice(2, 6)}`;
+          player = {
+            id: 'player',
+            name,
+            x: MAP_WIDTH / 2,
+            y: MAP_HEIGHT / 2,
+            targetX: MAP_WIDTH / 2,
+            targetY: MAP_HEIGHT / 2,
+            radius: INITIAL_PLAYER_RADIUS, // Use the constant for initial radius
+            color: 'hsl(200, 70%, 50%)',
+            speed: 5,
+            score: 0,
+            isBot: false,
+            skin: 'circle'
+          };
+          initializeGame();
+          // Use classes for smoother transitions
+          titleScreen.classList.add('hidden');
+          gameOverScreen.classList.add('hidden'); // Ensure game over is hidden
+          // Delay setting display to none to allow transition
+          setTimeout(() => {
+            titleScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+          }, 500); // Match CSS transition duration
+
+          gameStarted = true;
+          gameOver = false;
+          console.log("Game started successfully.");
+        } catch (error) {
+          console.error("Error starting game:", error);
+          showMessage("Error starting game. Check console for details.");
+        }
+      };
+
+      // Handle restart button click
+      restartButton.onclick = () => {
+        try {
+          // Reset game state
+          player = null;
+          bots = [];
+          foods = [];
+          particles = [];
+          bgParticles = [];
+          camera = { x: 0, y: 0 };
+          gameStarted = false;
+          gameOver = false;
+          currentScale = INITIAL_SCALE; // Reset scale on restart
+          darkenOverlayAlpha = 0; // Reset darkening on restart
+
+
+          // Show title screen with transition
+          gameOverScreen.classList.add('hidden');
+          setTimeout(() => {
+            gameOverScreen.style.display = 'none';
+            titleScreen.style.display = 'flex';
+            titleScreen.classList.remove('hidden');
+          }, 500); // Match CSS transition duration
+
+
+          playerNameInput.value = ''; // Clear player name input
+          updateScore(); // Reset score display
+          console.log("Game restarted successfully.");
+        } catch (error) {
+          console.error("Error restarting game:", error);
+          showMessage("Error restarting game. Check console for details.");
+        }
+      };
+
+
+      // Handle keyboard input
+      window.addEventListener('keydown', (e) => {
+        keys[e.key.toLowerCase()] = true;
+        // Toggle shop visibility with 'E' key
+        if (e.key.toLowerCase() === 'e' && gameStarted && !gameOver) {
+          if (shopDisplay.classList.contains('visible')) {
+            shopDisplay.classList.remove('visible');
+            setTimeout(() => { shopDisplay.style.display = 'none'; }, 300); // Match CSS transition duration
+          } else {
+            shopDisplay.style.display = 'block';
+            setTimeout(() => { shopDisplay.classList.add('visible'); }, 10); // Small delay to allow display to change before transition
+          }
+        }
+      });
+      window.addEventListener('keyup', (e) => {
+        keys[e.key.toLowerCase()] = false;
+      });
+
+      // Handle window resizing for responsive canvas
+      window.addEventListener('resize', resizeCanvas);
+
+      // --- Initialization ---
+
+      // Initialize game elements (bots, food, background particles)
+      function initializeGame() {
+        try {
+          // Initialize bots
+          for (let i = 0; i < BOT_COUNT; i++) {
+            bots.push(createBot(i));
+          }
+
+          // Initialize food
+          for (let i = 0; i < FOOD_COUNT; i++) {
+            foods.push(generateFood());
+          }
+
+          // Initialize background particles
+          for (let i = 0; i < 100; i++) { // More background particles
+            bgParticles.push({
+              x: Math.random() * MAP_WIDTH,
+              y: Math.random() * MAP_HEIGHT,
+              radius: 2 + Math.random() * 3,
+              vx: (Math.random() - 0.5) * 0.5,
+              vy: (Math.random() - 0.5) * 0.5,
+              alpha: 0.1 + Math.random() * 0.2 // Less opaque background particles
+            });
+          }
+
+          // Set initial canvas size
+          resizeCanvas();
+          console.log("Game initialized.");
+        } catch (error) {
+          console.error("Error initializing game:", error);
+          showMessage("Error initializing game. Check console for details.");
+        }
+      }
+
+      // Resize canvas to fit window
+      function resizeCanvas() {
+        try {
+          // Set canvas display size using CSS (handled in style block)
+          // Set canvas drawing buffer size
+          canvas.width = canvas.offsetWidth;
+          canvas.height = canvas.offsetHeight;
+          console.log(`Canvas resized to: ${canvas.width}x${canvas.height}`);
+        } catch (error) {
+          console.error("Error resizing canvas:", error);
+        }
+      }
+
+      // Create a bot object
+      function createBot(index) {
+        const randomScore = Math.floor(Math.random() * 10); // Bots can start with more score
+        const randomRadius = 15 + Math.random() * 5; // Bots can start slightly larger
+        return {
+          id: `bot_${index}`,
+          name: `Bot ${index + 1}`,
+          x: Math.random() * MAP_WIDTH,
+          y: Math.random() * MAP_HEIGHT,
+          targetX: Math.random() * MAP_WIDTH,
+          targetY: Math.random() * MAP_HEIGHT,
+          radius: randomRadius,
+          color: `hsl(${Math.random() * 360}, 70%, 40%)`,
+          speed: 4 + Math.random() * 2, // Bots have varied speed
+          score: randomScore,
+          isBot: true
+        };
+      }
+
+      // Generate a food object
+      function generateFood() {
+        return {
+          x: Math.random() * MAP_WIDTH,
+          y: Math.random() * MAP_HEIGHT,
+          radius: 8,
+          pulse: Math.random() * Math.PI * 2,
+          color: `hsl(${Math.random() * 360}, 80%, 60%)`
+        };
+      }
+
+      // Create a particle for eating effect
+      function createParticle(x, y, color) {
+        return {
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 10, // Faster particles
+          vy: (Math.random() - 0.5) * 10, // Faster particles
+          radius: 3 + Math.random() * 4, // Smaller particles
+          alpha: 1,
+          color
+        };
+      }
+
+      // Show a temporary message box with transition
+      function showMessage(message, duration = 2000) {
+        messageBox.textContent = message;
+        messageBox.style.display = 'block';
+        setTimeout(() => { messageBox.classList.add('visible'); }, 10); // Small delay for transition
+        setTimeout(() => {
+          messageBox.classList.remove('visible');
+          setTimeout(() => { messageBox.style.display = 'none'; }, 300); // Match CSS transition duration
+        }, duration);
+      }
+
+      // --- Game Logic ---
+
+      // Easing function for smooth movement
+      function ease(current, target, factor) {
+        return current + (target - current) * factor;
+      }
+
+      // Shop purchase logic
+      function buy(item, cost) {
+        if (!gameStarted || gameOver) return; // Prevent buying if game not started or over
+
+        if (player.score >= cost) {
+          player.score -= cost;
+          if (item === 'speed') {
+            player.speed += 1;
+            showMessage('Speed increased!');
+          } else if (item === 'radius') {
+            player.radius += 5;
+            showMessage('Size increased!');
+          } else if (item.startsWith('skin_')) {
+            player.skin = item.replace('skin_', '');
+            showMessage('Skin changed!');
+          }
+          updateScore();
+        } else {
+          showMessage('Not enough points!');
+        }
+      }
+
+      // Update game state (positions, collisions, etc.)
+      function update() {
+        if (!gameStarted || gameOver) return;
+        try {
+          // --- Update Player ---
+          let dx = 0, dy = 0;
+          if (keys['arrowup'] || keys['w']) dy -= player.speed;
+          if (keys['arrowdown'] || keys['s']) dy += player.speed;
+          if (keys['arrowleft'] || keys['a']) dx -= player.speed;
+          if (keys['arrowright'] || keys['d']) dx += player.speed;
+
+          // Update player target position, clamped to map boundaries
+          player.targetX = Math.max(player.radius, Math.min(MAP_WIDTH - player.radius, player.targetX + dx));
+          player.targetY = Math.max(player.radius, Math.min(MAP_HEIGHT - player.radius, player.targetY + dy));
+
+          // Ease player position towards target
+          player.x = ease(player.x, player.targetX, 0.15); // Slightly faster easing
+          player.y = ease(player.y, player.targetY, 0.15); // Slightly faster easing
+
+          // --- Update Bots ---
+          bots.forEach((bot, botIndex) => {
+            // Find nearest food or vulnerable entity
+            let nearestFood = null;
+            let nearestEntity = null; // Entity the bot can eat
+            let threateningEntity = null; // Entity that can eat the bot
+            let minFoodDist = Infinity;
+            let minEntityDist = Infinity;
+            let minThreatDist = Infinity;
+
+            // Find nearest food
+            foods.forEach(food => {
+              const dist = Math.hypot(bot.x - food.x, bot.y - food.y);
+              if (dist < minFoodDist) {
+                minFoodDist = dist;
+                nearestFood = food;
+              }
+            });
+
+            // Find entities the bot can eat or that can eat the bot
+            const allEntities = [player, ...bots.filter(b => b.id !== bot.id)];
+            allEntities.forEach(entity => {
+              const dist = Math.hypot(bot.x - entity.x, bot.y - entity.y);
+              // Check if bot can eat this entity (based on radius)
+              if (bot.radius > entity.radius) {
+                if (dist < minEntityDist) {
+                  minEntityDist = dist;
+                  nearestEntity = entity;
+                }
+              }
+              // Check if this entity can eat the bot (based on radius)
+              if (entity.radius > bot.radius) {
+                if (dist < minThreatDist) {
+                  minThreatDist = dist;
+                  threateningEntity = entity;
+                }
+              }
+            });
+
+            // Bot AI Logic: Prioritize escaping threats, then eating entities, then eating food
+            if (threateningEntity && minThreatDist < bot.radius * 10) { // If a threat is relatively close
+              const angle = Math.atan2(threateningEntity.y - bot.y, threateningEntity.x - bot.x);
+              // Move away from the threat
+              bot.targetX = bot.x - Math.cos(angle) * bot.speed * 2; // Move faster when escaping
+              bot.targetY = bot.y - Math.sin(angle) * bot.speed * 2;
+            } else if (nearestEntity && minEntityDist < minFoodDist * 2) { // If a vulnerable entity is closer than food (with some bias)
+              // Corrected target for eating - target the entity's actual position
+              const angle = Math.atan2(nearestEntity.y - bot.y, nearestEntity.x - bot.x);
+              bot.targetX = bot.x + Math.cos(angle) * bot.speed;
+              bot.targetY = bot.y + Math.sin(angle) * bot.speed;
+            } else if (nearestFood) { // Otherwise, move towards the nearest food
+              const angle = Math.atan2(nearestFood.y - bot.y, nearestFood.x - bot.x);
+              bot.targetX = bot.x + Math.cos(angle) * bot.speed;
+              bot.targetY = bot.y + Math.sin(angle) * bot.speed;
+            } else { // If nothing to chase, wander randomly
+              if (Math.random() < 0.02) { // Occasionally pick a new random target
+                bot.targetX = Math.random() * MAP_WIDTH;
+                bot.targetY = Math.random() * MAP_HEIGHT;
+              }
+            }
+
+
+            // Ease bot position towards target
+            bot.x = ease(bot.x, bot.targetX, 0.08); // Bots ease slightly slower
+            bot.y = ease(bot.y, bot.targetY, 0.08);
+
+            // Clamp bot position to map boundaries
+            bot.targetX = Math.max(bot.radius, Math.min(MAP_WIDTH - bot.radius, bot.targetX));
+            bot.targetY = Math.max(bot.radius, Math.min(MAP_HEIGHT - bot.radius, bot.targetY));
+            bot.x = Math.max(bot.radius, Math.min(MAP_WIDTH - bot.radius, bot.x));
+            bot.y = Math.max(bot.radius, Math.min(MAP_HEIGHT - bot.radius, bot.y));
+          });
+
+          // --- Collision Detection ---
+
+          // Define all entities once for collision checks
+          const allEntities = [player, ...bots];
+
+          // Check food collisions for all entities
+          // Iterate backwards to safely remove eaten food
+          for (let i = foods.length - 1; i >= 0; i--) {
+            const food = foods[i];
+            for (let j = 0; j < allEntities.length; j++) {
+              const entity = allEntities[j];
+              const dist = Math.hypot(entity.x - food.x, entity.y - food.y);
+              if (dist < entity.radius + food.radius * 0.8) { // Collision with food (slightly smaller radius for food)
+                entity.score++;
+                entity.radius += 0.2; // Smaller radius increase per food
+                if (entity.id === 'player') {
+                  updateScore();
+                  scoreDisplay.classList.add('grow');
+                  setTimeout(() => scoreDisplay.classList.remove('grow'), 200);
+                }
+                // Create particles at food location
+                for (let k = 0; k < 8; k++) { // Fewer particles per food
+                  particles.push(createParticle(food.x, food.y, food.color));
+                }
+                // Remove eaten food and generate a new one
+                foods.splice(i, 1);
+                foods.push(generateFood());
+                break; // Food is eaten, move to next food
+              }
+            }
+          }
+
+
+          // Check entity collisions (eating other entities)
+          // Iterate backwards for bots to safely replace eaten bots
+          for (let i = allEntities.length - 1; i >= 0; i--) {
+            const entityA = allEntities[i];
+            // Player cannot eat themselves, bots cannot eat themselves
+            for (let j = allEntities.length - 1; j >= 0; j--) {
+              const entityB = allEntities[j];
+              if (entityA.id === entityB.id) continue; // Don't check collision with self
+
+              const dist = Math.hypot(entityA.x - entityB.x, entityA.y - entityB.y);
+
+              // Check if entityA can eat entityB (based on radius)
+              if (entityA.radius > entityB.radius && dist < entityA.radius + entityB.radius * 0.5) { // Collision with entity (smaller radius for eaten entity)
+                // EntityA eats EntityB
+                entityA.score += entityB.score + Math.floor(entityB.radius); // Gain score and some radius from eaten entity
+                entityA.radius += entityB.radius * 0.5; // Radius gain from eaten entity
+
+                // Create particles at the location of the eaten entity
+                for (let k = 0; k < 20; k++) { // More particles when eating an entity
+                  particles.push(createParticle(entityB.x, entityB.y, entityB.color));
+                }
+
+                // Handle removal/replacement of the eaten entity
+                if (entityB.id === 'player') {
+                  // Player was eaten - Game Over!
+                  gameOver = true;
+                  gameStarted = false; // Stop game updates
+                  finalScoreDisplay.textContent = `Final Score: ${player.score}`;
+                  gameOverScreen.style.display = 'flex';
+                  gameOverScreen.classList.remove('hidden'); // Show game over screen with transition
+                  shopDisplay.classList.remove('visible'); // Hide shop with transition
+                  setTimeout(() => { shopDisplay.style.display = 'none'; }, 300); // Match CSS transition duration
+                  console.log("Game Over: Player was eaten.");
+                  return; // Stop updating if player is eaten
+                } else if (entityB.isBot) {
+                  // A bot was eaten by another entity (player or bot)
+                  const botIndex = bots.findIndex(b => b.id === entityB.id);
+                  if (botIndex !== -1) {
+                    bots[botIndex] = createBot(botIndex); // Replace eaten bot with a new one
+                  }
+                }
+
+                // Update score if player was the eater
+                if (entityA.id === 'player') {
+                  updateScore();
+                }
+
+                // Re-evaluate all entities array for the next iteration after removal/replacement
+                allEntities.splice(j, 1); // Remove entityB from the current collision check iteration
+                if (entityA.isBot) { // If entityA was a bot, need to re-add it to the list after eating
+                  // This is complex to handle in a single loop. A better approach is to mark entities for removal
+                  // and process removals after all collision checks.
+                  // For simplicity here, we'll rely on the bot replacement logic above.
+                }
+              }
+            }
+          }
+
+
+          // --- Update Particles ---
+          // Filter out particles that have faded away
+          particles = particles.filter(p => p.alpha > 0);
+          particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.alpha -= 0.03; // Faster fading
+            p.radius *= 0.97; // Faster shrinking
+          });
+
+          // --- Update Background Particles ---
+          bgParticles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            // Wrap background particles around the map
+            if (p.x < 0) p.x = MAP_WIDTH;
+            if (p.x > MAP_WIDTH) p.x = 0;
+            if (p.y < 0) p.y = MAP_HEIGHT;
+            if (p.y > MAP_HEIGHT) p.y = 0;
+          });
+
+          // --- Update Camera and Zoom ---
+          // Calculate target scale based on player radius
+          let targetScale = INITIAL_SCALE;
+          if (player.radius > INITIAL_PLAYER_RADIUS) {
+            const scaleRange = INITIAL_SCALE - MIN_SCALE;
+            const radiusRange = MAX_ZOOM_OUT_RADIUS - INITIAL_PLAYER_RADIUS;
+            const radiusProgress = Math.min(player.radius - INITIAL_PLAYER_RADIUS, radiusRange);
+            targetScale = INITIAL_SCALE - (radiusProgress / radiusRange) * scaleRange;
+          }
+
+          // Smoothly ease the current scale towards the target scale
+          currentScale = ease(currentScale, targetScale, ZOOM_EASING_FACTOR);
+
+          // Center camera on the player, considering the current scale
+          camera.x = player.x * currentScale - canvas.width / 2;
+          camera.y = player.y * currentScale - canvas.height / 2;
+
+          // Clamp camera position to map boundaries, considering the current scale
+          camera.x = Math.max(0, Math.min(MAP_WIDTH * currentScale - canvas.width, camera.x));
+          camera.y = Math.max(0, Math.min(MAP_HEIGHT * currentScale - canvas.height, camera.y));
+
+          // --- Update Darkening Overlay ---
+          let maxThreatDarkening = 0;
+          // Check distance to all entities larger than the player
+          const allGameEntities = [player, ...bots]; // Include player for consistent iteration
+          allGameEntities.forEach(entity => {
+            if (entity.id !== 'player' && entity.radius > player.radius) {
+              const dist = Math.hypot(player.x - entity.x, player.y - entity.y);
+              // Darkening starts when distance is within DARK_THRESHOLD_MULTIPLIER * larger_entity_radius
+              if (dist < entity.radius * DARK_THRESHOLD_MULTIPLIER) {
+                // Calculate darkening factor (1 when very close, 0 at threshold)
+                const darkeningFactor = 1 - (dist / (entity.radius * DARK_THRESHOLD_MULTIPLIER));
+                maxThreatDarkening = Math.max(maxThreatDarkening, darkeningFactor);
+              }
+            }
+          });
+
+          // Calculate target alpha for the overlay
+          const targetDarkenAlpha = maxThreatDarkening * MAX_DARK_OPACITY;
+
+          // Smoothly ease the current darkening alpha towards the target
+          darkenOverlayAlpha = ease(darkenOverlayAlpha, targetDarkenAlpha, DARK_EASING_FACTOR);
+
+
+          // --- Update Leaderboard ---
+          const leaderboard = allGameEntities
+            .sort((a, b) => b.score - a.score) // Sort by score descending
+            .slice(0, 10) // Show top 10
+            .map(p => `<div style="color: ${p.id === 'player' ? 'yellow' : 'white'};">${p.name}: ${Math.floor(p.score)}</div>`); // Highlight player
+          leaderboardDisplay.innerHTML = '<h3>Leaderboard</h3>' + leaderboard.join('');
+        } catch (error) {
+          console.error("Error in update function:", error);
+          showMessage("An error occurred during game update. Check console for details.");
+          gameOver = true; // Stop the game loop on error
+          gameStarted = false;
+        }
+      }
+
+      // Update score display and shop points
+      function updateScore() {
+        if (player) { // Check if player object exists
+          scoreDisplay.textContent = `Score: ${Math.floor(player.score)}`; // Display rounded score
+          shopPoints.textContent = Math.floor(player.score); // Display rounded score in shop
+        }
+      }
+
+      // --- Drawing ---
+
+      // Draw game elements on the canvas
+      function draw() {
+        if (!gameStarted && !gameOver) {
+          // Don't draw game elements if game hasn't started or is over and screens are visible
+          return;
+        }
+        try {
+          // Clear canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Draw gradient background
+          const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          gradient.addColorStop(0, '#6e8efb');
+          gradient.addColorStop(1, '#a777e3');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Apply camera transform and scaling
+          ctx.save();
+
+          // Apply the current smoothed scale
+          ctx.scale(currentScale, currentScale);
+
+          // Apply camera translation (adjusting for the current scale)
+          ctx.translate(-camera.x / currentScale, -camera.y / currentScale);
+
+
+          // Draw background particles
+          bgParticles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+            ctx.fill();
+          });
+
+          // Draw food with glow and pulse effect
+          foods.forEach(food => {
+            food.pulse += 0.05;
+            const pulseScale = 1 + Math.sin(food.pulse) * 0.1; // Pulsing effect
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(food.x, food.y, food.radius * pulseScale, 0, Math.PI * 2);
+            ctx.fillStyle = food.color;
+            ctx.shadowBlur = 10; // Reduced blur
+            ctx.shadowColor = food.color;
+            ctx.fill();
+            ctx.restore(); // Restore context to remove shadow for other elements
+          });
+
+          // Draw particles
+          particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            // Use hsla for color with alpha
+            ctx.fillStyle = p.color.replace(')', `, ${p.alpha})`).replace('hsl', 'hsla');
+            ctx.fill();
+          });
+
+          // Draw bots
+          bots.forEach(bot => {
+            ctx.save();
+            ctx.translate(bot.x, bot.y); // Translate to bot's position
+            ctx.fillStyle = bot.color;
+            ctx.shadowBlur = 15; // Reduced blur
+            ctx.shadowColor = bot.color;
+
+            // Draw bot circle
+            ctx.beginPath();
+            ctx.arc(0, 0, bot.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw bot name (optional)
+            ctx.fillStyle = 'white';
+            // Adjust font size based on current scale
+            ctx.font = `${Math.max(10 / currentScale, bot.radius / 3)}px Inter`; // Dynamic font size, scaled
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowBlur = 0; // No shadow for text
+            // Adjust text position based on current scale
+            ctx.fillText(bot.name, 0, bot.radius + Math.max(10 / currentScale, bot.radius / 3) / 2 + 5 / currentScale); // Position name below bot, scaled
+
+            ctx.restore(); // Restore context
+          });
+
+          // Draw player with selected skin
+          if (player) {
+            ctx.save();
+            ctx.translate(player.x, player.y); // Translate to player's position
+            ctx.fillStyle = player.color;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = player.color;
+
+            // Draw player based on skin
+            if (player.skin === 'circle') {
+              ctx.beginPath();
+              ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+              ctx.fill();
+            } else if (player.skin === 'star') {
+              ctx.beginPath();
+              const outerRadius = player.radius;
+              const innerRadius = player.radius / 2;
+              const numPoints = 10;
+              for (let i = 0; i < numPoints; i++) {
+                const angle = (i * Math.PI * 2) / numPoints - Math.PI / 2; // Rotate star
+                const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+              }
+              ctx.closePath();
+              ctx.fill();
+            } else if (player.skin === 'square') {
+              ctx.beginPath();
+              ctx.rect(-player.radius, -player.radius, player.radius * 2, player.radius * 2);
+              ctx.fill();
+            } else if (player.skin === 'gradient') {
+              const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, player.radius);
+              grad.addColorStop(0, player.color);
+              grad.addColorStop(1, 'white'); // Gradient to white
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            // Draw player name
+            ctx.fillStyle = 'white';
+            // Adjust font size based on current scale
+            ctx.font = `${Math.max(10 / currentScale, player.radius / 3)}px Inter`; // Dynamic font size, scaled
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowBlur = 0; // No shadow for text
+            // Adjust text position based on current scale
+            ctx.fillText(player.name, 0, player.radius + Math.max(10 / currentScale, player.radius / 3) / 2 + 5 / currentScale); // Position name below player, scaled
+
+            ctx.restore(); // Restore context
+          }
+
+          // Restore canvas transform
+          ctx.restore();
+
+          // --- Draw Darkening Overlay ---
+          // Draw this after restoring the context so it covers the whole viewport
+          if (darkenOverlayAlpha > 0) {
+            ctx.save();
+            ctx.fillStyle = `rgba(0, 0, 0, ${darkenOverlayAlpha})`;
+            // Draw the rectangle covering the entire canvas viewport
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.restore();
+          }
+
+
+        } catch (error) {
+          console.error("Error in draw function:", error);
+          showMessage("An error occurred during drawing. Check console for details.");
+          gameOver = true; // Stop the game loop on error
+          gameStarted = false;
+        }
+      }
+
+      // --- Game Loop ---
+
+      // Main game loop function
+      function gameLoop() {
+        // Use a try-catch block around the core update/draw calls
+        try {
+          if (!gameOver) { // Only update and draw if game is not over
+            update();
+            draw();
+          } else {
+            // If game is over, still draw the final state once or ensure UI is visible
+            draw(); // Draw the final frame
+          }
+        } catch (error) {
+          console.error("Error in game loop:", error);
+          showMessage("A critical error occurred. Game stopped. Check console for details.");
+          gameOver = true; // Ensure game stops on error
+          gameStarted = false;
+        }
+
+        // Request the next frame regardless of game over state to allow UI to be drawn
+        requestAnimationFrame(gameLoop);
+      }
+
+      // Start the game loop when the window is loaded
+      window.onload = function () {
+        console.log("Window loaded. Starting game loop.");
+        gameLoop();
+      }
+
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,855 @@
+{
+  "games": [
+    {
+      "id": "battlegrounds",
+      "title": "Battlegrounds",
+      "description": "Explore the world map and engage in intense battles across the globe.",
+      "image": "images/battlegrounds.png",
+      "url": "games/battlegrounds/index.html",
+      "tags": [
+        "shooter",
+        "exploration",
+        "adventure",
+        "multiplayer",
+        "fast-paced"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "featured",
+        "action"
+      ],
+      "ribbon": "astragames exclusive"
+    },
+    {
+      "id": "eat-that-food",
+      "title": "Eat that Food",
+      "description": "Eat orbs to become the biggest player in this satisfying, addictive game.",
+      "image": "images/eat-that-food.png",
+      "url": "games/eat-that-food/index.html",
+      "tags": [
+        "satisfying",
+        "relaxing",
+        "multiplayer",
+        "arcade"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "featured",
+        "satisfying",
+        "arcade"
+      ],
+      "ribbon": "astragames exclusive"
+    },
+    {
+      "id": "snow-rider-3d",
+      "title": "Snow Rider 3D",
+      "description": "The popular Snow Rider 3D game!",
+      "image": "images/snow-rider-3d.png",
+      "url": "games/snow-rider-3d/index.html",
+      "tags": [
+        "3d",
+        "arcade",
+        "fast-paced",
+        "reflex",
+        "skill",
+        "sports"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "skill",
+        "sports"
+      ],
+      "ribbon": "popular"
+    },
+    {
+      "id": "money-clicker",
+      "title": "Money Clicker",
+      "description": "Make the most money by clicking and upgrading your business.",
+      "image": "images/money-clicker.png",
+      "url": "games/money-clicker/index.html",
+      "tags": [
+        "clicker",
+        "satisfying",
+        "strategy"
+      ],
+      "rating": 4.2,
+      "categories": [
+        "clicker"
+      ],
+      "ribbon": "astragames exclusive"
+    },
+    {
+      "id": "flappy-bird",
+      "title": "Flappy Bird",
+      "description": "Play the classic Flappy Bird game.",
+      "image": "images/flappy-bird.png",
+      "url": "games/flappy-bird/index.html",
+      "tags": [
+        "clicker",
+        "satisfying",
+        "relaxing",
+        "arcade",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "clicker",
+        "classic",
+        "arcade"
+      ]
+    },
+    {
+      "id": "president-sim",
+      "title": "President Simulator",
+      "description": "Can you lead the nation to prosperity and secure your re-election?",
+      "image": "images/president-sim.png",
+      "url": "games/president-sim/index.html",
+      "tags": [
+        "simulator",
+        "simple",
+        "strategy"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "simulator",
+        "strategy"
+      ],
+      "ribbon": "astragames exclusive"
+    },
+    {
+      "id": "whack-a-mole",
+      "title": "Whack a Mole",
+      "description": "Whack as many moles as you can in this classic game's neon style remake.",
+      "image": "images/whack-a-mole.png",
+      "url": "games/whack-a-mole/index.html",
+      "tags": [
+        "clicker",
+        "simple",
+        "relaxing",
+        "arcade",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "clicker",
+        "classic",
+        "arcade"
+      ]
+    },
+    {
+      "id": "snake",
+      "title": "Snake",
+      "description": "Snake - but glowing",
+      "image": "images/snake.png",
+      "url": "games/snake/index.html",
+      "tags": [
+        "simple",
+        "fast-paced",
+        "relaxing",
+        "arcade",
+        "reflex"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "classic",
+        "arcade"
+      ]
+    },
+    {
+      "id": "chat",
+      "title": "Chat",
+      "description": "A global peer-to-peer chat room.",
+      "image": "images/chat.png",
+      "url": "games/chat/index.html",
+      "tags": [
+        "utility"
+      ],
+      "rating": 5,
+      "categories": [
+        "tool"
+      ]
+    },
+    {
+      "id": "avoid-the-blocks",
+      "title": "Avoid the Blocks",
+      "description": "Dodge falling blocks, collect powerups, and upgrade your skills in this fast-paced neon arcade game.",
+      "developer": "Ferretosan",
+      "image": "images/avoid-the-blocks.png",
+      "url": "games/avoid-the-blocks/index.html",
+      "tags": [
+        "arcade",
+        "fast-paced",
+        "simple",
+        "reflex"
+      ],
+      "rating": 4.3,
+      "categories": [
+        "arcade"
+      ],
+      "ribbon": "astragames exclusive"
+    },
+    {
+      "id": "2048-game",
+      "title": "2048",
+      "description": "Play the classic 2048 game.",
+      "image": "images/2048-game.png",
+      "url": "games/2048-game/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "puzzle",
+        "logic"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "arcade",
+        "classic",
+        "puzzle"
+      ]
+    },
+    {
+      "id": "archery",
+      "title": "Archery",
+      "description": "Improve your accuracy in this realistic archery simulator.",
+      "image": "images/archery.png",
+      "url": "games/archery/index.html",
+      "tags": [
+        "simple",
+        "simulator",
+        "sports",
+        "reflex"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "simulator",
+        "sports"
+      ],
+      "ribbon": "popular"
+    },
+    {
+      "id": "card-memory",
+      "title": "Card Memory",
+      "description": "Test your memory with this memory card game.",
+      "image": "images/card-memory.png",
+      "url": "games/card-memory/index.html",
+      "tags": [
+        "simple",
+        "memory",
+        "puzzle"
+      ],
+      "rating": 4.2,
+      "categories": [
+        "puzzle",
+        "memory"
+      ]
+    },
+    {
+      "id": "colour-memory",
+      "title": "Colour Memory",
+      "description": "Test your memory by remembering and matching colours.",
+      "image": "images/colour-memory.png",
+      "url": "games/colour-memory/index.html",
+      "tags": [
+        "memory",
+        "puzzle",
+        "simple"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "memory"
+      ]
+    },
+    {
+      "id": "connect-four",
+      "title": "Connect Four",
+      "description": "Play the classic game of Connect Four against a friend or the computer.",
+      "image": "images/connect-four.png",
+      "url": "games/connect-four/index.html",
+      "tags": [
+        "strategy",
+        "classic",
+        "multiplayer",
+        "puzzle"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "classic",
+        "puzzle",
+        "strategy"
+      ]
+    },
+    {
+      "id": "crossy-road",
+      "title": "Crossy Road",
+      "description": "Help the chicken cross the road while avoiding obstacles.",
+      "image": "images/crossy-road.png",
+      "url": "games/crossy-road/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "arcade",
+        "action",
+        "skill"
+      ]
+    },
+    {
+      "id": "dice-roll",
+      "title": "Dice Roll",
+      "description": "A simple dice rolling simulator.",
+      "image": "images/dice-roll.png",
+      "url": "games/dice-roll/index.html",
+      "tags": [
+        "utility",
+        "simple"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "tool"
+      ]
+    },
+    {
+      "id": "emoji-catcher",
+      "title": "Emoji Catcher",
+      "description": "Catch falling emojis in this fun arcade game.",
+      "image": "images/emoji-catcher.png",
+      "url": "games/emoji-catcher/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "arcade"
+      ]
+    },
+    {
+      "id": "hangman",
+      "title": "Hangman",
+      "description": "Guess the word before the hangman is complete.",
+      "image": "images/hangman.png",
+      "url": "games/hangman/index.html",
+      "tags": [
+        "word",
+        "puzzle",
+        "simple"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "word"
+      ]
+    },
+    {
+      "id": "insect-catch",
+      "title": "Insect Catch",
+      "description": "Catch as many insects as you can before time runs out.",
+      "image": "images/insect-catch.png",
+      "url": "games/insect-catch/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "arcade"
+      ]
+    },
+    {
+      "id": "minesweeper",
+      "title": "Minesweeper",
+      "description": "Play the classic game of Minesweeper.",
+      "image": "images/minesweeper.png",
+      "url": "games/minesweeper/index.html",
+      "tags": [
+        "puzzle",
+        "classic",
+        "logic"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "classic",
+        "logic"
+      ]
+    },
+    {
+      "id": "number-guess",
+      "title": "Number Guess",
+      "description": "Guess the random number within a limited number of tries.",
+      "image": "images/number-guess.png",
+      "url": "games/number-guess/index.html",
+      "tags": [
+        "puzzle",
+        "simple",
+        "logic"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "logic"
+      ]
+    },
+    {
+      "id": "quiz-game",
+      "title": "Quiz Game",
+      "description": "Test your knowledge with a variety of quiz questions.",
+      "image": "images/quiz-game.png",
+      "url": "games/quiz-game/index.html",
+      "tags": [
+        "quiz",
+        "simple",
+        "skill"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "quiz",
+        "educational"
+      ]
+    },
+    {
+      "id": "rock-paper-scissors",
+      "title": "Rock Paper Scissors",
+      "description": "Play the classic game of Rock Paper Scissors against the computer.",
+      "image": "images/rock-paper-scissors.png",
+      "url": "games/rock-paper-scissors/index.html",
+      "tags": [
+        "simple",
+        "classic",
+        "multiplayer"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "classic",
+        "multiplayer"
+      ]
+    },
+    {
+      "id": "shape-clicker",
+      "title": "Shape Clicker",
+      "description": "Click the shapes as fast as you can.",
+      "image": "images/shape-clicker.png",
+      "url": "games/shape-clicker/index.html",
+      "tags": [
+        "clicker",
+        "simple",
+        "reflex",
+        "arcade",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "clicker",
+        "arcade"
+      ]
+    },
+    {
+      "id": "tic-tac-toe",
+      "title": "Tic Tac Toe",
+      "description": "Play the classic game of Tic Tac Toe against a friend or the computer.",
+      "image": "images/tic-tac-toe.png",
+      "url": "games/tic-tac-toe/index.html",
+      "tags": [
+        "classic",
+        "simple",
+        "multiplayer",
+        "puzzle",
+        "strategy"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "classic",
+        "puzzle",
+        "multiplayer",
+        "strategy"
+      ]
+    },
+    {
+      "id": "tilting-maze",
+      "title": "Tilting Maze",
+      "description": "Tilt the maze to guide the ball to the end.",
+      "image": "images/tilting-maze.png",
+      "url": "games/tilting-maze/index.html",
+      "tags": [
+        "puzzle",
+        "reflex",
+        "arcade"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "puzzle",
+        "arcade"
+      ]
+    },
+    {
+      "id": "tower-blocks",
+      "title": "Tower Blocks",
+      "description": "Stack the blocks as high as you can.",
+      "image": "images/tower-blocks.png",
+      "url": "games/tower-blocks/index.html",
+      "tags": [
+        "arcade",
+        "simple",
+        "reflex",
+        "fast-paced"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "featured",
+        "arcade"
+      ]
+    },
+    {
+      "id": "typing-game",
+      "title": "Typing Game",
+      "description": "Improve your typing speed and accuracy.",
+      "image": "images/typing-game.png",
+      "url": "games/typing-game/index.html",
+      "tags": [
+        "simple",
+        "utility",
+        "skill"
+      ],
+      "rating": 4.0,
+      "categories": [
+        "tool",
+        "educational",
+        "skill"
+      ]
+    },
+    {
+      "id": "minecraft-1.8",
+      "title": "Minecraft 1.8",
+      "description": "Play Minecraft 1.8 right in your browser! Fullscreen doesn't work.",
+      "image": "images/minecraft.png",
+      "url": "games/minecraft-1.8/index.html",
+      "tags": [
+        "adventure",
+        "arcade",
+        "fast-paced",
+        "exploration"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "action"
+      ],
+      "ribbon": "popular"
+    },
+    {
+      "id": "minecraft-1.12.2",
+      "title": "Minecraft 1.12.2",
+      "description": "Play Minecraft 1.12.2 right in your browser! Fullscreen doesn't work.",
+      "image": "images/minecraft.png",
+      "url": "games/minecraft-1.12.2/index.html",
+      "tags": [
+        "adventure",
+        "arcade",
+        "fast-paced",
+        "exploration"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "action"
+      ]
+    },
+    {
+      "id": "pizza-clicker",
+      "title": "Pizza Clicker",
+      "description": "A fun foodie clicker. Full with upgrades and all!",
+      "image": "images/pizza-clicker.png",
+      "url": "games/pizza-clicker/index.html",
+      "tags": [
+        "clicker",
+        "arcade"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "clicker",
+        "arcade"
+      ],
+      "ribbon": "astragames exclusive"
+    },
+    {
+      "id": "food-dropper",
+      "title": "Food Dropper",
+      "description": "Catch the food to earn points!",
+      "image": "images/food-dropper.png",
+      "url": "games/food-dropper/index.html",
+      "tags": [
+        "satisfying",
+        "simulator"
+      ],
+      "rating": 4.5,
+      "categories": [
+        "satisfying",
+        "simulator"
+      ]
+    },
+    {
+      "id": "pixel-io",
+      "title": "Pixel.IO",
+      "description": "A Minecraft Creative clone - best performance",
+      "image": "images/pixel-io.png",
+      "url": "games/pixel-io/index.html",
+      "tags": [
+        "adventure",
+        "arcade",
+        "fast-paced",
+        "exploration"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "action"
+      ]
+    },
+    {
+      "id": "slope",
+      "title": "Slope",
+      "description": "Play Slope Game Unblocked for Free!",
+      "image": "images/slope.png",
+      "url": "games/slope/index.html",
+      "tags": [
+        "arcade",
+        "fast-paced",
+        "reflex",
+        "simple"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "arcade",
+        "skill"
+      ]
+    },
+    {
+      "id": "crazycattle3d",
+      "title": "Crazy Cattle 3D",
+      "description": "A fun 3D game where you ram into other players to knock them out of the arena.",
+      "image": "images/crazycattle3d.png",
+      "url": "games/crazycattle3d/message.html",
+      "tags": [
+        "fast-paced",
+        "reflex",
+        "multiplayer",
+        "skill"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "multiplayer"
+      ],
+      "ribbon": "popular"
+    },
+    {
+      "id": "motox3m",
+      "title": "Moto X3M",
+      "description": "A great 2D motorcycle racing game with many levels and challenges.",
+      "image": "images/motox3m.png",
+      "url": "games/motox3m/index.html",
+      "tags": [
+        "fast-paced",
+        "reflex",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ],
+      "ribbon": "popular"
+    },
+    {
+      "id": "motox3m2",
+      "title": "Moto X3M 2",
+      "description": "The sequel to the popular Moto X3M game with new levels and challenges.",
+      "image": "images/motox3m2.png",
+      "url": "games/motox3m2/index.html",
+      "tags": [
+        "fast-paced",
+        "reflex",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "sports",
+        "puzzle",
+        "arcade"
+      ],
+      "ribbon": "popular"
+    },
+    {
+      "id": "sand-tetris",
+      "title": "Sand Tetris",
+      "description": "A great take on the classic game of Tetris.",
+      "image": "images/sand-tetris.png",
+      "url": "games/sand-tetris/index.html",
+      "tags": [
+        "skill",
+        "puzzle",
+        "arcade",
+        "strategy"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "puzzle",
+        "arcade",
+        "strategy"
+      ],
+      "ribbon": "new"
+    }
+  ],
+  "categories": [
+    {
+      "id": "favorites",
+      "name": "Favorites",
+      "icon": "fa-star"
+    },
+    {
+      "id": "featured",
+      "name": "Featured",
+      "icon": "fa-trophy"
+    },
+    {
+      "id": "tool",
+      "name": "Tools",
+      "icon": "fa-wrench"
+    },
+    {
+      "id": "action",
+      "name": "Action",
+      "icon": "fa-rocket"
+    },
+    {
+      "id": "simulator",
+      "name": "Simulator",
+      "icon": "fa-robot"
+    },
+    {
+      "id": "satisfying",
+      "name": "Satisfying",
+      "icon": "fa-smile"
+    },
+    {
+      "id": "clicker",
+      "name": "Clicker",
+      "icon": "fa-hand-pointer"
+    },
+    {
+      "id": "classic",
+      "name": "Classic",
+      "icon": "fa-gamepad"
+    },
+    {
+      "id": "arcade",
+      "name": "Arcade",
+      "icon": "fa-gamepad"
+    },
+    {
+      "id": "puzzle",
+      "name": "Puzzle",
+      "icon": "fa-puzzle-piece"
+    },
+    {
+      "id": "memory",
+      "name": "Memory",
+      "icon": "fa-brain"
+    },
+    {
+      "id": "word",
+      "name": "Word",
+      "icon": "fa-font"
+    },
+    {
+      "id": "quiz",
+      "name": "Quiz",
+      "icon": "fa-question-circle"
+    },
+    {
+      "id": "strategy",
+      "name": "Strategy",
+      "icon": "fa-chess"
+    },
+    {
+      "id": "multiplayer",
+      "name": "Multiplayer",
+      "icon": "fa-users"
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "icon": "fa-cogs"
+    },
+    {
+      "id": "sports",
+      "name": "Sports",
+      "icon": "fa-dumbbell"
+    },
+    {
+      "id": "educational",
+      "name": "Educational",
+      "icon": "fa-lightbulb"
+    },
+    {
+      "id": "skill",
+      "name": "Skill",
+      "icon": "fa-star"
+    }
+  ],
+  "tags": {
+    "shooter": "fa-gun",
+    "space": "fa-globe",
+    "fast-paced": "fa-bolt",
+    "puzzle": "fa-brain",
+    "relaxing": "fa-spa",
+    "strategy": "fa-chess",
+    "defense": "fa-shield",
+    "logic": "fa-cogs",
+    "satisfying": "fa-smile",
+    "exploration": "fa-compass",
+    "adventure": "fa-map",
+    "multiplayer": "fa-users",
+    "simulator": "fa-robot",
+    "simple": "fa-thumbs-up",
+    "utility": "fa-wrench",
+    "arcade": "fa-gamepad",
+    "reflex": "fa-tachometer-alt",
+    "memory": "fa-brain",
+    "word": "fa-font",
+    "quiz": "fa-brain",
+    "sports": "fa-dumbbell",
+    "skill": "fa-lightbulb",
+    "3d": "fa-cube"
+  }
+}

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avoid the Blocks 2</title>
+  <style>
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e); 
+      font-family: 'Segoe UI', sans-serif; 
+    }
+    canvas { display: block; touch-action: none; }
+    .hidden { display: none; }
+
+    .btn {
+      position: fixed;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, rgba(79, 172, 254, 0.2), rgba(0, 242, 254, 0.2));
+      border: 2px solid #4facfe;
+      border-radius: 50%;
+      color: #4facfe;
+      font-size: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      user-select: none;
+      z-index: 10;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
+    }
+    .btn:hover {
+      box-shadow: 0 0 25px #4facfe, 0 0 50px rgba(79, 172, 254, 0.3);
+      transform: translateY(-2px);
+      border-color: #00f2fe;
+    }
+    .btn:active {
+      transform: scale(0.95) translateY(0px);
+      box-shadow: 0 0 15px #4facfe;
+    }
+
+    #btn-left  { bottom: 100px; left: 20px; }
+    #btn-right { bottom: 100px; left: 130px; }
+    #btn-up    { bottom: 200px; left: 75px; }
+    #btn-down  { bottom: 20px;  left: 75px; }
+    #btn-pause { top: 10px; right: 10px; width: 50px; height: 50px; font-size: 24px; }
+    #btn-shop  { top: 10px; right: 70px; width: 50px; height: 50px; font-size: 24px; }
+
+    #scoreboard {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      color: #4facfe;
+      font-size: 22px;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+      z-index: 5;
+      background: rgba(22, 33, 62, 0.8);
+      padding: 15px 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(79, 172, 254, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    #game-over, #shop {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, rgba(22, 33, 62, 0.95), rgba(26, 26, 46, 0.95));
+      padding: 40px;
+      border: 2px solid #4facfe;
+      border-radius: 20px;
+      color: #4facfe;
+      text-align: center;
+      z-index: 20;
+      box-shadow: 0 0 30px rgba(79, 172, 254, 0.4), 0 10px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(15px);
+    }
+
+    #shop {
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .shop-item {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(79, 172, 254, 0.1);
+      border: 1px solid rgba(79, 172, 254, 0.3);
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    .shop-item:hover {
+      background: rgba(79, 172, 254, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+    }
+
+    .shop-btn {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: #0a0a0a;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .shop-btn:hover {
+      box-shadow: 0 0 15px rgba(79, 172, 254, 0.5);
+      transform: translateY(-2px);
+    }
+    .shop-btn:disabled {
+      background: linear-gradient(135deg, #555, #444);
+      color: #999;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .game-over-btn {
+      background: linear-gradient(135deg, rgba(79, 172, 254, 0.2), rgba(0, 242, 254, 0.2));
+      border: 2px solid #4facfe;
+      color: #4facfe;
+      padding: 15px 30px;
+      margin: 12px 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .game-over-btn:hover {
+      box-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, rgba(79, 172, 254, 0.3), rgba(0, 242, 254, 0.3));
+    }
+    .game-over-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .reset-btn {
+      background: linear-gradient(135deg, rgba(255, 71, 87, 0.2), rgba(255, 107, 122, 0.2));
+      border: 2px solid #ff4757;
+      color: #ff4757;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .reset-btn:hover {
+      box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, rgba(255, 71, 87, 0.3), rgba(255, 107, 122, 0.3));
+    }
+    .reset-btn:active {
+      transform: translateY(0px);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+  <div id="scoreboard">Score: 0<br>High: 0<br>Points: 0</div>
+  <div class="btn" id="btn-left">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4facfe" stroke-width="2">
+      <path d="M15 18l-6-6 6-6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-right">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4facfe" stroke-width="2">
+      <path d="M9 18l6-6-6-6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-up">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4facfe" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-down">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4facfe" stroke-width="2">
+      <path d="M18 9l-6 6-6-6"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-pause">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#4facfe">
+      <rect x="6" y="4" width="4" height="16"/>
+      <rect x="14" y="4" width="4" height="16"/>
+    </svg>
+  </div>
+  <div class="btn" id="btn-shop">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4facfe" stroke-width="2">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+      <path d="M3 6h18"/>
+      <path d="M16 10a4 4 0 0 1-8 0"/>
+    </svg>
+  </div>
+  <div id="game-over" class="hidden">
+    <h1 style="margin-top: 0; font-size: 2.5em; background: linear-gradient(135deg, #4facfe, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Game Over</h1>
+    <p id="final-score" style="font-size: 1.3em;">Score: 0</p>
+    <p id="current-points" style="font-size: 1.1em;">Points: 0</p>
+    <button id="play-again" class="game-over-btn">Play Again</button>
+    <button id="go-to-shop" class="game-over-btn">Shop</button>
+  </div>
+  <div id="shop" class="hidden">
+    <h1 style="margin-top: 0; font-size: 2.2em; background: linear-gradient(135deg, #4facfe, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Upgrade Shop</h1>
+    <p id="shop-points" style="font-size: 1.2em; margin-bottom: 25px;">Points: 0</p>
+    <div id="shop-items"></div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+      <button id="reset-progress" class="reset-btn" title="Reset all progress">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2">
+          <polyline points="3,6 5,6 21,6"></polyline>
+          <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+        </svg>
+        Reset All
+      </button>
+      <button id="back" class="game-over-btn">Back</button>
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const scoreboard = document.getElementById("scoreboard");
+    const gameOverScreen = document.getElementById("game-over");
+    const shopScreen = document.getElementById("shop");
+    const shopItems = document.getElementById("shop-items");
+
+    let keys = {}, touches = {};
+    let blocks = [], powerups = [];
+    let notifications = [];
+    let points = parseInt(localStorage.getItem("atb2_points")) || 0;
+    let sessionScore = 0;
+    let highScore = parseInt(localStorage.getItem("atb2_highScore")) || 0;
+    let playerSpeed = 5;
+    let paused = false;
+    let gameState = "playing";
+    let previousState = "playing";
+
+    const player = { 
+      x: 0, 
+      y: 0, 
+      size: 40, 
+      baseSpeed: 5, 
+      color: "#4facfe",
+      shielded: false,
+      multiplier: 1,
+      trail: []
+    };
+
+    const powerupTypes = [
+      { type: "speed", color: "#00d4ff", effect: () => {
+        playerSpeed = player.baseSpeed + 4;
+        setTimeout(() => playerSpeed = player.baseSpeed, 6000);
+      }},
+      { type: "shield", color: "#00ff88", effect: () => {
+        player.shielded = true;
+        setTimeout(() => player.shielded = false, 8000);
+      }},
+      { type: "slow", color: "#ff6b9d", effect: () => {
+        blocks.forEach(b => b.speed /= 3);
+        setTimeout(() => blocks.forEach(b => b.speed *= 3), 7000);
+      }},
+      { type: "multiplier", color: "#ffaa00", effect: () => {
+        player.multiplier = 3;
+        setTimeout(() => player.multiplier = 1, 8000);
+      }},
+      { type: "magnet", color: "#c44fff", effect: () => {
+        player.magnet = true;
+        setTimeout(() => player.magnet = false, 10000);
+      }},
+      { type: "invincible", color: "#ffffff", effect: () => {
+        player.invincible = true;
+        setTimeout(() => player.invincible = false, 3000);
+      }}
+    ];
+
+    // Initialize shop upgrades with defaults and merge with localStorage
+    const defaultUpgrades = [
+      { name: "Speed Boost", desc: "Increase base speed", cost: 10, effect: () => player.baseSpeed += 1, purchased: 0, max: 5 },
+      { name: "Size Reduction", desc: "Make player smaller", cost: 15, effect: () => player.size = Math.max(15, player.size - 4), purchased: 0, max: 3 },
+      { name: "Shield Duration", desc: "Longer shield protection", cost: 20, effect: () => {}, purchased: 0, max: 3 },
+      { name: "Score Multiplier", desc: "Permanent 2x score boost", cost: 50, effect: () => player.baseMultiplier = (player.baseMultiplier || 1) + 0.5, purchased: 0, max: 2 },
+      { name: "Powerup Magnet", desc: "Attract powerups from distance", cost: 30, effect: () => player.magnetRange = (player.magnetRange || 50) + 30, purchased: 0, max: 3 },
+      { name: "Block Slower", desc: "All blocks move 20% slower", cost: 40, effect: () => {}, purchased: 0, max: 2 }
+    ];
+    let storedUpgrades = JSON.parse(localStorage.getItem("atb2_shopUpgrades")) || [];
+    const shopUpgrades = defaultUpgrades.map((defaultItem, index) => {
+      const storedItem = storedUpgrades[index] || {};
+      return {
+        ...defaultItem,
+        purchased: Math.min(storedItem.purchased || 0, defaultItem.max)
+      };
+    });
+
+    // Apply existing upgrades on load
+    shopUpgrades.forEach(item => {
+      for (let i = 0; i < item.purchased; i++) {
+        item.effect();
+      }
+    });
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      player.x = canvas.width / 2 - player.size / 2;
+      player.y = canvas.height - player.size - 20;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function createBlock() {
+      if (gameState !== "playing" || paused) return;
+      const size = Math.random() * 30 + 30;
+      blocks.push({
+        x: Math.random() * (canvas.width - size),
+        y: -size,
+        size,
+        speed: Math.random() * 2 + 2,
+        color: "#ff4c4c"
+      });
+    }
+
+    function createPowerup() {
+      if (gameState !== "playing" || paused) return;
+      const size = 30;
+      const type = powerupTypes[Math.floor(Math.random() * powerupTypes.length)];
+      powerups.push({
+        x: Math.random() * (canvas.width - size),
+        y: -size,
+        size,
+        speed: 2,
+        color: type.color,
+        type: type.type,
+        effect: type.effect
+      });
+    }
+
+    function movePlayer() {
+      if (paused) return;
+      const left = keys["a"] || keys["arrowleft"] || touches.left;
+      const right = keys["d"] || keys["arrowright"] || touches.right;
+      const up = keys["w"] || keys["arrowup"] || touches.up;
+      const down = keys["s"] || keys["arrowdown"] || touches.down;
+
+      if (left) player.x -= playerSpeed;
+      if (right) player.x += playerSpeed;
+      if (up) player.y -= playerSpeed;
+      if (down) player.y += playerSpeed;
+
+      player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+      player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+    }
+
+    function update() {
+      if (gameState !== "playing" || paused) return;
+
+      movePlayer();
+
+      blocks.forEach(b => {
+        b.y += b.speed;
+        if (
+          b.x < player.x + player.size &&
+          b.x + b.size > player.x &&
+          b.y < player.y + player.size &&
+          b.y + b.size > player.y
+        ) {
+          if (player.invincible) {
+            blocks.splice(blocks.indexOf(b), 1);
+            points += Math.floor(50 * (player.baseMultiplier || 1) / 100) || 1; // Ensure at least 1 point
+            sessionScore += 50 * (player.baseMultiplier || 1);
+          } else if (player.shielded) {
+            blocks.splice(blocks.indexOf(b), 1);
+            player.shielded = false;
+          } else {
+            gameState = "gameover";
+            showGameOver();
+          }
+        }
+      });
+
+      powerups.forEach(p => {
+        p.y += p.speed;
+        if (
+          p.x < player.x + player.size &&
+          p.x + p.size > player.x &&
+          p.y < player.y + player.size &&
+          p.y + p.size > player.y
+        ) {
+          points += Math.floor(25 * player.multiplier / 100) || 1; // Ensure at least 1 point
+          sessionScore += 25 * player.multiplier;
+          p.effect();
+          notifications.push({
+            text: `${p.type.charAt(0).toUpperCase() + p.type.slice(1)} Powerup Collected!`,
+            x: player.x + player.size / 2,
+            y: player.y - 20,
+            opacity: 1,
+            timer: 2000
+          });
+          powerups.splice(powerups.indexOf(p), 1);
+        }
+      });
+
+      blocks = blocks.filter(b => b.y < canvas.height);
+      powerups = powerups.filter(p => p.y < canvas.height);
+      
+      // Award points every 100 score points (100 score = 1 point)
+      const pointsToAdd = Math.floor(sessionScore / 100) - Math.floor((sessionScore - player.multiplier) / 100);
+      if (pointsToAdd > 0) {
+        points += pointsToAdd;
+      }
+      sessionScore += player.multiplier;
+
+      notifications.forEach(n => {
+        n.y -= 0.5;
+        n.timer -= 16;
+        n.opacity = n.timer / 2000;
+      });
+      notifications = notifications.filter(n => n.timer > 0);
+
+      // Update high score if current session is higher
+      if (sessionScore > highScore) {
+        highScore = sessionScore;
+      }
+
+      scoreboard.innerHTML = `Score: ${sessionScore}<br>High: ${highScore}<br>Points: ${points}`;
+    }
+
+    function drawPlayer() {
+      // Draw trail effect
+      if (player.trail) {
+        player.trail.forEach((pos, i) => {
+          const alpha = (i / player.trail.length) * 0.3;
+          ctx.shadowColor = player.color;
+          ctx.shadowBlur = 10;
+          ctx.fillStyle = `rgba(79, 172, 254, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(pos.x + player.size/2, pos.y + player.size/2, player.size/2 * (0.5 + alpha), 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+      
+      // Update trail
+      player.trail = player.trail || [];
+      player.trail.push({x: player.x, y: player.y});
+      if (player.trail.length > 8) player.trail.shift();
+      
+      // Draw main player
+      ctx.shadowColor = player.color;
+      ctx.shadowBlur = player.shielded ? 40 : player.invincible ? 60 : 25;
+      
+      if (player.invincible) {
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#ffffff";
+      } else if (player.shielded) {
+        ctx.fillStyle = "#00ff88";
+        ctx.shadowColor = "#00ff88";
+      } else {
+        ctx.fillStyle = player.color;
+      }
+      
+      ctx.beginPath();
+      ctx.arc(player.x + player.size/2, player.y + player.size/2, player.size/2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function drawBlock(b) {
+      // Create gradient for blocks
+      const gradient = ctx.createLinearGradient(b.x, b.y, b.x + b.size, b.y + b.size);
+      gradient.addColorStop(0, "#ff4757");
+      gradient.addColorStop(1, "#c44569");
+      
+      ctx.shadowColor = "#ff4757";
+      ctx.shadowBlur = 20;
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.roundRect(b.x, b.y, b.size, b.size, 12);
+      ctx.fill();
+      
+      // Add inner glow
+      ctx.shadowBlur = 5;
+      ctx.strokeStyle = "#ff6b7a";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    function drawPowerup(p) {
+      // Rotating glow effect
+      const time = Date.now() * 0.005;
+      const rotation = time + powerups.indexOf(p);
+      
+      ctx.save();
+      ctx.translate(p.x + p.size/2, p.y + p.size/2);
+      ctx.rotate(rotation);
+      
+      // Outer glow
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 25;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size/2 + 5, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Inner core
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size/2 - 3, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Draw powerup symbol
+      ctx.fillStyle = p.color;
+      ctx.font = "bold 16px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      const symbol = {
+        speed: "⚡", shield: "🛡", slow: "🐌", 
+        multiplier: "✨", magnet: "🧲", invincible: "⭐"
+      }[p.type] || "?";
+      ctx.fillText(symbol, 0, 0);
+      
+      ctx.restore();
+      ctx.shadowBlur = 0;
+    }
+
+    function drawNotifications() {
+      ctx.font = "bold 16px 'Segoe UI'";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      notifications.forEach(n => {
+        ctx.fillStyle = `rgba(0, 255, 255, ${n.opacity})`;
+        ctx.shadowColor = "#00ffff";
+        ctx.shadowBlur = 5;
+        ctx.fillText(n.text, n.x, n.y);
+        ctx.shadowBlur = 0;
+      });
+    }
+
+    function draw() {
+      if (gameState === "playing" && !paused) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPlayer();
+        blocks.forEach(drawBlock);
+        powerups.forEach(drawPowerup);
+        drawNotifications();
+      }
+    }
+
+    function resetGame() {
+      player.x = canvas.width / 2 - player.size / 2;
+      player.y = canvas.height - player.size - 20;
+      player.shielded = false;
+      player.multiplier = 1;
+      playerSpeed = player.baseSpeed;
+      blocks = [];
+      powerups = [];
+      sessionScore = 0;
+      gameState = "playing";
+      paused = false;
+      gameOverScreen.classList.add("hidden");
+      
+      // Clean up any temporary notifications from game over screen
+      const gameOverDiv = document.getElementById("game-over");
+      const notifications = gameOverDiv.querySelectorAll("p:not(#final-score):not(#current-points)");
+      notifications.forEach(n => n.remove());
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    setInterval(createBlock, 500);
+    setInterval(createPowerup, 7000);
+    gameLoop();
+
+    window.addEventListener("keydown", e => {
+      const key = e.key.toLowerCase();
+      keys[key] = true;
+      if (key === "p" && gameState === "playing") {
+        paused = !paused;
+        console.log("Paused state toggled to:", paused);
+      }
+    });
+    window.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
+
+    const btns = {
+      "btn-left": "left",
+      "btn-right": "right",
+      "btn-up": "up",
+      "btn-down": "down"
+    };
+
+    for (let id in btns) {
+      const dir = btns[id];
+      const el = document.getElementById(id);
+      el.addEventListener("touchstart", e => {
+        e.preventDefault();
+        touches[dir] = true;
+      });
+      el.addEventListener("touchend", e => {
+        e.preventDefault();
+        touches[dir] = false;
+      });
+      el.addEventListener("touchmove", e => e.preventDefault());
+
+      el.addEventListener("mousedown", e => {
+        e.preventDefault();
+        touches[dir] = true;
+      });
+    }
+
+    document.addEventListener("mouseup", e => {
+      e.preventDefault();
+      for (let dir in touches) {
+        touches[dir] = false;
+      }
+    });
+
+    document.getElementById("btn-pause").addEventListener("click", () => {
+      console.log("Pause button clicked, gameState:", gameState, "paused:", paused);
+      if (gameState === "playing") {
+        paused = !paused;
+        console.log("Paused state toggled to:", paused);
+      }
+    });
+
+    document.getElementById("btn-shop").addEventListener("click", () => {
+      console.log("Shop button clicked, gameState:", gameState, "paused:", paused);
+      if (gameState === "playing") {
+        paused = true;
+        previousState = "playing";
+        gameState = "shop";
+        showShop();
+      } else if (gameState === "gameover") {
+        previousState = "gameover";
+        gameState = "shop";
+        showShop();
+      }
+    });
+
+    function loseUpgradeLevels() {
+      // Lose one level from each purchased upgrade when dying
+      shopUpgrades.forEach(item => {
+        if (item.purchased > 0) {
+          item.purchased = Math.max(0, item.purchased - 1);
+          // Reverse the cost increase from the lost level
+          item.cost = Math.floor(item.cost / 1.5);
+        }
+      });
+      
+      // Reset player stats to base values and reapply remaining upgrades
+      player.baseSpeed = 5;
+      player.size = 40;
+      player.baseMultiplier = 1;
+      player.magnetRange = 0;
+      
+      // Reapply remaining upgrades
+      shopUpgrades.forEach(item => {
+        for (let i = 0; i < item.purchased; i++) {
+          item.effect();
+        }
+      });
+      
+      localStorage.setItem("atb2_shopUpgrades", JSON.stringify(shopUpgrades));
+    }
+
+    function showGameOver() {
+      loseUpgradeLevels(); // Lose upgrade levels when dying
+      
+      // Update high score if current session is higher
+      if (sessionScore > highScore) {
+        highScore = sessionScore;
+      }
+      
+      gameOverScreen.classList.remove("hidden");
+      document.getElementById("final-score").textContent = `Score: ${sessionScore}`;
+      document.getElementById("current-points").textContent = `Points: ${points}`;
+      
+      // Add notification about lost upgrades
+      const lostUpgrades = shopUpgrades.filter(item => item.purchased >= 0).length;
+      if (lostUpgrades > 0) {
+        const lostNotification = document.createElement("p");
+        lostNotification.style.color = "#ff6b7a";
+        lostNotification.style.fontSize = "1em";
+        lostNotification.style.fontWeight = "bold";
+        lostNotification.textContent = "⚠️ Lost 1 level from all upgrades!";
+        document.getElementById("game-over").insertBefore(lostNotification, document.getElementById("play-again"));
+      }
+      
+      localStorage.setItem("atb2_points", points);
+      localStorage.setItem("atb2_highScore", highScore);
+    }
+
+    function showShop() {
+      shopScreen.classList.remove("hidden");
+      if (previousState === "gameover") {
+        gameOverScreen.classList.add("hidden");
+      }
+      document.getElementById("shop-points").textContent = `Points: ${points}`;
+      shopItems.innerHTML = "";
+      shopUpgrades.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "shop-item";
+        
+        const itemInfo = document.createElement("div");
+        itemInfo.innerHTML = `
+          <div style="font-weight: bold; margin-bottom: 5px;">${item.name}</div>
+          <div style="font-size: 12px; color: #88c5ff; margin-bottom: 8px;">${item.desc}</div>
+          <div style="font-size: 14px;">${item.cost} pts • ${item.purchased}/${item.max}</div>
+        `;
+        
+        const btn = document.createElement("button");
+        btn.className = "shop-btn";
+        btn.textContent = item.purchased >= item.max ? "MAXED" : "BUY";
+        btn.disabled = points < item.cost || item.purchased >= item.max;
+        btn.onclick = () => {
+          if (points >= item.cost && item.purchased < item.max) {
+            points -= item.cost;
+            item.purchased++;
+            item.effect();
+            item.cost = Math.floor(item.cost * 1.5); // Increase cost each purchase
+            localStorage.setItem("atb2_points", points);
+            localStorage.setItem("atb2_shopUpgrades", JSON.stringify(shopUpgrades));
+            showShop();
+          }
+        };
+        
+        div.appendChild(itemInfo);
+        div.appendChild(btn);
+        shopItems.appendChild(div);
+      });
+    }
+
+    document.getElementById("play-again").addEventListener("click", () => {
+      resetGame();
+    });
+
+    document.getElementById("go-to-shop").addEventListener("click", () => {
+      previousState = "gameover";
+      gameState = "shop";
+      showShop();
+    });
+
+    document.getElementById("back").addEventListener("click", () => {
+      shopScreen.classList.add("hidden");
+      if (previousState === "gameover") {
+        gameState = "gameover";
+        gameOverScreen.classList.remove("hidden");
+      } else {
+        gameState = "playing";
+      }
+    });
+
+    document.getElementById("reset-progress").addEventListener("click", () => {
+      // Show confirmation dialog
+      const confirmed = confirm(
+        "⚠️ RESET ALL PROGRESS ⚠️\n\n" +
+        "This will permanently delete:\n" +
+        "• All your points\n" +
+        "• All purchased upgrades\n" +
+        "• Your high score\n\n" +
+        "This action cannot be undone!\n\n" +
+        "Are you absolutely sure you want to reset everything?"
+      );
+      
+      if (confirmed) {
+        // Second confirmation for extra safety
+        const doubleConfirmed = confirm(
+          "FINAL WARNING!\n\n" +
+          "You are about to lose ALL progress.\n" +
+          "Click OK to permanently reset everything, or Cancel to keep your progress."
+        );
+        
+        if (doubleConfirmed) {
+          resetAllProgress();
+        }
+      }
+    });
+
+    function resetAllProgress() {
+      // Reset all stored data
+      points = 0;
+      sessionScore = 0;
+      highScore = 0;
+      
+      // Reset all upgrades to default
+      shopUpgrades.forEach((item, index) => {
+        const defaultItem = defaultUpgrades[index];
+        item.purchased = 0;
+        item.cost = defaultItem.cost;
+      });
+      
+      // Reset player stats to base values
+      player.baseSpeed = 5;
+      player.size = 40;
+      player.baseMultiplier = 1;
+      player.magnetRange = 0;
+      playerSpeed = player.baseSpeed;
+      
+      // Clear localStorage
+      localStorage.removeItem("atb2_points");
+      localStorage.removeItem("atb2_highScore");
+      localStorage.removeItem("atb2_shopUpgrades");
+      
+      // Update displays
+      scoreboard.innerHTML = `Score: ${sessionScore}<br>High: ${highScore}<br>Points: ${points}`;
+      
+      // Refresh shop display
+      showShop();
+      
+      // Show confirmation
+      alert("✅ All progress has been reset!");
+    }
+
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + w, y, r);
+        this.closePath();
+        return this;
+      };
+    }
+  </script>
+</body>
+</html>

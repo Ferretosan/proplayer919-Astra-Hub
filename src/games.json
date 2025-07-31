@@ -728,6 +728,26 @@
         "strategy"
       ],
       "ribbon": "new"
+    },
+    {
+      "id": "avoid-the-blocks-2",
+      "title": "Avoid the Blocks 2",
+      "description": "Dodge falling blocks, collect powerups, and upgrade your skills in this fast-paced neon arcade game sequel.",
+      "image": "images/avoid-the-blocks-2.png",
+      "url": "games/avoid-the-blocks-2/index.html",
+      "tags": [
+        "skill",
+        "arcade",
+        "fast-paced"
+      ],
+      "rating": 5.0,
+      "categories": [
+        "featured",
+        "skill",
+        "arcade",
+        "strategy"
+      ],
+      "ribbon": "new"
     }
   ],
   "categories": [

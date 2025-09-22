@@ -748,6 +748,28 @@
         "strategy"
       ],
       "ribbon": "new"
+    },
+    {
+      "id": "wbwwb",
+      "title": "We Become What We Behold",
+      "description": "A game about news cycles, vicious cycles, infinite cycles. Capture the news with your camera to see how the world reacts.",
+      "image": "images/wbwwb.png",
+      "url": "games/wbwwb/index.html",
+      "tags": [
+        "strategy",
+        "simulator",
+        "educational",
+        "puzzle",
+        "logic"
+      ],
+      "rating": 4.7,
+      "categories": [
+        "featured",
+        "strategy",
+        "educational",
+        "simulator"
+      ],
+      "ribbon": "new"
     }
   ],
   "categories": [
